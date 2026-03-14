@@ -1,8 +1,7 @@
-flask==3.0.0
-authlib==1.3.2
-requests==2.31.0
-python-dotenv==1.0.0
-groq==0.4.2
-gunicorn==21.2.0
-supabase==1.2.0
-httpx==0.23.3
+flask
+authlib
+requests
+python-dotenv
+groq
+gunicorn
+supabase
