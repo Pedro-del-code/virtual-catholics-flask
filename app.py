@@ -216,7 +216,11 @@ def auth_google_callback():
         if not usuario:
             username = email.split("@")[0] + "_" + str(uuid.uuid4())[:4]
             criar_usuario_google(username, nome, google_id, email, foto)
-            usuario = carregar_usuario(username)
+            session["username"] = username
+            session["nome"] = nome
+            session["foto"] = foto
+            session["idioma"] = "pt"
+            return redirect("/")
         session["username"] = usuario["username"]
         session["nome"] = usuario["nome"]
         session["foto"] = foto
