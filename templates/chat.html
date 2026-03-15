@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;display:flex;overflow:hidden;color:var(--cream);}
 /* Sidebar */
-.sidebar{width:260px;background:rgba(8,5,1,.88);backdrop-filter:blur(16px);border-right:1px solid rgba(200,160,80,.18);display:flex;flex-direction:column;flex-shrink:0;}
+.sidebar{width:260px;background:rgba(8,5,1,.95);backdrop-filter:blur(16px);border-right:1px solid rgba(200,160,80,.18);display:flex;flex-direction:column;flex-shrink:0;}
 .sidebar-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);text-align:center;}
 .sidebar-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
 .sidebar-sub{font-size:10px;color:rgba(200,160,80,.3);letter-spacing:3px;margin-top:3px;}
@@ -70,35 +70,48 @@ body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;
 .welcome-santo{font-size:12px;color:rgba(200,160,80,.4);margin-top:4px;font-style:italic;}
 /* Imagem de fundo da área principal */
 .main-bg{position:absolute;inset:0;z-index:0;background-size:contain;background-repeat:no-repeat;background-position:center center;opacity:0.07;pointer-events:none;transition:opacity .3s;}
-/* Modo claro */
-body.light .sidebar{background:rgba(255,248,225,.82);backdrop-filter:blur(16px);border-right-color:rgba(180,130,40,.2);}
-body.light .sidebar-logo{color:var(--gold-dark);}
-body.light .sidebar-sub{color:rgba(139,104,32,.5);}
-body.light .sidebar-section{color:rgba(139,104,32,.5);}
-body.light .btn-new{background:rgba(200,160,80,.15);border-color:rgba(200,160,80,.3);color:var(--gold-dark);}
-body.light .menu-btn{color:rgba(80,50,10,.7);}
-body.light .menu-btn:hover{background:rgba(200,160,80,.12);color:var(--gold-dark);}
-body.light .chat-item{color:rgba(80,50,10,.65);}
-body.light .chat-item:hover,.chat-item.active{color:var(--gold-dark);}
-body.light .user-nome{color:var(--gold-dark);}
-body.light .btn-logout{border-color:rgba(180,130,40,.2);color:rgba(139,104,32,.5);}
-body.light .lang-mini{border-color:rgba(180,130,40,.2);color:rgba(139,104,32,.4);}
-body.light .lang-mini.active,.light .lang-mini:hover{border-color:var(--gold-dark);color:var(--gold-dark);}
+/* Modo escuro — textos claros e suaves */
+.sidebar-logo{color:#f0e8d8;}
+.sidebar-sub{color:rgba(240,232,216,.45);}
+.sidebar-section{color:rgba(240,232,216,.4);}
+.btn-new{color:#f0e8d8;}
+.menu-btn{color:rgba(240,232,216,.75);}
+.menu-btn:hover{background:rgba(200,160,80,.1);color:#f5f0e8;}
+.chat-item{color:rgba(240,232,216,.65);}
+.chat-item:hover,.chat-item.active{color:#f5f0e8;}
+.user-nome{color:#f0e8d8;}
+.btn-logout{color:rgba(240,232,216,.5);}
+.lang-mini{color:rgba(240,232,216,.45);}
+.lang-mini.active,.lang-mini:hover{color:#f0e8d8;}
+
+/* Modo claro — textos escuros e quentes */
+body.light .sidebar{background:rgba(255,248,225,.93);backdrop-filter:blur(16px);border-right-color:rgba(180,130,40,.2);}
+body.light .sidebar-logo{color:#4a2a00;}
+body.light .sidebar-sub{color:rgba(80,50,10,.55);}
+body.light .sidebar-section{color:rgba(80,50,10,.5);}
+body.light .btn-new{background:rgba(200,160,80,.18);border-color:rgba(200,160,80,.35);color:#4a2a00;}
+body.light .menu-btn{color:rgba(60,35,5,.8);}
+body.light .menu-btn:hover{background:rgba(200,160,80,.12);color:#3a1a00;}
+body.light .chat-item{color:rgba(60,35,5,.75);}
+body.light .chat-item:hover,.light .chat-item.active{color:#3a1a00;}
+body.light .user-nome{color:#4a2a00;}
+body.light .btn-logout{border-color:rgba(180,130,40,.2);color:rgba(80,50,10,.55);}
+body.light .lang-mini{border-color:rgba(180,130,40,.2);color:rgba(80,50,10,.55);}
+body.light .lang-mini.active,.light .lang-mini:hover{border-color:var(--gold-dark);color:#4a2a00;}
 body.light .sidebar-footer{border-top-color:rgba(180,130,40,.15);}
 body.light .msg-user{background:rgba(200,160,80,.18);color:#2a1a08;}
-body.light .msg-bot{background:rgba(255,252,240,.75);color:#2a1a08;}
-body.light .main-header{border-bottom-color:rgba(200,160,80,.2);}
-body.light .chat-titulo{color:rgba(139,104,32,.8);}
+body.light .msg-bot{background:rgba(255,252,240,.78);color:#2a1a08;}
+body.light .main-header{border-bottom-color:rgba(200,160,80,.2);background:rgba(255,248,225,.3);}
+body.light .chat-titulo{color:#4a2a00;}
 body.light .messages{background:transparent;}
 body.light .main-bg{opacity:0.10;}
 body.light textarea{background:rgba(255,252,240,.65);color:#2a1a08;border-color:rgba(200,160,80,.3);}
-body.light textarea::placeholder{color:rgba(139,104,32,.4);}
-body.light .panel{background:rgba(255,250,235,.96);border-left-color:rgba(200,160,80,.25);}
+body.light textarea::placeholder{color:rgba(80,50,10,.4);}
+body.light .panel{background:rgba(255,250,235,.97);border-left-color:rgba(200,160,80,.25);}
 body.light .panel-content{color:#2a1a08;}
-body.light .panel-item{color:#4a3010;border-color:rgba(180,130,40,.2);}
+body.light .panel-item{color:#3a1a00;border-color:rgba(180,130,40,.2);}
 body.light .panel-item:hover{background:rgba(200,160,80,.08);}
 body.light .input-area{background:rgba(255,248,225,.3);}
-body.light .main-header{background:rgba(255,248,225,.3);}
 /* Typing */
 .typing{display:flex;gap:4px;padding:4px 0;}
 .typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:typing 1.2s ease-in-out infinite;}
