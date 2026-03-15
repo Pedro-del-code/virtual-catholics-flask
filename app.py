@@ -113,18 +113,20 @@ def novo_chat_id():
     return datetime.now().strftime("%Y%m%d%H%M%S")
 
 _SANTOS = {
-    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",(1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
-    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",(2,14):"Santos Cirilo e Metodio",(2,22):"Catedral de Sao Pedro",(2,23):"Sao Policarpo",
-    (3,4):"Sao Casimiro",(3,6):"Sao Colette — freira francesa (1381-1447) que reformou as Clarissas, fundou 17 mosteiros, tinha dons misticos e e padroeira das gravidas",(3,7):"Santas Perpetua e Felicidade",(3,8):"Sao Joao de Deus",(3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
-    (4,7):"Sao Joao Batista de La Salle",(4,23):"Sao Jorge",(4,25):"Sao Marcos Evangelista",(4,29):"Santa Catarina de Siena",
-    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",(5,24):"Santa Maria Auxiliadora",
+    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",
+    (1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
+    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",
+    (3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
+    (4,23):"Sao Jorge",(4,29):"Santa Catarina de Siena",
+    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",
     (6,13):"Santo Antonio de Lisboa",(6,24):"Natividade de Sao Joao Batista",(6,29):"Santos Pedro e Paulo",
-    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",(7,25):"Sao Tiago Apostolo",
-    (8,6):"Transfiguracao do Senhor",(8,10):"Sao Lourenco",(8,11):"Santa Clara de Assis",(8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
-    (9,8):"Natividade de Nossa Senhora",(9,14):"Exaltacao da Santa Cruz",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina — capuchinho italiano com estigmas por 50 anos, dons de cura e leitura de almas",
-    (10,1):"Santa Teresinha do Menino Jesus",(10,2):"Santos Anjos da Guarda",(10,4):"Sao Francisco de Assis",(10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
+    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",
+    (8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
+    (9,8):"Natividade de Nossa Senhora",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina",
+    (10,1):"Santa Teresinha do Menino Jesus",(10,4):"Sao Francisco de Assis",
+    (10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
     (11,1):"Todos os Santos",(11,2):"Todos os Fieis Defuntos",
-    (12,8):"Imaculada Conceicao de Maria",(12,12):"Nossa Senhora de Guadalupe",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
+    (12,8):"Imaculada Conceicao de Maria",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
 }
 
 TRADUCOES = {
@@ -134,18 +136,10 @@ TRADUCOES = {
     "it": {"novo_chat":"+ Nuova chat","oracoes":"Preghiere","biblia":"Bibbia","terco":"Rosario","liturgia":"Liturgia del Giorno","santo":"Santo del Giorno","novenas":"Novene","catecismo":"Catechismo","liturgia_horas":"Liturgia delle Ore","canticos":"Cantici e Inni","modo_escuro":"Modalita Scura","modo_claro":"Modalita Chiara","idioma":"Lingua","deletar":"Elimina conversazione","bem_vindo":"Benvenuto(a)","subtitulo":"Assistente Cattolico","entrar":"Accedi","criar_conta":"Crea account","erro_login":"Nome utente o password errati!","erro_campos":"Per favore, compila tutti i campi!","erro_usuario_existe":"Nome utente gia esistente!","erro_usuario_invalido":"Nome utente non valido.","erro_nome_improprio":"Nome non consentito.","erro_senha_impropria":"Password non consentita.","placeholder_mensagem":"Invia un messaggio...","nova_conversa":"Nuova conversazione","santo_sem":"Nessun santo registrato per oggi.","nov_titulo":"Novene","nov_dia":"Giorno","nov_anterior":"Precedente","nov_proximo":"Successivo","nov_fim":"Novena completata!","terco_titulo":"Rosario","terco_como":"Come pregare","lit_horas_titulo":"Liturgia delle Ore","canticos_titulo":"Cantici e Inni Liturgici","idioma_instrucao":"REGOLA ASSOLUTA DI LINGUA: Rispondi SEMPRE ed ESCLUSIVAMENTE in italiano.","sair":"Esci"},
 }
 
-@app.route("/intro")
-def intro():
-    return render_template("intro.html")
-
 @app.route("/")
 def index():
     if "username" not in session:
         return redirect("/login")
-    # Mostrar intro apenas uma vez por sessão
-    if not session.get("intro_visto"):
-        session["intro_visto"] = True
-        return redirect("/intro")
     idioma = session.get("idioma", "pt")
     T = TRADUCOES[idioma]
     hoje = date.today()
@@ -222,7 +216,11 @@ def auth_google_callback():
         if not usuario:
             username = email.split("@")[0] + "_" + str(uuid.uuid4())[:4]
             criar_usuario_google(username, nome, google_id, email, foto)
-            usuario = carregar_usuario(username)
+            session["username"] = username
+            session["nome"] = nome
+            session["foto"] = foto
+            session["idioma"] = "pt"
+            return redirect("/")
         session["username"] = usuario["username"]
         session["nome"] = usuario["nome"]
         session["foto"] = foto
@@ -356,28 +354,13 @@ def api_deletar_chat():
 
 @app.route("/api/dados/<tipo>")
 def api_dados(tipo):
-    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS, CATECISMO
-    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS, "catecismo": CATECISMO}
+    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS
+    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS}
     dados = mapa.get(tipo, {})
     nome = request.args.get("nome")
     if nome:
         return jsonify({"conteudo": dados.get(nome, "")})
     return jsonify(list(dados.keys()))
-
-@app.route("/api/creditos")
-def api_creditos():
-    from data import CREDITOS
-    return jsonify(CREDITOS)
-
-@app.route("/api/info")
-def api_info():
-    from data import CREDITOS
-    return jsonify({
-        "email": CREDITOS["email"],
-        "versao": CREDITOS["versao"],
-        "criador": CREDITOS["criador"],
-        "pix_qr": CREDITOS["pix_qr"],
-    })
 
 @app.route("/api/santo-dia")
 def api_santo_dia():
@@ -387,3 +370,246 @@ def api_santo_dia():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# ── BÍBLIA ────────────────────────────────────────────────────────────────────
+LIVROS_BIBLIA = [
+    {"id":"genesis","nome":"Gênesis","abrev":"Gn","testamento":"AT"},
+    {"id":"exodus","nome":"Êxodo","abrev":"Ex","testamento":"AT"},
+    {"id":"leviticus","nome":"Levítico","abrev":"Lv","testamento":"AT"},
+    {"id":"numbers","nome":"Números","abrev":"Nm","testamento":"AT"},
+    {"id":"deuteronomy","nome":"Deuteronômio","abrev":"Dt","testamento":"AT"},
+    {"id":"joshua","nome":"Josué","abrev":"Js","testamento":"AT"},
+    {"id":"judges","nome":"Juízes","abrev":"Jz","testamento":"AT"},
+    {"id":"ruth","nome":"Rute","abrev":"Rt","testamento":"AT"},
+    {"id":"1samuel","nome":"1 Samuel","abrev":"1Sm","testamento":"AT"},
+    {"id":"2samuel","nome":"2 Samuel","abrev":"2Sm","testamento":"AT"},
+    {"id":"1kings","nome":"1 Reis","abrev":"1Rs","testamento":"AT"},
+    {"id":"2kings","nome":"2 Reis","abrev":"2Rs","testamento":"AT"},
+    {"id":"job","nome":"Jó","abrev":"Jó","testamento":"AT"},
+    {"id":"psalms","nome":"Salmos","abrev":"Sl","testamento":"AT"},
+    {"id":"proverbs","nome":"Provérbios","abrev":"Pr","testamento":"AT"},
+    {"id":"ecclesiastes","nome":"Eclesiastes","abrev":"Ecl","testamento":"AT"},
+    {"id":"songofsolomon","nome":"Cântico dos Cânticos","abrev":"Ct","testamento":"AT"},
+    {"id":"isaiah","nome":"Isaías","abrev":"Is","testamento":"AT"},
+    {"id":"jeremiah","nome":"Jeremias","abrev":"Jr","testamento":"AT"},
+    {"id":"lamentations","nome":"Lamentações","abrev":"Lm","testamento":"AT"},
+    {"id":"ezekiel","nome":"Ezequiel","abrev":"Ez","testamento":"AT"},
+    {"id":"daniel","nome":"Daniel","abrev":"Dn","testamento":"AT"},
+    {"id":"hosea","nome":"Oséias","abrev":"Os","testamento":"AT"},
+    {"id":"joel","nome":"Joel","abrev":"Jl","testamento":"AT"},
+    {"id":"amos","nome":"Amós","abrev":"Am","testamento":"AT"},
+    {"id":"jonah","nome":"Jonas","abrev":"Jn","testamento":"AT"},
+    {"id":"micah","nome":"Miquéias","abrev":"Mq","testamento":"AT"},
+    {"id":"matthew","nome":"Mateus","abrev":"Mt","testamento":"NT"},
+    {"id":"mark","nome":"Marcos","abrev":"Mc","testamento":"NT"},
+    {"id":"luke","nome":"Lucas","abrev":"Lc","testamento":"NT"},
+    {"id":"john","nome":"João","abrev":"Jo","testamento":"NT"},
+    {"id":"acts","nome":"Atos dos Apóstolos","abrev":"At","testamento":"NT"},
+    {"id":"romans","nome":"Romanos","abrev":"Rm","testamento":"NT"},
+    {"id":"1corinthians","nome":"1 Coríntios","abrev":"1Cor","testamento":"NT"},
+    {"id":"2corinthians","nome":"2 Coríntios","abrev":"2Cor","testamento":"NT"},
+    {"id":"galatians","nome":"Gálatas","abrev":"Gl","testamento":"NT"},
+    {"id":"ephesians","nome":"Efésios","abrev":"Ef","testamento":"NT"},
+    {"id":"philippians","nome":"Filipenses","abrev":"Fl","testamento":"NT"},
+    {"id":"colossians","nome":"Colossenses","abrev":"Cl","testamento":"NT"},
+    {"id":"1thessalonians","nome":"1 Tessalonicenses","abrev":"1Ts","testamento":"NT"},
+    {"id":"hebrews","nome":"Hebreus","abrev":"Hb","testamento":"NT"},
+    {"id":"james","nome":"Tiago","abrev":"Tg","testamento":"NT"},
+    {"id":"1peter","nome":"1 Pedro","abrev":"1Pd","testamento":"NT"},
+    {"id":"1john","nome":"1 João","abrev":"1Jo","testamento":"NT"},
+    {"id":"revelation","nome":"Apocalipse","abrev":"Ap","testamento":"NT"},
+]
+
+CAPITULOS_POR_LIVRO = {
+    "genesis":50,"exodus":40,"leviticus":27,"numbers":36,"deuteronomy":34,
+    "joshua":24,"judges":21,"ruth":4,"1samuel":31,"2samuel":24,
+    "1kings":22,"2kings":25,"job":42,"psalms":150,"proverbs":31,
+    "ecclesiastes":12,"songofsolomon":8,"isaiah":66,"jeremiah":52,
+    "lamentations":5,"ezekiel":48,"daniel":14,"hosea":14,"joel":4,
+    "amos":9,"jonah":4,"micah":7,"matthew":28,"mark":16,"luke":24,
+    "john":21,"acts":28,"romans":16,"1corinthians":16,"2corinthians":13,
+    "galatians":6,"ephesians":6,"philippians":4,"colossians":4,
+    "1thessalonians":5,"hebrews":13,"james":5,"1peter":5,"1john":5,"revelation":22,
+}
+
+@app.route("/api/biblia/livros")
+def api_biblia_livros():
+    return jsonify(LIVROS_BIBLIA)
+
+@app.route("/api/biblia/capitulos/<livro>")
+def api_biblia_capitulos(livro):
+    total = CAPITULOS_POR_LIVRO.get(livro.lower(), 0)
+    return jsonify({"livro": livro, "total": total})
+
+@app.route("/api/biblia/versiculo")
+def api_biblia_versiculo():
+    import requests as req
+    livro = request.args.get("livro", "john")
+    capitulo = request.args.get("capitulo", "3")
+    versiculo = request.args.get("versiculo", "")
+    try:
+        if versiculo:
+            url = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation=almeida"
+        else:
+            url = f"https://bible-api.com/{livro}+{capitulo}?translation=almeida"
+        r = req.get(url, timeout=8)
+        return jsonify(r.json())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ── CATECISMO COMPLETO ────────────────────────────────────────────────────────
+@app.route("/api/catecismo/paragrafo/<int:num>")
+def api_catecismo_paragrafo(num):
+    import requests as req
+    try:
+        url = "https://raw.githubusercontent.com/aseemsavio/catholicism-in-json/master/catholicism-in-json/catechism.json"
+        r = req.get(url, timeout=10)
+        data = r.json()
+        if 1 <= num <= len(data):
+            p = data[num-1]
+            return jsonify({"id": p.get("id", num), "texto": p.get("text","")})
+        return jsonify({"error": "Parágrafo não encontrado"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/catecismo/busca")
+def api_catecismo_busca():
+    import requests as req
+    termo = request.args.get("q","").lower()
+    if not termo or len(termo) < 3:
+        return jsonify({"error": "Termo muito curto"}), 400
+    try:
+        url = "https://raw.githubusercontent.com/aseemsavio/catholicism-in-json/master/catholicism-in-json/catechism.json"
+        r = req.get(url, timeout=10)
+        data = r.json()
+        resultados = [{"id":p["id"],"texto":p["text"][:200]+"..."} for p in data if termo in p.get("text","").lower()][:20]
+        return jsonify(resultados)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ── CALENDÁRIO LITÚRGICO ──────────────────────────────────────────────────────
+@app.route("/api/calendario")
+def api_calendario():
+    from datetime import timedelta
+    import math
+
+    hoje = date.today()
+
+    def pascoa(ano):
+        a=ano%19; b=ano//100; c=ano%100; d=b//4; e=b%4
+        f=(b+8)//25; g=(b-f+1)//3; h=(19*a+b-d-g+15)%30
+        i=c//4; k=c%4; l=(32+2*e+2*i-h-k)%7
+        m=(a+11*h+22*l)//451
+        mes=(h+l-7*m+114)//31; dia=((h+l-7*m+114)%31)+1
+        return date(ano, mes, dia)
+
+    ano = hoje.year
+    p = pascoa(ano)
+    cinzas = p - timedelta(days=46)
+    domingo_ramos = p - timedelta(days=7)
+    quinta_santa = p - timedelta(days=3)
+    sexta_santa = p - timedelta(days=2)
+    ascensao = p + timedelta(days=39)
+    pentecostes = p + timedelta(days=49)
+    corpus = p + timedelta(days=60)
+    # Advento: 4 domingos antes do Natal
+    natal = date(ano, 12, 25)
+    advento_ini = natal - timedelta(days=(natal.weekday()+1)%7 + 21)
+
+    if hoje < cinzas:
+        if hoje >= advento_ini:
+            tempo="Advento"; cor="roxo"; desc="Tempo de espera e preparação para o Natal."
+        elif date(ano,1,1) <= hoje <= date(ano,1,13):
+            tempo="Natal"; cor="branco"; desc="Celebramos o nascimento de Jesus Cristo."
+        else:
+            tempo="Tempo Comum"; cor="verde"; desc="Tempo de crescimento na fé e na vida cristã."
+    elif hoje <= p - timedelta(days=1):
+        if hoje >= domingo_ramos:
+            tempo="Semana Santa"; cor="vermelho"; desc="A semana mais santa do ano."
+        else:
+            tempo="Quaresma"; cor="roxo"; desc="40 dias de jejum, oração e esmola."
+    elif hoje == p:
+        tempo="Páscoa do Senhor"; cor="branco"; desc="Alleluia! Cristo ressuscitou!"
+    elif hoje <= pentecostes:
+        if hoje == pentecostes:
+            tempo="Pentecostes"; cor="vermelho"; desc="Descida do Espírito Santo."
+        elif hoje == ascensao:
+            tempo="Ascensão do Senhor"; cor="branco"; desc="Jesus sobe ao céu."
+        else:
+            tempo="Tempo Pascal"; cor="branco"; desc="50 dias de alegria pascal."
+    elif hoje >= advento_ini:
+        tempo="Advento"; cor="roxo"; desc="Tempo de espera e preparação para o Natal."
+    elif hoje >= date(ano,12,25):
+        tempo="Natal"; cor="branco"; desc="Celebramos o nascimento de Jesus Cristo."
+    else:
+        tempo="Tempo Comum"; cor="verde"; desc="Tempo de crescimento na fé e na vida cristã."
+
+    proximas = []
+    datas_especiais = [
+        (cinzas,"Quarta-feira de Cinzas"),(domingo_ramos,"Domingo de Ramos"),
+        (quinta_santa,"Quinta-feira Santa"),(sexta_santa,"Sexta-feira Santa"),
+        (p,"Páscoa"),(ascensao,"Ascensão do Senhor"),(pentecostes,"Pentecostes"),
+        (corpus,"Corpus Christi"),(advento_ini,"Início do Advento"),(natal,"Natal"),
+    ]
+    for d, nome in sorted(datas_especiais, key=lambda x: x[0]):
+        if d >= hoje:
+            diff = (d - hoje).days
+            proximas.append({"nome":nome,"data":d.strftime("%d/%m/%Y"),"dias":diff,
+                "label":"Hoje!" if diff==0 else f"Em {diff} dia{'s' if diff>1 else ''}"})
+
+    santo = _SANTOS.get((hoje.month, hoje.day), "")
+    return jsonify({
+        "hoje": hoje.strftime("%d/%m/%Y"),
+        "dia_semana": ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"][hoje.weekday()],
+        "tempo_liturgico": tempo,
+        "cor_liturgica": cor,
+        "descricao": desc,
+        "santo_dia": santo,
+        "proximas_datas": proximas[:5],
+        "pascoa": p.strftime("%d/%m/%Y"),
+    })
+
+# ── EXAME DE CONSCIÊNCIA ──────────────────────────────────────────────────────
+EXAME_CONSCIENCIA = {
+    "introducao": "O exame de consciência é um momento sagrado de diálogo com Deus. Faça-o com calma, honestidade e confiança na misericórdia divina.",
+    "oracao_inicio": "Espírito Santo, iluminai minha consciência para que eu reconheça meus pecados com verdade e arrependimento sincero. Amém.",
+    "mandamentos": [
+        {"numero":1,"mandamento":"Amarás a Deus sobre todas as coisas","perguntas":["Dei a Deus o primeiro lugar na minha vida?","Rezei com regularidade — Missa dominical, oração diária?","Pratiquei superstições, adivinhações, horóscopo ou ocultismo?","Duvidei ou reneguei a fé católica?","Fui ingrato pelos dons de Deus?"]},
+        {"numero":2,"mandamento":"Não tomarás o nome de Deus em vão","perguntas":["Pronunciei o nome de Deus ou de Jesus com irreverência?","Blasfemei contra Deus, Nossa Senhora ou os Santos?","Fiz juramentos falsos ou desnecessários?","Maldisse pessoas, animais ou coisas?"]},
+        {"numero":3,"mandamento":"Guardarás o domingo e as festas de guarda","perguntas":["Participei da Santa Missa todos os domingos e festas de guarda?","Trabalhei desnecessariamente no domingo sem motivo grave?","Dediquei tempo ao descanso e à família no domingo?"]},
+        {"numero":4,"mandamento":"Honrarás pai e mãe","perguntas":["Respeitei e obedeci meus pais com amor?","Cuidei dos meus pais idosos ou doentes?","Fui rebelde, grosseiro ou negligente com minha família?","Dei bom exemplo aos meus filhos na fé?"]},
+        {"numero":5,"mandamento":"Não matarás","perguntas":["Tive pensamentos ou desejos de fazer mal a alguém?","Causei dano físico ou emocional a outra pessoa?","Pratiquei ou incentivei o aborto?","Abusé de álcool, drogas ou condutas que prejudicam minha saúde?","Lutei contra vícios — pornografia, jogos, substâncias?","Fui movido por ódio, rancor ou desejo de vingança?"]},
+        {"numero":6,"mandamento":"Não cometerás atos impuros","perguntas":["Consenti em pensamentos, desejos ou fantasias impuras?","Pratiquei atos impuros sozinho?","Pequei contra a castidade com outra pessoa?","Consumi pornografia?","Fiz uso de métodos contraceptivos artificiais?","Vivi em união irregular sem o sacramento do matrimônio?"]},
+        {"numero":7,"mandamento":"Não furtarás","perguntas":["Roubei ou furtei algo de alguém?","Fui desonesto no trabalho ou nos negócios?","Causei dano à propriedade alheia sem reparar?","Fui avarento, não partilhando o que tenho com quem precisa?"]},
+        {"numero":8,"mandamento":"Não levantarás falso testemunho","perguntas":["Menti, enganei ou fui desonesto com alguém?","Prejudiquei a reputação de alguém com calúnias?","Revelei segredos ou fofoquei sobre os outros?","Fui hipócrita — aparentei virtude sem praticá-la?"]},
+        {"numero":9,"mandamento":"Não desejarás a mulher do próximo","perguntas":["Alimentei desejos ou olhares impuros sobre outra pessoa?","Fui infiel em pensamentos ou ações no casamento?","Provoquei ou incentivei tentações na vida de outros?"]},
+        {"numero":10,"mandamento":"Não cobiçarás os bens alheios","perguntas":["Desejei com inveja os bens ou o sucesso do próximo?","Fui dominado pela ganância ou pelo materialismo?","Fui descontente com o que Deus me deu?"]},
+    ],
+    "ato_contricao": "Meu Deus, porque sois infinitamente bom e digno de ser amado, pesa-me de todo coração ter-Vos ofendido. Proponho firmemente, com o auxílio da vossa graça, não mais pecar e evitar as ocasiões de pecado. Amém.",
+    "conselho_final": "Após este exame, vá se confessar com um padre. O sacramento da Confissão é o abraço de misericórdia de Deus — não há pecado tão grande que Ele não possa perdoar.",
+}
+
+@app.route("/api/exame-consciencia")
+def api_exame_consciencia():
+    return jsonify(EXAME_CONSCIENCIA)
+
+# ── APOIO ESPIRITUAL ──────────────────────────────────────────────────────────
+TOPICOS_APOIO = [
+    {"id":"pornografia","titulo":"🔒 Pornografia","icone":"🔒","intro":"Você não está sozinho. A pornografia é um dos maiores desafios espirituais do nosso tempo. Deus não te condena — Ele quer te libertar.","passos":["Reconheça o problema — admitir é o primeiro passo da cura.","Confie na misericórdia de Deus — não há pecado que vença o amor de Deus.","Vá à Confissão — o sacramento da Penitência rompe as correntes do vício.","Reze o Rosário diariamente — Nossa Senhora é poderosa contra o mal.","Instale filtros de conteúdo no celular e computador.","Busque um confessor regular — um padre de confiança é fundamental.","Quando vier a tentação, levante-se, saia do ambiente e reze: 'Jesus, misericórdia!'"],"oracao":"Senhor Jesus, sois a fonte de toda pureza. Livrai-me desta corrente e purificai meu coração. Nossa Senhora, rainha da pureza, intercedei por mim. Amém.","citacao":"\"Bem-aventurados os limpos de coração, porque eles verão a Deus.\" (Mt 5,8)","proximo_passo":"Procure um padre hoje para se confessar. A misericórdia de Deus está esperando por você agora."},
+    {"id":"alcool_drogas","titulo":"🍷 Álcool e drogas","icone":"🍷","intro":"O vício é uma ferida, não uma fraqueza moral. Deus vê seu sofrimento e quer curar você de dentro para fora.","passos":["Admita a dependência — a humildade é o começo da cura.","Busque ajuda profissional — psicólogo, médico, grupos de apoio (AA, NA).","Vá à Confissão — limpe a alma enquanto cuida do corpo.","Reze pela força: 'Posso tudo nAquele que me fortalece.' (Fl 4,13)","Afaste-se das ocasiões de pecado — mude ambientes e companhias.","Peça intercessão de São Maximilian Kolbe e do Padre Pio."],"oracao":"Senhor, minha fraqueza é grande, mas Vós sois mais forte. Cujai-me pela vossa misericórdia. Que eu encontre em Vós a força que busco nas coisas erradas. Amém.","citacao":"\"Vinde a mim, todos os que estais cansados e oprimidos, e Eu vos aliviarei.\" (Mt 11,28)","proximo_passo":"Ligue para o CVV (188) ou procure o CAPS mais próximo. Depois, vá a uma Missa e se confesse."},
+    {"id":"depressao_ansiedade","titulo":"💙 Depressão e ansiedade","icone":"💙","intro":"A dor da alma é real e Deus a conhece. Jesus chorou diante do túmulo de Lázaro — Ele chora com você.","passos":["Busque ajuda profissional — terapia e/ou psiquiatria são presentes de Deus.","Compartilhe com alguém de confiança — não carregue sozinho.","Reze os Salmos — especialmente o Salmo 22 e o Salmo 91.","Vá à adoração eucarística — a presença de Jesus cura o que as palavras não alcançam.","Não fuja dos sacramentos — Missa, Confissão e Unção dos Enfermos.","Um dia de cada vez — não tente resolver tudo de uma vez."],"oracao":"Senhor, minha alma está abatida dentro de mim. Mas ponho minha esperança em Vós. Sois minha rocha e minha salvação. Amém.","citacao":"\"Não temas, porque Eu estou contigo; não te assombres, porque Eu sou o teu Deus.\" (Is 41,10)","proximo_passo":"Ligue para o CVV: 188 (24h, gratuito). Busque um psicólogo ou médico próximo de você."},
+    {"id":"casamento_familia","titulo":"👨‍👩‍👧 Casamento e família","icone":"👨‍👩‍👧","intro":"O casamento é um sacramento — Deus está na aliança. Nas crises, Ele não abandona.","passos":["Ore junto com o cônjuge — a família que reza unida permanece unida.","Busque aconselhamento com um padre ou conselheiro familiar católico.","Vão juntos à Missa — a Eucaristia fortalece o amor conjugal.","Perdoe e peça perdão — o perdão é o coração do casamento cristão.","Participem de retiros de casal — como o Encontro de Casais com Cristo (ECC)."],"oracao":"Senhor, abençoai nossa família. Quando o amor fraqueja, renovai-o. Que Nossa Senhora cuide de nós. Amém.","citacao":"\"O que Deus uniu, o homem não separe.\" (Mc 10,9)","proximo_passo":"Procure sua paróquia e pergunte sobre aconselhamento familiar ou retiros de casal."},
+    {"id":"perda_luto","titulo":"🕯️ Perda e luto","icone":"🕯️","intro":"A dor da perda é a medida do amor. Deus chora com você e guarda todos aqueles que partem.","passos":["Deixe-se chorar — o luto é sagrado e necessário.","Reze por quem partiu — ofereça Missas, reze o Rosário.","Confie na ressurreição — a morte não é o fim para quem crê.","Busque apoio da comunidade — sua paróquia pode oferecer grupos de luto.","Não apresse o processo — Deus caminha no ritmo do seu coração."],"oracao":"Senhor, recebei em Vossos braços aqueles que amamos. Que a luz que não tem fim brilhe para eles. Amém.","citacao":"\"Eu sou a ressurreição e a vida. Quem crê em mim, mesmo que morra, viverá.\" (Jo 11,25)","proximo_passo":"Peça ao padre da sua paróquia para oferecer uma Missa pela alma do falecido."},
+    {"id":"fe_duvida","titulo":"🤔 Dúvidas na fé","icone":"🤔","intro":"A dúvida não é o oposto da fé — é parte do caminho. Até os santos duvidaram. Deus não teme suas perguntas.","passos":["Dialogue com Deus na oração — diga a Ele suas dúvidas diretamente.","Leia bons livros católicos — C.S. Lewis, G.K. Chesterton, Santo Agostinho.","Converse com um padre — ele está preparado para acompanhar crises de fé.","Continue na Missa e na oração mesmo sem sentir.","Estude a apologética católica — há respostas para quase tudo."],"oracao":"Senhor, eu creio; ajudai a minha incredulidade. (Mc 9,24) Iluminai minha mente e fortifiquei minha fé. Amém.","citacao":"\"Pede e receberás; procura e encontrarás; bate e te abrirão.\" (Mt 7,7)","proximo_passo":"Leia 'Meras Questões Cristãs' de C.S. Lewis ou 'Confissões' de Santo Agostinho."},
+]
+
+@app.route("/api/apoio")
+def api_apoio_lista():
+    return jsonify([{"id":t["id"],"titulo":t["titulo"],"icone":t["icone"]} for t in TOPICOS_APOIO])
+
+@app.route("/api/apoio/<topico_id>")
+def api_apoio_topico(topico_id):
+    for t in TOPICOS_APOIO:
+        if t["id"] == topico_id:
+            return jsonify(t)
+    return jsonify({"error": "Tópico não encontrado"}), 404
