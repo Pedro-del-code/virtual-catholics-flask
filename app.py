@@ -13,9 +13,6 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
-app.config["SESSION_COOKIE_SECURE"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -116,20 +113,18 @@ def novo_chat_id():
     return datetime.now().strftime("%Y%m%d%H%M%S")
 
 _SANTOS = {
-    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",
-    (1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
-    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",
-    (3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
-    (4,23):"Sao Jorge",(4,29):"Santa Catarina de Siena",
-    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",
+    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",(1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
+    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",(2,14):"Santos Cirilo e Metodio",(2,22):"Catedral de Sao Pedro",(2,23):"Sao Policarpo",
+    (3,4):"Sao Casimiro",(3,6):"Sao Colette — freira francesa (1381-1447) que reformou as Clarissas, fundou 17 mosteiros, tinha dons misticos e e padroeira das gravidas",(3,7):"Santas Perpetua e Felicidade",(3,8):"Sao Joao de Deus",(3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
+    (4,7):"Sao Joao Batista de La Salle",(4,23):"Sao Jorge",(4,25):"Sao Marcos Evangelista",(4,29):"Santa Catarina de Siena",
+    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",(5,24):"Santa Maria Auxiliadora",
     (6,13):"Santo Antonio de Lisboa",(6,24):"Natividade de Sao Joao Batista",(6,29):"Santos Pedro e Paulo",
-    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",
-    (8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
-    (9,8):"Natividade de Nossa Senhora",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina",
-    (10,1):"Santa Teresinha do Menino Jesus",(10,4):"Sao Francisco de Assis",
-    (10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
+    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",(7,25):"Sao Tiago Apostolo",
+    (8,6):"Transfiguracao do Senhor",(8,10):"Sao Lourenco",(8,11):"Santa Clara de Assis",(8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
+    (9,8):"Natividade de Nossa Senhora",(9,14):"Exaltacao da Santa Cruz",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina — capuchinho italiano com estigmas por 50 anos, dons de cura e leitura de almas",
+    (10,1):"Santa Teresinha do Menino Jesus",(10,2):"Santos Anjos da Guarda",(10,4):"Sao Francisco de Assis",(10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
     (11,1):"Todos os Santos",(11,2):"Todos os Fieis Defuntos",
-    (12,8):"Imaculada Conceicao de Maria",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
+    (12,8):"Imaculada Conceicao de Maria",(12,12):"Nossa Senhora de Guadalupe",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
 }
 
 TRADUCOES = {
@@ -219,11 +214,7 @@ def auth_google_callback():
         if not usuario:
             username = email.split("@")[0] + "_" + str(uuid.uuid4())[:4]
             criar_usuario_google(username, nome, google_id, email, foto)
-            session["username"] = username
-            session["nome"] = nome
-            session["foto"] = foto
-            session["idioma"] = "pt"
-            return redirect("/")
+            usuario = carregar_usuario(username)
         session["username"] = usuario["username"]
         session["nome"] = usuario["nome"]
         session["foto"] = foto
@@ -357,13 +348,28 @@ def api_deletar_chat():
 
 @app.route("/api/dados/<tipo>")
 def api_dados(tipo):
-    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS
-    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS}
+    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS, CATECISMO
+    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS, "catecismo": CATECISMO}
     dados = mapa.get(tipo, {})
     nome = request.args.get("nome")
     if nome:
         return jsonify({"conteudo": dados.get(nome, "")})
     return jsonify(list(dados.keys()))
+
+@app.route("/api/creditos")
+def api_creditos():
+    from data import CREDITOS
+    return jsonify(CREDITOS)
+
+@app.route("/api/info")
+def api_info():
+    from data import CREDITOS
+    return jsonify({
+        "email": CREDITOS["email"],
+        "versao": CREDITOS["versao"],
+        "criador": CREDITOS["criador"],
+        "pix_qr": CREDITOS["pix_qr"],
+    })
 
 @app.route("/api/santo-dia")
 def api_santo_dia():
@@ -372,4 +378,4 @@ def api_santo_dia():
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True)
