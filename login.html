@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Catholics</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c8a050;--gold-light:#f5d78e;--gold-dark:#8b6820;--cream:#faf6ef;--dark:#0d0a05;--brown:#2a1a08;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;overflow:hidden;position:relative;transition:background .4s;}
+/* Fundo com imagem */
+.bg-img{position:fixed;inset:0;background-size:cover;background-position:center;transition:all .4s;}
+.bg-overlay{position:fixed;inset:0;transition:background .4s;}
+/* Estrelinhas */
+.star{position:fixed;width:2px;height:2px;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay);z-index:1;}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+/* Card */
+.card{position:relative;z-index:10;width:380px;border:1px solid rgba(200,160,80,.3);border-radius:2px;padding:48px 40px 40px;transition:all .4s;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.logo-area{text-align:center;margin-bottom:32px;}
+.cross{font-size:28px;color:var(--gold);margin-bottom:12px;display:block;text-shadow:0 0 20px rgba(200,160,80,.5);}
+.logo-title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color .4s;}
+.logo-sub{font-size:12px;color:rgba(200,160,80,.5);letter-spacing:4px;text-transform:uppercase;margin-top:6px;}
+.tabs{display:flex;border-bottom:1px solid rgba(200,160,80,.2);margin-bottom:28px;}
+.tab{flex:1;padding:10px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:rgba(200,160,80,.4);cursor:pointer;transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.form{display:none;}.form.active{display:block;}
+.input-group{position:relative;margin-bottom:16px;}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(200,160,80,.4);font-size:14px;}
+input{width:100%;padding:13px 14px 13px 38px;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.2);border-radius:2px;font-family:'Cormorant Garamond',serif;font-size:15px;outline:none;transition:all .3s;}
+input::placeholder{color:rgba(200,160,80,.3);}
+input:focus{border-color:rgba(200,160,80,.6);background:rgba(255,255,255,.06);}
+.btn-main{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:2px;color:var(--dark);font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px;}
+.btn-main:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));box-shadow:0 4px 20px rgba(200,160,80,.3);}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(200,160,80,.15);}
+.divider span{font-size:11px;color:rgba(200,160,80,.3);letter-spacing:2px;}
+.btn-google{width:100%;padding:13px;background:transparent;border:1px solid rgba(200,160,80,.25);border-radius:2px;color:var(--gold-light);font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;}
+.btn-google:hover{border-color:rgba(200,160,80,.5);background:rgba(200,160,80,.05);}
+.btn-google img{width:18px;height:18px;}
+.lang-sel{display:flex;justify-content:center;gap:8px;margin-bottom:20px;}
+.lang-btn{background:transparent;border:1px solid rgba(200,160,80,.2);border-radius:2px;color:rgba(200,160,80,.5);font-size:11px;padding:4px 8px;cursor:pointer;transition:all .2s;font-family:'Cinzel',serif;}
+.lang-btn.active,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+.erro{background:rgba(180,40,40,.15);border:1px solid rgba(180,40,40,.3);border-radius:2px;padding:10px 14px;font-size:13px;color:#ff8080;margin-bottom:16px;display:none;}
+.erro.show{display:block;}
+.footer{text-align:center;margin-top:28px;font-size:12px;color:rgba(200,160,80,.25);letter-spacing:1px;font-style:italic;}
+/* Botão modo */
+.btn-mode{position:fixed;top:16px;right:16px;z-index:20;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.25);border-radius:2px;color:rgba(200,160,80,.7);font-size:11px;padding:6px 12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;transition:all .2s;}
+.btn-mode:hover{background:rgba(200,160,80,.2);color:var(--gold);}
+/* Modo escuro */
+body.dark .card{background:linear-gradient(160deg,rgba(26,14,4,.92) 0%,rgba(13,10,5,.96) 100%);box-shadow:0 0 60px rgba(200,160,80,.08),0 20px 60px rgba(0,0,0,.8);}
+body.dark .logo-title{color:var(--gold-light);}
+body.dark input{color:var(--cream);}
+body.dark .bg-overlay{background:rgba(0,0,0,.55);}
+body.dark .star{background:rgba(245,215,142,.6);}
+/* Modo claro */
+body.light .card{background:linear-gradient(160deg,rgba(255,252,245,.92) 0%,rgba(250,246,239,.96) 100%);box-shadow:0 0 40px rgba(200,160,80,.1),0 20px 60px rgba(0,0,0,.15);}
+body.light .logo-title{color:var(--gold-dark);}
+body.light input{color:#2a1a08;background:rgba(255,255,255,.6);}
+body.light input:focus{background:rgba(255,255,255,.9);}
+body.light .bg-overlay{background:rgba(250,246,239,.45);}
+body.light .star{background:rgba(200,160,80,.5);}
+body.light .footer{color:rgba(139,104,32,.4);}
+</style>
+</head>
+<body id="body" class="dark">
+<div class="bg-img" id="bgImg"></div>
+<div class="bg-overlay" id="bgOverlay"></div>
+<div id="starsContainer"></div>
+<button class="btn-mode" id="btnMode" onclick="toggleModo()">☀️ Modo Claro</button>
+<div class="card">
+  <div class="logo-area">
+    <span class="cross">✝</span>
+    <div class="logo-title">Virtual Catholics</div>
+    <div class="logo-sub" id="sub">{{ T.subtitulo }}</div>
+  </div>
+  <div class="lang-sel">
+    <button class="lang-btn {% if idioma=='pt' %}active{% endif %}" onclick="setLang('pt')">🇧🇷 PT</button>
+    <button class="lang-btn {% if idioma=='en' %}active{% endif %}" onclick="setLang('en')">🇺🇸 EN</button>
+    <button class="lang-btn {% if idioma=='es' %}active{% endif %}" onclick="setLang('es')">🇪🇸 ES</button>
+    <button class="lang-btn {% if idioma=='it' %}active{% endif %}" onclick="setLang('it')">🇮🇹 IT</button>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="trocarAba('entrar')" id="tab-entrar">{{ T.entrar }}</div>
+    <div class="tab" onclick="trocarAba('criar')" id="tab-criar">{{ T.criar_conta }}</div>
+  </div>
+  <div id="erro" class="erro"></div>
+  <div class="form active" id="form-entrar">
+    <div class="input-group"><span class="input-icon">👤</span><input type="text" id="login-user" placeholder="{{ T.entrar }}"></div>
+    <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="login-senha" placeholder="Senha"></div>
+    <button class="btn-main" onclick="fazerLogin()">✝ &nbsp; {{ T.entrar }}</button>
+    <div class="divider"><span>ou</span></div>
+    <a href="/auth/google" class="btn-google"><img src="https://www.google.com/favicon.ico" alt="G"> Google</a>
+  </div>
+  <div class="form" id="form-criar">
+    <div class="input-group"><span class="input-icon">🙏</span><input type="text" id="reg-nome" placeholder="Nome"></div>
+    <div class="input-group"><span class="input-icon">👤</span><input type="text" id="reg-user" placeholder="Usuario"></div>
+    <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="reg-senha" placeholder="Senha"></div>
+    <button class="btn-main" onclick="criarConta()">✝ &nbsp; {{ T.criar_conta }}</button>
+    <div class="divider"><span>ou</span></div>
+    <a href="/auth/google" class="btn-google"><img src="https://www.google.com/favicon.ico" alt="G"> Google</a>
+  </div>
+  <div class="footer">Que Deus te abencoe ✦ Paz e Bem!</div>
+</div>
+<script>
+let idioma='{{ idioma }}';
+const IMG_ESCURA = "{{ url_for('static', filename='maria_escura.png') }}";
+const IMG_CLARA = "{{ url_for('static', filename='maria_clara.png') }}";
+
+// Estrelas
+const sc = document.getElementById('starsContainer');
+for(let i=0;i<50;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s`;
+  sc.appendChild(s);
+}
+
+// Modo
+let modoEscuro = localStorage.getItem('modo') !== 'claro';
+aplicarModo();
+
+function aplicarModo() {
+  const body = document.getElementById('body');
+  const btn = document.getElementById('btnMode');
+  const bg = document.getElementById('bgImg');
+  if (modoEscuro) {
+    body.className = 'dark';
+    bg.style.backgroundImage = `url('${IMG_ESCURA}')`;
+    btn.textContent = '☀️ Modo Claro';
+  } else {
+    body.className = 'light';
+    bg.style.backgroundImage = `url('${IMG_CLARA}')`;
+    btn.textContent = '🌙 Modo Escuro';
+  }
+}
+
+function toggleModo() {
+  modoEscuro = !modoEscuro;
+  localStorage.setItem('modo', modoEscuro ? 'escuro' : 'claro');
+  aplicarModo();
+}
+
+function setLang(l){window.location.href='/login?lang='+l;}
+function trocarAba(a){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0)===(a==='entrar')));
+  document.getElementById('form-entrar').classList.toggle('active',a==='entrar');
+  document.getElementById('form-criar').classList.toggle('active',a==='criar');
+  document.getElementById('erro').classList.remove('show');
+}
+function mostrarErro(m){const e=document.getElementById('erro');e.textContent=m;e.classList.add('show');}
+async function fazerLogin(){
+  const u=document.getElementById('login-user').value;
+  const s=document.getElementById('login-senha').value;
+  document.getElementById('erro').classList.remove('show');
+  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,senha:s,idioma})});
+  const d=await r.json();
+  if(d.ok)window.location.href='/';
+  else mostrarErro(d.erro);
+}
+async function criarConta(){
+  const n=document.getElementById('reg-nome').value;
+  const u=document.getElementById('reg-user').value;
+  const s=document.getElementById('reg-senha').value;
+  document.getElementById('erro').classList.remove('show');
+  const r=await fetch('/api/registro',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome:n,username:u,senha:s,idioma})});
+  const d=await r.json();
+  if(d.ok)window.location.href='/';
+  else mostrarErro(d.erro);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('form-entrar').classList.contains('active'))fazerLogin();else criarConta();}});
+</script>
+</body>
+</html>
