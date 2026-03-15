@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;overflow:hidden;position:relative;transition:background .4s;}
 /* Fundo com imagem */
-.bg-img{position:fixed;inset:0;background-size:cover;background-position:center;transition:all .4s;}
+.bg-img{position:fixed;inset:0;background-size:cover;background-position:center top;transition:all .4s;}
 .bg-overlay{position:fixed;inset:0;transition:background .4s;}
 /* Estrelinhas */
 .star{position:fixed;width:2px;height:2px;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay);z-index:1;}
@@ -52,16 +52,23 @@ input:focus{border-color:rgba(200,160,80,.6);background:rgba(255,255,255,.06);}
 body.dark .card{background:linear-gradient(160deg,rgba(26,14,4,.92) 0%,rgba(13,10,5,.96) 100%);box-shadow:0 0 60px rgba(200,160,80,.08),0 20px 60px rgba(0,0,0,.8);}
 body.dark .logo-title{color:var(--gold-light);}
 body.dark input{color:var(--cream);}
-body.dark .bg-overlay{background:rgba(0,0,0,.55);}
+body.dark .bg-overlay{background:rgba(0,0,0,.42);}
 body.dark .star{background:rgba(245,215,142,.6);}
 /* Modo claro */
-body.light .card{background:linear-gradient(160deg,rgba(255,252,245,.92) 0%,rgba(250,246,239,.96) 100%);box-shadow:0 0 40px rgba(200,160,80,.1),0 20px 60px rgba(0,0,0,.15);}
+body.light .card{background:linear-gradient(160deg,rgba(255,252,245,.93) 0%,rgba(250,246,239,.97) 100%);box-shadow:0 0 40px rgba(200,160,80,.1),0 20px 60px rgba(0,0,0,.15);}
 body.light .logo-title{color:var(--gold-dark);}
-body.light input{color:#2a1a08;background:rgba(255,255,255,.6);}
-body.light input:focus{background:rgba(255,255,255,.9);}
-body.light .bg-overlay{background:rgba(250,246,239,.45);}
+body.light input{color:#1a0e04;background:rgba(255,255,255,.7);}
+body.light input:focus{background:rgba(255,255,255,.95);}
+body.light input::placeholder{color:rgba(139,104,32,.5);}
+body.light .bg-overlay{background:rgba(245,238,220,.25);}
 body.light .star{background:rgba(200,160,80,.5);}
 body.light .footer{color:rgba(139,104,32,.4);}
+body.light .tab{color:rgba(139,104,32,.5);}
+body.light .tab.active{color:var(--gold-dark);border-bottom-color:var(--gold-dark);}
+body.light .divider span{color:rgba(139,104,32,.4);}
+body.light .btn-google{color:var(--gold-dark);border-color:rgba(139,104,32,.3);}
+body.light .logo-sub{color:rgba(139,104,32,.6);}
+body.light .btn-mode{background:rgba(139,104,32,.1);border-color:rgba(139,104,32,.3);color:rgba(139,104,32,.8);}
 </style>
 </head>
 <body id="body" class="dark">
@@ -87,7 +94,7 @@ body.light .footer{color:rgba(139,104,32,.4);}
   </div>
   <div id="erro" class="erro"></div>
   <div class="form active" id="form-entrar">
-    <div class="input-group"><span class="input-icon">👤</span><input type="text" id="login-user" placeholder="{{ T.entrar }}"></div>
+    <div class="input-group"><span class="input-icon">👤</span><input type="text" id="login-user" placeholder="Usuário"></div>
     <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="login-senha" placeholder="Senha"></div>
     <button class="btn-main" onclick="fazerLogin()">✝ &nbsp; {{ T.entrar }}</button>
     <div class="divider"><span>ou</span></div>
@@ -151,13 +158,23 @@ function trocarAba(a){
 }
 function mostrarErro(m){const e=document.getElementById('erro');e.textContent=m;e.classList.add('show');}
 async function fazerLogin(){
-  const u=document.getElementById('login-user').value;
-  const s=document.getElementById('login-senha').value;
+  const u=document.getElementById('login-user').value.trim();
+  const s=document.getElementById('login-senha').value.trim();
+  if(!u||!s){mostrarErro('Preencha todos os campos!');return;}
   document.getElementById('erro').classList.remove('show');
-  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,senha:s,idioma})});
-  const d=await r.json();
-  if(d.ok)window.location.href='/';
-  else mostrarErro(d.erro);
+  const btn = document.querySelector('#form-entrar .btn-main');
+  btn.textContent = '...';
+  btn.disabled = true;
+  try {
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,senha:s,idioma})});
+    const d=await r.json();
+    if(d.ok)window.location.href='/';
+    else mostrarErro(d.erro);
+  } catch(e) {
+    mostrarErro('Erro de conexão. Tente novamente.');
+  }
+  btn.innerHTML='✝ &nbsp; {{ T.entrar }}';
+  btn.disabled=false;
 }
 async function criarConta(){
   const n=document.getElementById('reg-nome').value;
