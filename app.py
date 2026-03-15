@@ -134,10 +134,18 @@ TRADUCOES = {
     "it": {"novo_chat":"+ Nuova chat","oracoes":"Preghiere","biblia":"Bibbia","terco":"Rosario","liturgia":"Liturgia del Giorno","santo":"Santo del Giorno","novenas":"Novene","catecismo":"Catechismo","liturgia_horas":"Liturgia delle Ore","canticos":"Cantici e Inni","modo_escuro":"Modalita Scura","modo_claro":"Modalita Chiara","idioma":"Lingua","deletar":"Elimina conversazione","bem_vindo":"Benvenuto(a)","subtitulo":"Assistente Cattolico","entrar":"Accedi","criar_conta":"Crea account","erro_login":"Nome utente o password errati!","erro_campos":"Per favore, compila tutti i campi!","erro_usuario_existe":"Nome utente gia esistente!","erro_usuario_invalido":"Nome utente non valido.","erro_nome_improprio":"Nome non consentito.","erro_senha_impropria":"Password non consentita.","placeholder_mensagem":"Invia un messaggio...","nova_conversa":"Nuova conversazione","santo_sem":"Nessun santo registrato per oggi.","nov_titulo":"Novene","nov_dia":"Giorno","nov_anterior":"Precedente","nov_proximo":"Successivo","nov_fim":"Novena completata!","terco_titulo":"Rosario","terco_como":"Come pregare","lit_horas_titulo":"Liturgia delle Ore","canticos_titulo":"Cantici e Inni Liturgici","idioma_instrucao":"REGOLA ASSOLUTA DI LINGUA: Rispondi SEMPRE ed ESCLUSIVAMENTE in italiano.","sair":"Esci"},
 }
 
+@app.route("/intro")
+def intro():
+    return render_template("intro.html")
+
 @app.route("/")
 def index():
     if "username" not in session:
         return redirect("/login")
+    # Mostrar intro apenas uma vez por sessão
+    if not session.get("intro_visto"):
+        session["intro_visto"] = True
+        return redirect("/intro")
     idioma = session.get("idioma", "pt")
     T = TRADUCOES[idioma]
     hoje = date.today()
