@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;display:flex;overflow:hidden;color:var(--cream);}
 /* Sidebar */
-.sidebar{width:260px;background:rgba(8,5,1,.95);backdrop-filter:blur(16px);border-right:1px solid rgba(200,160,80,.18);display:flex;flex-direction:column;flex-shrink:0;}
+.sidebar{width:260px;background:var(--sidebar);border-right:1px solid rgba(200,160,80,.15);display:flex;flex-direction:column;flex-shrink:0;}
 .sidebar-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);text-align:center;}
 .sidebar-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
 .sidebar-sub{font-size:10px;color:rgba(200,160,80,.3);letter-spacing:3px;margin-top:3px;}
@@ -70,48 +70,20 @@ body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;
 .welcome-santo{font-size:12px;color:rgba(200,160,80,.4);margin-top:4px;font-style:italic;}
 /* Imagem de fundo da área principal */
 .main-bg{position:absolute;inset:0;z-index:0;background-size:contain;background-repeat:no-repeat;background-position:center center;opacity:0.07;pointer-events:none;transition:opacity .3s;}
-/* Modo escuro — textos claros e suaves */
-.sidebar-logo{color:#f0e8d8;}
-.sidebar-sub{color:rgba(240,232,216,.45);}
-.sidebar-section{color:rgba(240,232,216,.4);}
-.btn-new{color:#f0e8d8;}
-.menu-btn{color:rgba(240,232,216,.75);}
-.menu-btn:hover{background:rgba(200,160,80,.1);color:#f5f0e8;}
-.chat-item{color:rgba(240,232,216,.65);}
-.chat-item:hover,.chat-item.active{color:#f5f0e8;}
-.user-nome{color:#f0e8d8;}
-.btn-logout{color:rgba(240,232,216,.5);}
-.lang-mini{color:rgba(240,232,216,.45);}
-.lang-mini.active,.lang-mini:hover{color:#f0e8d8;}
-
-/* Modo claro — textos escuros e quentes */
-body.light .sidebar{background:rgba(255,248,225,.93);backdrop-filter:blur(16px);border-right-color:rgba(180,130,40,.2);}
-body.light .sidebar-logo{color:#4a2a00;}
-body.light .sidebar-sub{color:rgba(80,50,10,.55);}
-body.light .sidebar-section{color:rgba(80,50,10,.5);}
-body.light .btn-new{background:rgba(200,160,80,.18);border-color:rgba(200,160,80,.35);color:#4a2a00;}
-body.light .menu-btn{color:rgba(60,35,5,.8);}
-body.light .menu-btn:hover{background:rgba(200,160,80,.12);color:#3a1a00;}
-body.light .chat-item{color:rgba(60,35,5,.75);}
-body.light .chat-item:hover,.light .chat-item.active{color:#3a1a00;}
-body.light .user-nome{color:#4a2a00;}
-body.light .btn-logout{border-color:rgba(180,130,40,.2);color:rgba(80,50,10,.55);}
-body.light .lang-mini{border-color:rgba(180,130,40,.2);color:rgba(80,50,10,.55);}
-body.light .lang-mini.active,.light .lang-mini:hover{border-color:var(--gold-dark);color:#4a2a00;}
-body.light .sidebar-footer{border-top-color:rgba(180,130,40,.15);}
-body.light .msg-user{background:rgba(200,160,80,.18);color:#2a1a08;}
-body.light .msg-bot{background:rgba(255,252,240,.78);color:#2a1a08;}
-body.light .main-header{border-bottom-color:rgba(200,160,80,.2);background:rgba(255,248,225,.3);}
-body.light .chat-titulo{color:#4a2a00;}
+/* Modo claro */
+body.light{--dark:#f5f0e8;--sidebar:#ede6d6;--cream:#2a1a08;background:#f5f0e8;}
+body.light .main{background:#f5f0e8;}
+body.light .msg-user{background:rgba(200,160,80,.15);color:#2a1a08;}
+body.light .msg-bot{background:rgba(255,255,255,.7);color:#2a1a08;}
+body.light .main-header{border-bottom-color:rgba(200,160,80,.2);}
+body.light .chat-titulo{color:rgba(139,104,32,.8);}
 body.light .messages{background:transparent;}
-body.light .main-bg{opacity:0.10;}
-body.light textarea{background:rgba(255,252,240,.65);color:#2a1a08;border-color:rgba(200,160,80,.3);}
-body.light textarea::placeholder{color:rgba(80,50,10,.4);}
-body.light .panel{background:rgba(255,250,235,.97);border-left-color:rgba(200,160,80,.25);}
+body.light .main-bg{opacity:0.12;}
+body.light textarea{background:rgba(255,255,255,.6);color:#2a1a08;border-color:rgba(200,160,80,.3);}
+body.light textarea::placeholder{color:rgba(139,104,32,.4);}
+body.light .panel{background:rgba(245,240,232,.97);border-left-color:rgba(200,160,80,.3);}
 body.light .panel-content{color:#2a1a08;}
-body.light .panel-item{color:#3a1a00;border-color:rgba(180,130,40,.2);}
-body.light .panel-item:hover{background:rgba(200,160,80,.08);}
-body.light .input-area{background:rgba(255,248,225,.3);}
+body.light .panel-item{color:#4a3010;}
 /* Typing */
 .typing{display:flex;gap:4px;padding:4px 0;}
 .typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:typing 1.2s ease-in-out infinite;}
@@ -146,7 +118,11 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
     <div class="menu-btn" onclick="abrirPanel('liturgia_horas')">⛪ {{ T.liturgia_horas }}</div>
     <div class="menu-btn" onclick="abrirPanel('canticos')">🎵 {{ T.canticos }}</div>
     <div class="menu-btn" onclick="abrirPanel('catecismo')">📖 Catecismo</div>
+    <div class="menu-btn" onclick="abrirPanel('biblia')">📜 Bíblia Sagrada</div>
+    <div class="menu-btn" onclick="abrirPanel('calendario')">🗓️ Calendário Litúrgico</div>
     <div class="menu-btn" onclick="abrirPanel('santo')">⭐ {{ T.santo }}</div>
+    <div class="menu-btn" onclick="abrirPanel('exame')">🔍 Exame de Consciência</div>
+    <div class="menu-btn" onclick="abrirPanel('apoio')">🆘 Apoio Espiritual</div>
     <div class="sidebar-section">SOBRE</div>
     <div class="menu-btn" onclick="abrirPanel('creditos')">👨‍💻 Créditos</div>
     <div class="menu-btn" onclick="abrirPanel('feedback')">📧 Feedback & Suporte</div>
@@ -383,11 +359,86 @@ async function abrirPanel(tipo) {
     return;
   }
 
+  if(tipo==='calendario') {
+    document.getElementById('panelTitulo').textContent='CALENDÁRIO LITÚRGICO';
+    body.innerHTML='<div class="panel-content">Carregando... 🕯️</div>';
+    const r = await fetch('/api/calendario');
+    const d = await r.json();
+    const cores={'verde':'#4a8c4a','roxo':'#6a3d9a','branco':'#8b6914','vermelho':'#8b1a1a'};
+    const cor=cores[d.cor_liturgica]||'#c8a050';
+    body.innerHTML=`<div class="panel-content">
+      <b style="color:var(--gold)">${d.dia_semana}, ${d.hoje}</b><br><br>
+      <div style="background:${cor}22;border:1px solid ${cor}55;border-radius:6px;padding:10px;margin-bottom:12px">
+        <b style="color:${cor};font-size:15px">${d.tempo_liturgico}</b><br>
+        <small>Cor litúrgica: <b>${d.cor_liturgica}</b></small><br>
+        <small style="opacity:.8">${d.descricao}</small>
+      </div>
+      ${d.santo_dia?`<b style="color:var(--gold)">⭐ Santo do dia</b><br><small>${d.santo_dia}</small><br><br>`:''}
+      <b style="color:var(--gold)">📅 Próximas datas</b>
+      ${d.proximas_datas.map(p=>`<div style="padding:6px 0;border-bottom:1px solid rgba(200,160,80,.1)"><b>${p.nome}</b><br><small>${p.data} — <span style="color:var(--gold)">${p.label}</span></small></div>`).join('')}
+    </div>`;
+    return;
+  }
+
+  if(tipo==='biblia') {
+    document.getElementById('panelTitulo').textContent='BÍBLIA SAGRADA';
+    body.innerHTML='<div class="panel-content">Carregando... 📜</div>';
+    const r = await fetch('/api/biblia/livros');
+    const livros = await r.json();
+    body.innerHTML='<div class="panel-content"><b style="color:var(--gold)">📜 Antigo Testamento</b></div>';
+    let ntOk=false;
+    livros.forEach(l=>{
+      if(l.testamento==='NT'&&!ntOk){
+        const s=document.createElement('div');s.className='panel-content';
+        s.innerHTML='<b style="color:var(--gold)">✝️ Novo Testamento</b>';
+        body.appendChild(s);ntOk=true;
+      }
+      const el=document.createElement('div');el.className='panel-item';
+      el.innerHTML=`<span style="color:var(--gold);font-size:11px;margin-right:6px">${l.abrev}</span>${l.nome}`;
+      el.onclick=()=>abrirLivroBiblia(l);
+      body.appendChild(el);
+    });
+    return;
+  }
+
+  if(tipo==='exame') {
+    document.getElementById('panelTitulo').textContent='EXAME DE CONSCIÊNCIA';
+    body.innerHTML='<div class="panel-content">Carregando... 🙏</div>';
+    const r = await fetch('/api/exame-consciencia');
+    const d = await r.json();
+    body.innerHTML=`<div class="panel-content">
+      <b style="color:var(--gold)">🙏 Oração inicial</b><br>
+      <small style="font-style:italic;opacity:.85">${d.oracao_inicio}</small><br><br>
+      <small>Clique em cada mandamento para examinar sua consciência:</small>
+    </div>`;
+    d.mandamentos.forEach(m=>{
+      const el=document.createElement('div');el.className='panel-item';
+      el.innerHTML=`<b style="color:var(--gold)">${m.numero}º</b> ${m.mandamento}`;
+      el.onclick=()=>abrirMandamento(m,d.ato_contricao,d.conselho_final);
+      body.appendChild(el);
+    });
+    return;
+  }
+
+  if(tipo==='apoio') {
+    document.getElementById('panelTitulo').textContent='APOIO ESPIRITUAL';
+    body.innerHTML='<div class="panel-content"><b style="color:var(--gold)">🆘 Estou passando por...</b><br><small>Escolha um tema e receba orientação espiritual e prática.</small></div>';
+    const r = await fetch('/api/apoio');
+    const lista = await r.json();
+    lista.forEach(t=>{
+      const el=document.createElement('div');el.className='panel-item';
+      el.textContent=t.titulo;
+      el.onclick=()=>abrirApoio(t.id);
+      body.appendChild(el);
+    });
+    return;
+  }
+
   if(tipo==='creditos') {
     document.getElementById('panelTitulo').textContent='CRÉDITOS';
     const r = await fetch('/api/creditos');
     const d = await r.json();
-    body.innerHTML = `<div class="panel-content">
+    body.innerHTML=`<div class="panel-content">
       <b style="color:var(--gold)">👨‍💻 Criador</b><br>${d.criador}<br><small>${d.criador_desc}</small><br><br>
       <b style="color:var(--gold)">💡 Agradecimento Especial</b><br>${d.agradecimento_nome}<br><small>${d.agradecimento_desc}</small><br><br>
       <b style="color:var(--gold)">🙏 Dedicado a</b><br><small>${d.dedicatoria}</small><br><br>
@@ -400,10 +451,10 @@ async function abrirPanel(tipo) {
     document.getElementById('panelTitulo').textContent='FEEDBACK & SUPORTE';
     const r = await fetch('/api/info');
     const d = await r.json();
-    body.innerHTML = `<div class="panel-content">
+    body.innerHTML=`<div class="panel-content">
       <b style="color:var(--gold)">📧 Email de contato</b><br>
       <span style="font-size:1.05rem;font-weight:600">${d.email}</span><br><br>
-      <small>Envie suas sugestões, dúvidas ou relatos de problemas para o email acima. Respondemos com caridade! 🙏</small>
+      <small>Envie suas sugestões, dúvidas ou problemas. Respondemos com caridade! 🙏</small>
     </div>`;
     return;
   }
@@ -412,13 +463,12 @@ async function abrirPanel(tipo) {
     document.getElementById('panelTitulo').textContent='APOIE O PROJETO';
     const r = await fetch('/api/info');
     const d = await r.json();
-    body.innerHTML = `<div class="panel-content" style="text-align:center">
+    body.innerHTML=`<div class="panel-content" style="text-align:center">
       <b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b><br><br>
       <small>Sua doação ajuda a manter e expandir este ministério digital.</small><br><br>
-      <b style="color:var(--gold)">📱 Chave Pix</b><br>
-      <small>Escaneie o QR Code abaixo:</small><br><br>
+      <b style="color:var(--gold)">📱 Chave Pix</b><br><small>Escaneie o QR Code abaixo:</small><br><br>
       <img src="${d.pix_qr}" style="border-radius:12px;border:2px solid var(--gold);width:180px" alt="QR Code Pix"><br><br>
-      <small style="opacity:.6">Que Deus abençoe cada pessoa que contribui! Obrigado de coração! ✝️</small>
+      <small style="opacity:.6">Que Deus abençoe cada pessoa que contribui! ✝️</small>
     </div>`;
     return;
   }
@@ -427,49 +477,124 @@ async function abrirPanel(tipo) {
     document.getElementById('panelTitulo').textContent='CATECISMO';
     const r = await fetch('/api/dados/catecismo');
     const pilares = await r.json();
-    body.innerHTML = '<div class="panel-content"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b><br><small>Escolha um dos 4 pilares:</small></div>';
-    pilares.forEach(pilar => {
-      const el = document.createElement('div');
-      el.className = 'panel-item';
-      el.textContent = pilar;
-      el.onclick = () => abrirItemCatecismo(pilar);
+    body.innerHTML='<div class="panel-content"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b><br><small>Escolha um dos 4 pilares:</small></div>';
+    pilares.forEach(pilar=>{
+      const el=document.createElement('div');el.className='panel-item';
+      el.textContent=pilar;
+      el.onclick=()=>abrirItemCatecismo(pilar);
       body.appendChild(el);
     });
     return;
   }
 
-  document.getElementById('panelTitulo').textContent = tipo.toUpperCase().replace('_',' ');
+  document.getElementById('panelTitulo').textContent=tipo.toUpperCase().replace('_',' ');
   const r = await fetch(`/api/dados/${tipo}`);
   const lista = await r.json();
-  body.innerHTML = '';
-  lista.forEach(nome => {
-    const el = document.createElement('div');
-    el.className = 'panel-item';
-    el.textContent = nome;
-    el.onclick = () => abrirItem(tipo, nome);
+  body.innerHTML='';
+  lista.forEach(nome=>{
+    const el=document.createElement('div');el.className='panel-item';
+    el.textContent=nome;
+    el.onclick=()=>abrirItem(tipo,nome);
     body.appendChild(el);
   });
 }
 
-async function abrirItemCatecismo(pilar) {
-  const body = document.getElementById('panelBody');
-  document.getElementById('panelTitulo').textContent = pilar.substring(0,30).toUpperCase();
-  const r = await fetch(`/api/dados/catecismo?nome=${encodeURIComponent(pilar)}`);
+async function abrirLivroBiblia(livro) {
+  const body=document.getElementById('panelBody');
+  document.getElementById('panelTitulo').textContent=livro.nome.toUpperCase();
+  const r = await fetch(`/api/biblia/capitulos/${livro.id}`);
   const d = await r.json();
-  body.innerHTML = '';
-  const back = document.createElement('div');
-  back.className = 'panel-item';
-  back.textContent = '← Voltar aos Pilares';
-  back.onclick = () => abrirPanel('catecismo');
+  body.innerHTML=`<div class="panel-content"><b style="color:var(--gold)">📜 ${livro.nome}</b><br><small>${d.total} capítulos</small></div>`;
+  const back=document.createElement('div');back.className='panel-item';
+  back.textContent='← Voltar aos livros';back.onclick=()=>abrirPanel('biblia');
   body.appendChild(back);
-  if(Array.isArray(d.conteudo)) {
-    d.conteudo.forEach(([num, texto]) => {
-      const el = document.createElement('div');
-      el.className = 'panel-content';
-      el.innerHTML = `<b style="color:var(--gold)">📜 ${num}</b><br>${texto}`;
-      el.style.borderLeft = '3px solid var(--gold)';
-      el.style.paddingLeft = '10px';
-      el.style.marginBottom = '12px';
+  for(let c=1;c<=d.total;c++){
+    const el=document.createElement('div');el.className='panel-item';
+    el.textContent=`Capítulo ${c}`;
+    el.onclick=(()=>{const cap=c;return()=>abrirCapituloBiblia(livro,cap);})();
+    body.appendChild(el);
+  }
+}
+
+async function abrirCapituloBiblia(livro, capitulo) {
+  const body=document.getElementById('panelBody');
+  document.getElementById('panelTitulo').textContent=`${livro.abrev} ${capitulo}`;
+  body.innerHTML='<div class="panel-content">Carregando versículos... 📖</div>';
+  const r=await fetch(`/api/biblia/versiculo?livro=${livro.id}&capitulo=${capitulo}`);
+  const d=await r.json();
+  const back=document.createElement('div');back.className='panel-item';
+  back.textContent='← Voltar ao livro';back.onclick=()=>abrirLivroBiblia(livro);
+  body.innerHTML='';body.appendChild(back);
+  if(d.verses){
+    d.verses.forEach(v=>{
+      const el=document.createElement('div');el.className='panel-content';
+      el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:8px';
+      el.innerHTML=`<b style="color:var(--gold);font-size:11px">${v.verse}</b> ${v.text}`;
+      body.appendChild(el);
+    });
+  } else {
+    body.innerHTML+='<div class="panel-content">Versículos não disponíveis para este livro na tradução Almeida.</div>';
+  }
+}
+
+async function abrirMandamento(m, atoContricao, conselhoFinal) {
+  const body=document.getElementById('panelBody');
+  document.getElementById('panelTitulo').textContent=`${m.numero}º MANDAMENTO`;
+  const back=document.createElement('div');back.className='panel-item';
+  back.textContent='← Voltar ao exame';back.onclick=()=>abrirPanel('exame');
+  body.innerHTML=`<div class="panel-content"><b style="color:var(--gold)">${m.mandamento}</b></div>`;
+  body.insertBefore(back,body.firstChild);
+  m.perguntas.forEach(p=>{
+    const el=document.createElement('div');el.className='panel-content';
+    el.style.cssText='border-left:3px solid rgba(200,160,80,.4);padding-left:10px;margin-bottom:8px;cursor:pointer';
+    el.innerHTML=`<label style="display:flex;gap:8px;cursor:pointer"><input type="checkbox" style="accent-color:var(--gold);margin-top:3px"> <span>${p}</span></label>`;
+    body.appendChild(el);
+  });
+  const fim=document.createElement('div');fim.className='panel-content';
+  fim.innerHTML=`<br><b style="color:var(--gold)">🙏 Ato de Contrição</b><br><small style="font-style:italic">${atoContricao}</small><br><br><b style="color:var(--gold)">✝️ Próximo passo</b><br><small>${conselhoFinal}</small>`;
+  body.appendChild(fim);
+}
+
+async function abrirApoio(id) {
+  const body=document.getElementById('panelBody');
+  body.innerHTML='<div class="panel-content">Carregando... 🙏</div>';
+  const r=await fetch(`/api/apoio/${id}`);
+  const d=await r.json();
+  const back=document.createElement('div');back.className='panel-item';
+  back.textContent='← Voltar ao apoio';back.onclick=()=>abrirPanel('apoio');
+  body.innerHTML='';body.appendChild(back);
+  const intro=document.createElement('div');intro.className='panel-content';
+  intro.innerHTML=`<b style="color:var(--gold)">${d.titulo}</b><br><br><small>${d.intro}</small>`;
+  body.appendChild(intro);
+  const passos=document.createElement('div');passos.className='panel-content';
+  passos.innerHTML=`<b style="color:var(--gold)">📋 O que fazer</b><br>${d.passos.map((p,i)=>`<div style="padding:5px 0;border-bottom:1px solid rgba(200,160,80,.1)">${i+1}. ${p}</div>`).join('')}`;
+  body.appendChild(passos);
+  const oracao=document.createElement('div');oracao.className='panel-content';
+  oracao.innerHTML=`<b style="color:var(--gold)">🙏 Oração</b><br><small style="font-style:italic">${d.oracao}</small>`;
+  body.appendChild(oracao);
+  const cit=document.createElement('div');cit.className='panel-content';
+  cit.innerHTML=`<b style="color:var(--gold)">📖 Palavra de Deus</b><br><small style="font-style:italic">${d.citacao}</small>`;
+  body.appendChild(cit);
+  const prox=document.createElement('div');prox.className='panel-content';
+  prox.style.cssText='background:rgba(200,160,80,.08);border-radius:6px;padding:10px;border:1px solid rgba(200,160,80,.2)';
+  prox.innerHTML=`<b style="color:var(--gold)">✅ Próximo passo agora</b><br><small>${d.proximo_passo}</small>`;
+  body.appendChild(prox);
+}
+
+async function abrirItemCatecismo(pilar) {
+  const body=document.getElementById('panelBody');
+  document.getElementById('panelTitulo').textContent=pilar.substring(0,30).toUpperCase();
+  const r=await fetch(`/api/dados/catecismo?nome=${encodeURIComponent(pilar)}`);
+  const d=await r.json();
+  body.innerHTML='';
+  const back=document.createElement('div');back.className='panel-item';
+  back.textContent='← Voltar aos pilares';back.onclick=()=>abrirPanel('catecismo');
+  body.appendChild(back);
+  if(Array.isArray(d.conteudo)){
+    d.conteudo.forEach(([num,texto])=>{
+      const el=document.createElement('div');el.className='panel-content';
+      el.innerHTML=`<b style="color:var(--gold)">📜 ${num}</b><br>${texto}`;
+      el.style.cssText='border-left:3px solid rgba(200,160,80,.4);padding-left:10px;margin-bottom:12px';
       body.appendChild(el);
     });
   }
