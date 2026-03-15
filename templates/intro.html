@@ -244,6 +244,11 @@ for(let i=0;i<25;i++){
 <div class="footer">Que Deus te abençoe ✦ Paz e Bem!</div>
 
 <script>
+// Pré-carrega imagens de fundo enquanto intro toca
+const _img1 = new Image(); _img1.src = '/static/sagrada_escura.png';
+const _img2 = new Image(); _img2.src = '/static/sagrada_clara.png';
+const _img3 = new Image(); _img3.src = '/static/maria_escura.png';
+const _img4 = new Image(); _img4.src = '/static/maria_clara.png';
 // Frase aleatória
 const f = frases[Math.floor(Math.random()*frases.length)];
 document.getElementById('quoteText').textContent = '"' + f.texto + '"';
