@@ -624,3 +624,21 @@ def api_apoio_topico(topico_id):
         if t["id"] == topico_id:
             return jsonify(t)
     return jsonify({"error": "Tópico não encontrado"}), 404
+
+# ── LITURGIA DO DIA ───────────────────────────────────────────────────────────
+@app.route("/api/liturgia-dia")
+def api_liturgia_dia():
+    from datetime import date
+    hoje = date.today()
+    data_fmt = hoje.strftime("%d de %B de %Y").replace(
+        "January","Janeiro").replace("February","Fevereiro").replace("March","Março").replace(
+        "April","Abril").replace("May","Maio").replace("June","Junho").replace(
+        "July","Julho").replace("August","Agosto").replace("September","Setembro").replace(
+        "October","Outubro").replace("November","Novembro").replace("December","Dezembro")
+    # Link CNBB com data
+    url_cnbb = f"https://www.cnbb.org.br/liturgia-diaria/"
+    return jsonify({
+        "data": data_fmt,
+        "url_cnbb": url_cnbb,
+        "texto": f"Para acompanhar as leituras completas da Missa de hoje, acesse o site oficial da CNBB:",
+    })
