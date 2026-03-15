@@ -144,9 +144,6 @@ def intro():
 def index():
     if "username" not in session:
         return redirect("/login")
-    if not session.get("intro_visto"):
-        session["intro_visto"] = True
-        return redirect("/intro")
     idioma = session.get("idioma", "pt")
     T = TRADUCOES[idioma]
     hoje = date.today()
@@ -158,10 +155,11 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Mostrar intro na primeira visita ao site
+    # Intro aparece sempre ao acessar o login
     if not session.get("intro_visto"):
         session["intro_visto"] = True
         return render_template("intro.html")
+    session.pop("intro_visto", None)  # Reset pra próxima visita
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
