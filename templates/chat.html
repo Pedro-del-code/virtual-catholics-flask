@@ -11,6 +11,8 @@
 body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;display:flex;overflow:hidden;color:var(--cream);}
 /* Sidebar */
 .sidebar{width:260px;min-width:260px;background:rgba(8,5,1,.95);border-right:1px solid rgba(200,160,80,.18);display:flex;flex-direction:column;flex-shrink:0;}
+/* Main */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;position:relative;}
 .sidebar-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);text-align:center;}
 .sidebar-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
 .sidebar-sub{font-size:10px;color:rgba(200,160,80,.3);letter-spacing:3px;margin-top:3px;}
@@ -34,7 +36,6 @@ body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;
 .lang-mini{flex:1;padding:4px;background:transparent;border:1px solid rgba(200,160,80,.15);border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;transition:all .2s;}
 .lang-mini.active,.lang-mini:hover{border-color:var(--gold);color:var(--gold);}
 /* Main */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
 .main-header{padding:14px 20px;border-bottom:1px solid rgba(200,160,80,.1);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2;}
 .chat-titulo{font-family:'Cinzel',serif;font-size:12px;color:rgba(200,160,80,.6);letter-spacing:2px;}
 /* Botão modo escuro no header */
@@ -106,11 +107,11 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 /* Responsive */
 @media(max-width:720px){
   body{overflow-x:hidden;}
-  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%);transition:transform .28s ease;width:80vw;max-width:300px;min-width:0;}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%);transition:transform .28s ease;width:80vw;max-width:300px;min-width:0 !important;width:80vw !important;}
   .sidebar.open{transform:translateX(0);}
   .btn-hamburger{display:flex;}
-  .main{width:100vw;min-width:0;flex:1;}
-  .panel{width:100vw;max-width:100vw;right:0;}
+  .main{width:100% !important;flex:1;}
+  .panel{width:100% !important;max-width:100vw;right:0;}
   .msg{max-width:90%;}
   .input-area{padding:10px 12px;}
   .messages{padding:12px;}
