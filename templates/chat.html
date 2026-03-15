@@ -2,49 +2,95 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Virtual Catholics</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#c8a050;--gold-light:#f5d78e;--gold-dark:#8b6820;--cream:#faf6ef;--dark:#0d0a05;--sidebar:#110c03;--brown:#1a0e04;}
+:root{--gold:#c8a050;--gold-light:#f5d78e;--gold-dark:#8b6820;--cream:#faf6ef;--dark:#0d0a05;--sidebar-bg:#0f0a02;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;display:flex;overflow:hidden;color:var(--cream);}
-/* Sidebar */
-.sidebar{width:260px;background:var(--sidebar);border-right:1px solid rgba(200,160,80,.15);display:flex;flex-direction:column;flex-shrink:0;}
-.sidebar-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);text-align:center;}
-.sidebar-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
-.sidebar-sub{font-size:10px;color:rgba(200,160,80,.3);letter-spacing:3px;margin-top:3px;}
-.sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
-.sidebar-section{padding:8px 12px 4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(200,160,80,.3);margin-top:8px;}
-.btn-new{margin:12px;padding:9px;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.25);border-radius:2px;color:var(--gold-light);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .3s;text-align:center;}
+html,body{height:100%;overflow:hidden;}
+body{height:100dvh;background:var(--dark);font-family:'Cormorant Garamond',serif;color:var(--cream);position:relative;display:flex;flex-direction:column;}
+
+/* ── Fundo ── */
+.bg-img{position:fixed;inset:0;background-size:cover;background-position:center;z-index:0;transition:background-image .4s;}
+.bg-overlay{position:fixed;inset:0;z-index:0;transition:background .4s;}
+body.dark .bg-overlay{background:rgba(0,0,0,.52);}
+body.light .bg-overlay{background:rgba(255,248,230,.18);}
+
+/* ── Header ── */
+.header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(200,160,80,.15);flex-shrink:0;backdrop-filter:blur(6px);background:rgba(0,0,0,.25);}
+.btn-menu{background:transparent;border:none;color:var(--gold);font-size:20px;cursor:pointer;padding:4px 8px;display:flex;flex-direction:column;gap:4px;justify-content:center;}
+.btn-menu span{display:block;width:20px;height:2px;background:var(--gold);border-radius:1px;transition:all .3s;}
+.header-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);text-align:center;flex:1;}
+.btn-dark-mode{background:transparent;border:1px solid rgba(200,160,80,.25);border-radius:2px;color:rgba(200,160,80,.7);font-size:10px;padding:5px 9px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;transition:all .2s;white-space:nowrap;}
+.btn-dark-mode:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── Sidebar drawer ── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:rgba(10,6,1,.97);backdrop-filter:blur(12px);border-right:1px solid rgba(200,160,80,.15);z-index:100;transform:translateX(-100%);transition:transform .3s ease;display:flex;flex-direction:column;}
+.sidebar.open{transform:translateX(0);}
+.sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;display:none;}
+.sidebar-backdrop.show{display:block;}
+.sidebar-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);display:flex;align-items:center;justify-content:space-between;}
+.sidebar-logo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);}
+.sidebar-sub{font-size:9px;color:rgba(200,160,80,.3);letter-spacing:3px;margin-top:2px;}
+.btn-close-sidebar{background:transparent;border:none;color:rgba(200,160,80,.5);font-size:20px;cursor:pointer;padding:4px;}
+.btn-close-sidebar:hover{color:var(--gold);}
+.sidebar-body{flex:1;overflow-y:auto;padding:8px 0;}
+.sidebar-section{padding:8px 14px 4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(200,160,80,.3);margin-top:6px;}
+.btn-new{margin:10px 12px;padding:10px;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.25);border-radius:2px;color:var(--gold-light);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .3s;text-align:center;}
 .btn-new:hover{background:rgba(200,160,80,.2);}
-.chat-item{padding:9px 12px;border-radius:2px;cursor:pointer;font-size:13px;color:rgba(250,246,239,.6);transition:all .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid transparent;margin:1px 8px;}
+.chat-item{padding:9px 14px;cursor:pointer;font-size:13px;color:rgba(250,246,239,.6);transition:all .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid transparent;margin:1px 8px;border-radius:2px;}
 .chat-item:hover{background:rgba(200,160,80,.08);color:var(--gold-light);}
 .chat-item.active{background:rgba(200,160,80,.12);border-color:rgba(200,160,80,.2);color:var(--gold-light);}
-.menu-btn{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:13px;color:rgba(250,246,239,.5);cursor:pointer;transition:all .2s;margin:1px 8px;border-radius:2px;}
+.menu-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:14px;color:rgba(250,246,239,.5);cursor:pointer;transition:all .2s;border-radius:2px;margin:1px 8px;}
 .menu-btn:hover{background:rgba(200,160,80,.08);color:var(--gold-light);}
 .sidebar-footer{padding:14px;border-top:1px solid rgba(200,160,80,.1);}
-.user-info{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.user-foto{width:30px;height:30px;border-radius:50%;border:1px solid rgba(200,160,80,.3);object-fit:cover;background:rgba(200,160,80,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-.user-nome{font-size:14px;color:var(--gold-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-logout{width:100%;padding:7px;background:transparent;border:1px solid rgba(200,160,80,.15);border-radius:2px;color:rgba(200,160,80,.4);font-family:'Cormorant Garamond',serif;font-size:12px;cursor:pointer;transition:all .3s;letter-spacing:1px;}
-.btn-logout:hover{border-color:rgba(200,160,80,.3);color:rgba(200,160,80,.7);}
-/* Seletor idioma */
-.lang-row{display:flex;gap:4px;margin-bottom:8px;}
-.lang-mini{flex:1;padding:4px;background:transparent;border:1px solid rgba(200,160,80,.15);border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;transition:all .2s;}
+.lang-row{display:flex;gap:4px;margin-bottom:10px;}
+.lang-mini{flex:1;padding:5px;background:transparent;border:1px solid rgba(200,160,80,.15);border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;transition:all .2s;}
 .lang-mini.active,.lang-mini:hover{border-color:var(--gold);color:var(--gold);}
-/* Main */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
-.main-header{padding:14px 20px;border-bottom:1px solid rgba(200,160,80,.1);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2;}
-.chat-titulo{font-family:'Cinzel',serif;font-size:12px;color:rgba(200,160,80,.6);letter-spacing:2px;}
-/* Botão modo escuro no header */
-.btn-dark-mode{background:transparent;border:1px solid rgba(200,160,80,.2);border-radius:2px;color:rgba(200,160,80,.5);font-size:12px;padding:5px 10px;cursor:pointer;transition:all .2s;font-family:'Cinzel',serif;letter-spacing:1px;}
-.btn-dark-mode:hover{border-color:var(--gold);color:var(--gold);}
-/* Painel lateral direito para recursos */
-.panel{position:absolute;right:0;top:0;bottom:0;width:320px;background:rgba(13,10,5,.97);border-left:1px solid rgba(200,160,80,.2);z-index:20;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;}
+.user-info{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.user-foto{width:32px;height:32px;border-radius:50%;border:1px solid rgba(200,160,80,.3);object-fit:cover;background:rgba(200,160,80,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.user-nome{font-size:14px;color:var(--gold-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-logout{width:100%;padding:8px;background:transparent;border:1px solid rgba(200,160,80,.15);border-radius:2px;color:rgba(200,160,80,.4);font-family:'Cormorant Garamond',serif;font-size:13px;cursor:pointer;transition:all .3s;letter-spacing:1px;}
+.btn-logout:hover{border-color:rgba(200,160,80,.3);color:rgba(200,160,80,.7);}
+
+/* ── Mensagens ── */
+.messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:2;-webkit-overflow-scrolling:touch;}
+.messages::-webkit-scrollbar{width:3px;}
+.messages::-webkit-scrollbar-thumb{background:rgba(200,160,80,.2);}
+.msg{max-width:80%;padding:12px 15px;border-radius:4px;font-size:16px;line-height:1.7;}
+.msg-user{align-self:flex-end;background:rgba(200,160,80,.15);border:1px solid rgba(200,160,80,.25);color:var(--cream);}
+.msg-bot{align-self:flex-start;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);border:1px solid rgba(200,160,80,.12);color:rgba(250,246,239,.92);}
+.msg-bot .msg-author{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:7px;}
+
+/* ── Welcome ── */
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 20px;gap:10px;position:relative;z-index:2;}
+.welcome-cross{font-size:28px;color:var(--gold);opacity:.7;text-shadow:0 0 20px rgba(200,160,80,.5);}
+.welcome-title{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light);letter-spacing:3px;}
+.welcome-sub{font-size:14px;color:rgba(200,160,80,.5);font-style:italic;max-width:280px;line-height:1.6;}
+.welcome-santo{font-size:12px;color:rgba(200,160,80,.4);font-style:italic;}
+
+/* ── Typing ── */
+.typing{display:flex;gap:4px;padding:4px 0;}
+.typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:typing 1.2s ease-in-out infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typing{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
+
+/* ── Input ── */
+.input-area{position:relative;z-index:10;padding:10px 12px;border-top:1px solid rgba(200,160,80,.12);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;backdrop-filter:blur(6px);background:rgba(0,0,0,.2);}
+textarea{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(200,160,80,.2);border-radius:4px;padding:11px 13px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:16px;resize:none;outline:none;max-height:110px;min-height:44px;line-height:1.5;transition:border-color .3s;}
+textarea::placeholder{color:rgba(200,160,80,.25);}
+textarea:focus{border-color:rgba(200,160,80,.5);}
+.btn-send{width:44px;height:44px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:4px;color:var(--dark);font-size:16px;cursor:pointer;transition:all .3s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.btn-send:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));box-shadow:0 4px 15px rgba(200,160,80,.3);}
+.btn-send:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── Painel Recursos ── */
+.panel{position:fixed;right:0;top:0;bottom:0;width:min(320px,100vw);background:rgba(10,6,1,.97);backdrop-filter:blur(12px);border-left:1px solid rgba(200,160,80,.2);z-index:100;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;}
 .panel.open{transform:translateX(0);}
-.panel-header{padding:16px;border-bottom:1px solid rgba(200,160,80,.1);display:flex;align-items:center;justify-content:space-between;}
-.panel-titulo{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:2px;}
+.panel-header{padding:14px 16px;border-bottom:1px solid rgba(200,160,80,.1);display:flex;align-items:center;justify-content:space-between;}
+.panel-titulo{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);letter-spacing:2px;}
 .panel-close{background:transparent;border:none;color:rgba(200,160,80,.5);font-size:18px;cursor:pointer;padding:4px;}
 .panel-close:hover{color:var(--gold);}
 .panel-body{flex:1;overflow-y:auto;padding:12px;}
@@ -54,70 +100,55 @@ body{height:100vh;background:var(--dark);font-family:'Cormorant Garamond',serif;
 .panel-nav{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(200,160,80,.1);}
 .btn-nav{flex:1;padding:8px;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.2);border-radius:2px;color:var(--gold-light);font-size:12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;transition:all .2s;}
 .btn-nav:hover{background:rgba(200,160,80,.2);}
-/* Mensagens */
-.messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2;}
-.messages::-webkit-scrollbar{width:3px;}
-.messages::-webkit-scrollbar-thumb{background:rgba(200,160,80,.2);border-radius:2px;}
-.msg{max-width:72%;padding:13px 16px;border-radius:2px;font-size:16px;line-height:1.7;}
-.msg-user{align-self:flex-end;background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.2);color:var(--cream);}
-.msg-bot{align-self:flex-start;background:rgba(255,255,255,.03);border:1px solid rgba(200,160,80,.1);color:rgba(250,246,239,.9);}
-.msg-bot .msg-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:8px;}
-/* Welcome */
-.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;gap:10px;position:relative;z-index:2;}
-.welcome-cross{font-size:32px;color:var(--gold);opacity:.6;}
-.welcome-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-light);letter-spacing:3px;}
-.welcome-sub{font-size:13px;color:rgba(200,160,80,.5);font-style:italic;max-width:300px;line-height:1.6;}
-.welcome-santo{font-size:12px;color:rgba(200,160,80,.4);margin-top:4px;font-style:italic;}
-/* Imagem de fundo da área principal */
-.main-bg{position:absolute;inset:0;z-index:0;background-size:contain;background-repeat:no-repeat;background-position:center center;opacity:0.07;pointer-events:none;transition:opacity .3s;}
-/* Modo claro */
-body.light{--dark:#f5f0e8;--sidebar:#ede6d6;--cream:#2a1a08;background:#f5f0e8;}
-body.light .main{background:#f5f0e8;}
-body.light .msg-user{background:rgba(200,160,80,.15);color:#2a1a08;}
-body.light .msg-bot{background:rgba(255,255,255,.7);color:#2a1a08;}
-body.light .main-header{border-bottom-color:rgba(200,160,80,.2);}
-body.light .chat-titulo{color:rgba(139,104,32,.8);}
-body.light .messages{background:transparent;}
-body.light .main-bg{opacity:0.12;}
-body.light textarea{background:rgba(255,255,255,.6);color:#2a1a08;border-color:rgba(200,160,80,.3);}
+
+/* ── Modo claro ── */
+body.light .header{background:rgba(255,248,230,.3);}
+body.light .input-area{background:rgba(255,248,230,.25);}
+body.light .msg-user{background:rgba(200,160,80,.2);color:#2a1a08;}
+body.light .msg-bot{background:rgba(255,252,240,.6);color:#2a1a08;}
+body.light textarea{background:rgba(255,252,240,.6);color:#2a1a08;border-color:rgba(200,160,80,.3);}
 body.light textarea::placeholder{color:rgba(139,104,32,.4);}
-body.light .panel{background:rgba(245,240,232,.97);border-left-color:rgba(200,160,80,.3);}
+body.light .panel{background:rgba(255,250,235,.97);}
 body.light .panel-content{color:#2a1a08;}
 body.light .panel-item{color:#4a3010;}
-/* Typing */
-.typing{display:flex;gap:4px;padding:4px 0;}
-.typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:typing 1.2s ease-in-out infinite;}
-.typing span:nth-child(2){animation-delay:.2s;}
-.typing span:nth-child(3){animation-delay:.4s;}
-@keyframes typing{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
-/* Input */
-.input-area{padding:14px 20px;border-top:1px solid rgba(200,160,80,.1);display:flex;gap:10px;align-items:flex-end;position:relative;z-index:2;}
-textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.2);border-radius:2px;padding:12px 14px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:16px;resize:none;outline:none;max-height:120px;min-height:46px;line-height:1.5;transition:border-color .3s;}
-textarea::placeholder{color:rgba(200,160,80,.25);}
-textarea:focus{border-color:rgba(200,160,80,.5);}
-.btn-send{width:46px;height:46px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:2px;color:var(--dark);font-size:17px;cursor:pointer;transition:all .3s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.btn-send:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));box-shadow:0 4px 15px rgba(200,160,80,.3);}
-.btn-send:disabled{opacity:.4;cursor:not-allowed;}
+body.light .sidebar{background:rgba(255,248,225,.97);}
+body.light .sidebar-logo{color:var(--gold-dark);}
+body.light .menu-btn{color:rgba(80,50,10,.6);}
+body.light .chat-item{color:rgba(80,50,10,.7);}
+body.light .user-nome{color:var(--gold-dark);}
+body.light .welcome-title{color:var(--gold-dark);}
+body.light .header-title{color:var(--gold-dark);}
 </style>
 </head>
-<body id="body">
-<!-- Sidebar -->
-<div class="sidebar">
+<body id="body" class="dark">
+
+<!-- Fundo -->
+<div class="bg-img" id="mainBg"></div>
+<div class="bg-overlay"></div>
+
+<!-- Backdrop sidebar -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="fecharSidebar()"></div>
+
+<!-- Sidebar drawer -->
+<div class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-logo">✝ VIRTUAL CATHOLICS</div>
-    <div class="sidebar-sub">{{ T.subtitulo }}</div>
+    <div>
+      <div class="sidebar-logo">✝ VIRTUAL CATHOLICS</div>
+      <div class="sidebar-sub">{{ T.subtitulo }}</div>
+    </div>
+    <button class="btn-close-sidebar" onclick="fecharSidebar()">✕</button>
   </div>
   <div class="sidebar-body">
-    <div class="btn-new" onclick="novoChat()">{{ T.novo_chat }}</div>
-    <div class="sidebar-section">{{ T.chats if T.chats is defined else 'CHATS' }}</div>
+    <div class="btn-new" onclick="novoChat();fecharSidebar()">{{ T.novo_chat }}</div>
+    <div class="sidebar-section">CHATS</div>
     <div id="chatsList"></div>
-    <div class="sidebar-section">{{ T.recursos if T.recursos is defined else 'RECURSOS' }}</div>
-    <div class="menu-btn" onclick="abrirPanel('oracoes')">🙏 {{ T.oracoes }}</div>
-    <div class="menu-btn" onclick="abrirPanel('novenas')">🕯️ {{ T.novenas }}</div>
-    <div class="menu-btn" onclick="abrirPanel('tercos')">📿 {{ T.terco }}</div>
-    <div class="menu-btn" onclick="abrirPanel('liturgia_horas')">⛪ {{ T.liturgia_horas }}</div>
-    <div class="menu-btn" onclick="abrirPanel('canticos')">🎵 {{ T.canticos }}</div>
-    <div class="menu-btn" onclick="abrirPanel('santo')">⭐ {{ T.santo }}</div>
+    <div class="sidebar-section">RECURSOS</div>
+    <div class="menu-btn" onclick="abrirPanel('oracoes');fecharSidebar()">🙏 {{ T.oracoes }}</div>
+    <div class="menu-btn" onclick="abrirPanel('novenas');fecharSidebar()">🕯️ {{ T.novenas }}</div>
+    <div class="menu-btn" onclick="abrirPanel('tercos');fecharSidebar()">📿 {{ T.terco }}</div>
+    <div class="menu-btn" onclick="abrirPanel('liturgia_horas');fecharSidebar()">⛪ {{ T.liturgia_horas }}</div>
+    <div class="menu-btn" onclick="abrirPanel('canticos');fecharSidebar()">🎵 {{ T.canticos }}</div>
+    <div class="menu-btn" onclick="abrirPanel('santo');fecharSidebar()">⭐ {{ T.santo }}</div>
   </div>
   <div class="sidebar-footer">
     <div class="lang-row">
@@ -138,28 +169,31 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
   </div>
 </div>
 
-<!-- Main -->
-<div class="main">
-  <div class="main-header">
-    <div class="chat-titulo" id="chatTitulo">VIRTUAL CATHOLICS</div>
-    <button class="btn-dark-mode" id="btnDark" onclick="toggleDark()">🌙 {{ T.modo_escuro }}</button>
+<!-- Header -->
+<div class="header">
+  <button class="btn-menu" onclick="abrirSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="header-title" id="chatTitulo">✝ VIRTUAL CATHOLICS</div>
+  <button class="btn-dark-mode" id="btnDark" onclick="toggleDark()">☀️ Claro</button>
+</div>
+
+<!-- Mensagens -->
+<div class="messages" id="messages">
+  <div class="welcome" id="welcome">
+    <div class="welcome-cross">✝</div>
+    <div class="welcome-title">{{ T.bem_vindo }}, {{ usuario.nome }}</div>
+    <div class="welcome-sub">Estou aqui para guiar, orar e caminhar junto contigo na fé.</div>
+    {% if santo_hoje %}
+    <div class="welcome-santo">⭐ Santo do dia: {{ santo_hoje }}</div>
+    {% endif %}
   </div>
-  <!-- Imagem de fundo -->
-  <div class="main-bg" id="mainBg"></div>
-  <div class="messages" id="messages">
-    <div class="welcome" id="welcome">
-      <div class="welcome-cross">✝</div>
-      <div class="welcome-title">{{ T.bem_vindo }}, {{ usuario.nome }}</div>
-      <div class="welcome-sub">Que posso fazer por voce hoje? Estou aqui para guiar, orar e caminhar junto contigo na fe.</div>
-      {% if santo_hoje %}
-      <div class="welcome-santo">⭐ Santo do dia: {{ santo_hoje }}</div>
-      {% endif %}
-    </div>
-  </div>
-  <div class="input-area">
-    <textarea id="inputMsg" placeholder="{{ T.placeholder_mensagem }}" rows="1" onkeydown="teclaEnter(event)" oninput="autoResize(this)"></textarea>
-    <button class="btn-send" id="btnSend" onclick="enviarMensagem()">✝</button>
-  </div>
+</div>
+
+<!-- Input -->
+<div class="input-area">
+  <textarea id="inputMsg" placeholder="{{ T.placeholder_mensagem }}" rows="1" onkeydown="teclaEnter(event)" oninput="autoResize(this)"></textarea>
+  <button class="btn-send" id="btnSend" onclick="enviarMensagem()">✝</button>
 </div>
 
 <!-- Painel Recursos -->
@@ -170,48 +204,52 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
   </div>
   <div class="panel-body" id="panelBody"></div>
   <div class="panel-nav" id="panelNav" style="display:none">
-    <button class="btn-nav" id="btnAnterior" onclick="navegarNovena(-1)">← Anterior</button>
+    <button class="btn-nav" onclick="navegarNovena(-1)">← Anterior</button>
     <span style="color:rgba(200,160,80,.5);font-size:12px;align-self:center" id="novenaInfo"></span>
-    <button class="btn-nav" id="btnProximo" onclick="navegarNovena(1)">Proximo →</button>
+    <button class="btn-nav" onclick="navegarNovena(1)">Próximo →</button>
   </div>
 </div>
 
 <script>
-let mensagens = [];
-let chatId = null;
-let carregando = false;
+let mensagens = [], chatId = null, carregando = false;
 let idioma = '{{ idioma }}';
-let novenaDia = 0;
-let novenaDias = [];
-let novenaNome = '';
+let novenaDia = 0, novenaDias = [], novenaNome = '';
 
-// Imagens de fundo
 const IMG_ESCURA = "{{ url_for('static', filename='sagrada_escura.png') }}";
-const IMG_CLARA = "{{ url_for('static', filename='sagrada_clara.png') }}";
+const IMG_CLARA  = "{{ url_for('static', filename='sagrada_clara.png') }}";
 
-// Modo escuro/claro
+// Modo escuro/claro persistido
 let modoEscuro = localStorage.getItem('modo') !== 'claro';
 aplicarModo();
 
 function aplicarModo() {
   const body = document.getElementById('body');
-  const btn = document.getElementById('btnDark');
-  const bg = document.getElementById('mainBg');
+  const btn  = document.getElementById('btnDark');
+  const bg   = document.getElementById('mainBg');
   if (modoEscuro) {
-    body.classList.remove('light');
+    body.className = 'dark';
     bg.style.backgroundImage = `url('${IMG_ESCURA}')`;
-    if(btn) btn.textContent = '☀️ {{ T.modo_claro }}';
+    btn.textContent = '☀️ Claro';
   } else {
-    body.classList.add('light');
+    body.className = 'light';
     bg.style.backgroundImage = `url('${IMG_CLARA}')`;
-    if(btn) btn.textContent = '🌙 {{ T.modo_escuro }}';
+    btn.textContent = '🌙 Escuro';
   }
 }
-
 function toggleDark() {
   modoEscuro = !modoEscuro;
   localStorage.setItem('modo', modoEscuro ? 'escuro' : 'claro');
   aplicarModo();
+}
+
+// Sidebar
+function abrirSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarBackdrop').classList.add('show');
+}
+function fecharSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
 }
 
 carregarChats();
@@ -226,7 +264,7 @@ async function carregarChats() {
     el.className = 'chat-item';
     el.textContent = c.titulo;
     el.dataset.id = c.id;
-    el.onclick = () => abrirChat(c.id, el);
+    el.onclick = () => { abrirChat(c.id, el); fecharSidebar(); };
     lista.appendChild(el);
   });
 }
@@ -248,15 +286,14 @@ async function abrirChat(id, el) {
 }
 
 function novoChat() {
-  mensagens = [];
-  chatId = null;
+  mensagens = []; chatId = null;
   const msgs = document.getElementById('messages');
   msgs.innerHTML = `<div class="welcome" id="welcome">
     <div class="welcome-cross">✝</div>
     <div class="welcome-title">Nova conversa</div>
-    <div class="welcome-sub">Como posso ajudar voce hoje?</div>
+    <div class="welcome-sub">Como posso ajudar você hoje?</div>
   </div>`;
-  document.getElementById('chatTitulo').textContent = 'NOVA CONVERSA';
+  document.getElementById('chatTitulo').textContent = '✝ VIRTUAL CATHOLICS';
   document.querySelectorAll('.chat-item').forEach(c => c.classList.remove('active'));
 }
 
@@ -267,7 +304,7 @@ function adicionarMensagem(role, content, scroll=true) {
   const div = document.createElement('div');
   div.className = role === 'user' ? 'msg msg-user' : 'msg msg-bot';
   if(role === 'assistant') {
-    div.innerHTML = `<div class="msg-author">✝ &nbsp; VIRTUAL CATHOLICS</div>${content.replace(/\n/g,'<br>')}`;
+    div.innerHTML = `<div class="msg-author">✝ VIRTUAL CATHOLICS</div>${content.replace(/\n/g,'<br>')}`;
   } else {
     div.textContent = content;
   }
@@ -281,28 +318,23 @@ async function enviarMensagem() {
   const input = document.getElementById('inputMsg');
   const texto = input.value.trim();
   if(!texto) return;
-  input.value = '';
-  input.style.height = 'auto';
+  input.value = ''; input.style.height = 'auto';
   carregando = true;
   document.getElementById('btnSend').disabled = true;
-  mensagens.push({role:'user',content:texto});
+  mensagens.push({role:'user', content:texto});
   adicionarMensagem('user', texto);
   const msgs = document.getElementById('messages');
   const typing = document.createElement('div');
   typing.className = 'msg msg-bot';
-  typing.innerHTML = '<div class="msg-author">✝ &nbsp; VIRTUAL CATHOLICS</div><div class="typing"><span></span><span></span><span></span></div>';
+  typing.innerHTML = '<div class="msg-author">✝ VIRTUAL CATHOLICS</div><div class="typing"><span></span><span></span><span></span></div>';
   msgs.appendChild(typing);
   msgs.scrollTop = msgs.scrollHeight;
   try {
-    const r = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({mensagens, idioma})
-    });
+    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({mensagens, idioma})});
     const data = await r.json();
     typing.remove();
     if(data.resposta) {
-      mensagens.push({role:'assistant',content:data.resposta});
+      mensagens.push({role:'assistant', content:data.resposta});
       adicionarMensagem('assistant', data.resposta);
       await salvarChat();
     }
@@ -317,11 +349,7 @@ async function enviarMensagem() {
 
 async function salvarChat() {
   const titulo = mensagens[0]?.content?.slice(0,40) || 'Nova conversa';
-  const r = await fetch('/api/salvar-chat', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({chat_id:chatId, titulo, historico:mensagens})
-  });
+  const r = await fetch('/api/salvar-chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:chatId, titulo, historico:mensagens})});
   const data = await r.json();
   if(data.chat_id) { chatId = data.chat_id; carregarChats(); }
 }
@@ -329,16 +357,15 @@ async function salvarChat() {
 function teclaEnter(e) {
   if(e.key==='Enter' && !e.shiftKey) { e.preventDefault(); enviarMensagem(); }
 }
-
 function autoResize(el) {
   el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,120)+'px';
+  el.style.height=Math.min(el.scrollHeight,110)+'px';
 }
 
 async function abrirPanel(tipo) {
   const panel = document.getElementById('panel');
-  const body = document.getElementById('panelBody');
-  const nav = document.getElementById('panelNav');
+  const body  = document.getElementById('panelBody');
+  const nav   = document.getElementById('panelNav');
   nav.style.display='none';
   panel.classList.add('open');
   if(tipo==='santo') {
@@ -363,52 +390,40 @@ async function abrirPanel(tipo) {
 
 async function abrirItem(tipo, nome) {
   const body = document.getElementById('panelBody');
-  const nav = document.getElementById('panelNav');
+  const nav  = document.getElementById('panelNav');
   document.getElementById('panelTitulo').textContent = nome.toUpperCase().substring(0,30);
   if(tipo==='novenas') {
     const r = await fetch(`/api/dados/novenas?nome=${encodeURIComponent(nome)}`);
     const d = await r.json();
-    const dias = d.conteudo;
-    if(Array.isArray(dias)) {
-      novenaDias = dias; novenaDia = 0; novenaNome = nome;
-      mostrarDia();
-      nav.style.display='flex';
-      return;
+    if(Array.isArray(d.conteudo)) {
+      novenaDias=d.conteudo; novenaDia=0; novenaNome=nome;
+      mostrarDia(); nav.style.display='flex'; return;
     }
   }
   const r = await fetch(`/api/dados/${tipo}?nome=${encodeURIComponent(nome)}`);
   const d = await r.json();
-  const conteudo = d.conteudo;
   nav.style.display='none';
-  if(Array.isArray(conteudo)) {
-    body.innerHTML = conteudo.map((item,i) => {
+  if(Array.isArray(d.conteudo)) {
+    body.innerHTML = d.conteudo.map((item,i) => {
       if(Array.isArray(item)) return `<div class="panel-content"><b>${item[0]}</b>\n\n${item[1]}</div>`;
       return `<div class="panel-content"><b>Passo ${i+1}</b>\n\n${item}</div>`;
     }).join('<hr style="border-color:rgba(200,160,80,.1);margin:8px 0">');
   } else {
-    body.innerHTML = `<div class="panel-content">${String(conteudo).replace(/\n/g,'<br>')}</div>`;
+    body.innerHTML = `<div class="panel-content">${String(d.conteudo).replace(/\n/g,'<br>')}</div>`;
   }
 }
 
 function mostrarDia() {
-  const body = document.getElementById('panelBody');
-  const info = document.getElementById('novenaInfo');
-  info.textContent = `Dia ${novenaDia+1}/${novenaDias.length}`;
-  const texto = novenaDias[novenaDia];
-  body.innerHTML = `<div class="panel-content"><b>Dia ${novenaDia+1}</b><br><br>${String(texto).replace(/\n/g,'<br>')}</div>`;
+  document.getElementById('novenaInfo').textContent = `Dia ${novenaDia+1}/${novenaDias.length}`;
+  document.getElementById('panelBody').innerHTML = `<div class="panel-content"><b>Dia ${novenaDia+1}</b><br><br>${String(novenaDias[novenaDia]).replace(/\n/g,'<br>')}</div>`;
 }
-
 function navegarNovena(dir) {
   novenaDia = Math.max(0, Math.min(novenaDias.length-1, novenaDia+dir));
   mostrarDia();
 }
-
-function fecharPanel() {
-  document.getElementById('panel').classList.remove('open');
-}
-
+function fecharPanel() { document.getElementById('panel').classList.remove('open'); }
 async function setLang(l) {
-  await fetch('/api/idioma', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});
+  await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});
   window.location.reload();
 }
 </script>
