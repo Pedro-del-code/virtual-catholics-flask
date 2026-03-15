@@ -249,6 +249,13 @@ def set_idioma():
     session["idioma"] = data.get("idioma", "pt")
     return jsonify({"ok": True})
 
+@app.route("/api/novo-chat", methods=["POST"])
+def api_novo_chat():
+    if "username" not in session:
+        return jsonify({"erro": "Nao autenticado"}), 401
+    chat_id = novo_chat_id()
+    return jsonify({"chat_id": chat_id})
+
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
     if "username" not in session:
