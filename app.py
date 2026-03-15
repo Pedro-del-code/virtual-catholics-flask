@@ -138,8 +138,6 @@ TRADUCOES = {
 
 @app.route("/intro")
 def intro():
-    if "username" not in session:
-        return redirect("/login")
     return render_template("intro.html")
 
 @app.route("/")
@@ -160,6 +158,10 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
+    # Mostrar intro na primeira visita ao site
+    if not session.get("intro_visto"):
+        session["intro_visto"] = True
+        return render_template("intro.html")
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
