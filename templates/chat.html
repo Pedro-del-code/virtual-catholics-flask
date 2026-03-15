@@ -98,11 +98,23 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 .btn-send{width:46px;height:46px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:2px;color:var(--dark);font-size:17px;cursor:pointer;transition:all .3s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .btn-send:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));box-shadow:0 4px 15px rgba(200,160,80,.3);}
 .btn-send:disabled{opacity:.4;cursor:not-allowed;}
+/* Mobile */
+.btn-hamburger{display:none;background:transparent;border:1px solid rgba(200,160,80,.2);border-radius:2px;color:rgba(200,160,80,.7);font-size:18px;padding:6px 10px;cursor:pointer;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;}
+@media(max-width:700px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%);transition:transform .3s ease;width:260px;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .btn-hamburger{display:block;}
+  .main{width:100%;}
+  .panel{width:100%;}
+}
 </style>
 </head>
 <body id="body">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharSidebar()"></div>
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">✝ VIRTUAL CATHOLICS</div>
     <div class="sidebar-sub">{{ T.subtitulo }}</div>
@@ -150,6 +162,7 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 <!-- Main -->
 <div class="main">
   <div class="main-header">
+    <button class="btn-hamburger" onclick="abrirSidebar()">☰</button>
     <div class="chat-titulo" id="chatTitulo">VIRTUAL CATHOLICS</div>
     <button class="btn-dark-mode" id="btnDark" onclick="toggleDark()">🌙 {{ T.modo_escuro }}</button>
   </div>
@@ -644,6 +657,16 @@ function navegarNovena(dir) {
 
 function fecharPanel() {
   document.getElementById('panel').classList.remove('open');
+}
+
+function abrirSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+
+function fecharSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
 }
 
 async function setLang(l) {
