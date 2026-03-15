@@ -8,15 +8,19 @@
 <style>
 :root{--gold:#c8a050;--gold-light:#f5d78e;--gold-dark:#8b6820;--cream:#faf6ef;--dark:#0d0a05;--brown:#2a1a08;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;overflow:hidden;position:relative;}
-.bg{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(200,160,80,.08) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(200,160,80,.05) 0%,transparent 50%),var(--dark);}
-.star{position:fixed;width:2px;height:2px;background:rgba(245,215,142,.6);border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay);}
-@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.8}}
-.card{position:relative;z-index:10;width:380px;background:linear-gradient(160deg,rgba(42,26,8,.95) 0%,rgba(20,12,4,.98) 100%);border:1px solid rgba(200,160,80,.3);border-radius:2px;padding:48px 40px 40px;box-shadow:0 0 60px rgba(200,160,80,.08),0 20px 60px rgba(0,0,0,.8);}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;overflow:hidden;position:relative;transition:background .4s;}
+/* Fundo com imagem */
+.bg-img{position:fixed;inset:0;background-size:cover;background-position:center;transition:all .4s;}
+.bg-overlay{position:fixed;inset:0;transition:background .4s;}
+/* Estrelinhas */
+.star{position:fixed;width:2px;height:2px;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite var(--delay);z-index:1;}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+/* Card */
+.card{position:relative;z-index:10;width:380px;border:1px solid rgba(200,160,80,.3);border-radius:2px;padding:48px 40px 40px;transition:all .4s;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
 .logo-area{text-align:center;margin-bottom:32px;}
 .cross{font-size:28px;color:var(--gold);margin-bottom:12px;display:block;text-shadow:0 0 20px rgba(200,160,80,.5);}
-.logo-title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;color:var(--gold-light);letter-spacing:3px;text-transform:uppercase;}
+.logo-title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color .4s;}
 .logo-sub{font-size:12px;color:rgba(200,160,80,.5);letter-spacing:4px;text-transform:uppercase;margin-top:6px;}
 .tabs{display:flex;border-bottom:1px solid rgba(200,160,80,.2);margin-bottom:28px;}
 .tab{flex:1;padding:10px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:rgba(200,160,80,.4);cursor:pointer;transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px;}
@@ -24,7 +28,7 @@ body{min-height:100vh;background:var(--dark);display:flex;align-items:center;jus
 .form{display:none;}.form.active{display:block;}
 .input-group{position:relative;margin-bottom:16px;}
 .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(200,160,80,.4);font-size:14px;}
-input{width:100%;padding:13px 14px 13px 38px;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.2);border-radius:2px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:15px;outline:none;transition:border-color .3s;}
+input{width:100%;padding:13px 14px 13px 38px;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.2);border-radius:2px;font-family:'Cormorant Garamond',serif;font-size:15px;outline:none;transition:all .3s;}
 input::placeholder{color:rgba(200,160,80,.3);}
 input:focus{border-color:rgba(200,160,80,.6);background:rgba(255,255,255,.06);}
 .btn-main{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:2px;color:var(--dark);font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px;}
@@ -41,10 +45,30 @@ input:focus{border-color:rgba(200,160,80,.6);background:rgba(255,255,255,.06);}
 .erro{background:rgba(180,40,40,.15);border:1px solid rgba(180,40,40,.3);border-radius:2px;padding:10px 14px;font-size:13px;color:#ff8080;margin-bottom:16px;display:none;}
 .erro.show{display:block;}
 .footer{text-align:center;margin-top:28px;font-size:12px;color:rgba(200,160,80,.25);letter-spacing:1px;font-style:italic;}
+/* Botão modo */
+.btn-mode{position:fixed;top:16px;right:16px;z-index:20;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.25);border-radius:2px;color:rgba(200,160,80,.7);font-size:11px;padding:6px 12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;transition:all .2s;}
+.btn-mode:hover{background:rgba(200,160,80,.2);color:var(--gold);}
+/* Modo escuro */
+body.dark .card{background:linear-gradient(160deg,rgba(26,14,4,.92) 0%,rgba(13,10,5,.96) 100%);box-shadow:0 0 60px rgba(200,160,80,.08),0 20px 60px rgba(0,0,0,.8);}
+body.dark .logo-title{color:var(--gold-light);}
+body.dark input{color:var(--cream);}
+body.dark .bg-overlay{background:rgba(0,0,0,.55);}
+body.dark .star{background:rgba(245,215,142,.6);}
+/* Modo claro */
+body.light .card{background:linear-gradient(160deg,rgba(255,252,245,.92) 0%,rgba(250,246,239,.96) 100%);box-shadow:0 0 40px rgba(200,160,80,.1),0 20px 60px rgba(0,0,0,.15);}
+body.light .logo-title{color:var(--gold-dark);}
+body.light input{color:#2a1a08;background:rgba(255,255,255,.6);}
+body.light input:focus{background:rgba(255,255,255,.9);}
+body.light .bg-overlay{background:rgba(250,246,239,.45);}
+body.light .star{background:rgba(200,160,80,.5);}
+body.light .footer{color:rgba(139,104,32,.4);}
 </style>
 </head>
-<body>
-<div class="bg" id="bg"></div>
+<body id="body" class="dark">
+<div class="bg-img" id="bgImg"></div>
+<div class="bg-overlay" id="bgOverlay"></div>
+<div id="starsContainer"></div>
+<button class="btn-mode" id="btnMode" onclick="toggleModo()">☀️ Modo Claro</button>
 <div class="card">
   <div class="logo-area">
     <span class="cross">✝</span>
@@ -81,8 +105,43 @@ input:focus{border-color:rgba(200,160,80,.6);background:rgba(255,255,255,.06);}
 </div>
 <script>
 let idioma='{{ idioma }}';
-const bg=document.getElementById('bg');
-for(let i=0;i<50;i++){const s=document.createElement('div');s.className='star';s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s`;bg.appendChild(s);}
+const IMG_ESCURA = "{{ url_for('static', filename='maria_escura.png') }}";
+const IMG_CLARA = "{{ url_for('static', filename='maria_clara.png') }}";
+
+// Estrelas
+const sc = document.getElementById('starsContainer');
+for(let i=0;i<50;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s`;
+  sc.appendChild(s);
+}
+
+// Modo
+let modoEscuro = localStorage.getItem('modo') !== 'claro';
+aplicarModo();
+
+function aplicarModo() {
+  const body = document.getElementById('body');
+  const btn = document.getElementById('btnMode');
+  const bg = document.getElementById('bgImg');
+  if (modoEscuro) {
+    body.className = 'dark';
+    bg.style.backgroundImage = `url('${IMG_ESCURA}')`;
+    btn.textContent = '☀️ Modo Claro';
+  } else {
+    body.className = 'light';
+    bg.style.backgroundImage = `url('${IMG_CLARA}')`;
+    btn.textContent = '🌙 Modo Escuro';
+  }
+}
+
+function toggleModo() {
+  modoEscuro = !modoEscuro;
+  localStorage.setItem('modo', modoEscuro ? 'escuro' : 'claro');
+  aplicarModo();
+}
+
 function setLang(l){window.location.href='/login?lang='+l;}
 function trocarAba(a){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(i===0)===(a==='entrar')));
