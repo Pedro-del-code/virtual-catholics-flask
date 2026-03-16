@@ -6,11 +6,13 @@
 <title>Virtual Catholics</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
+:root { --intro-bg: #fffef8; --intro-text: #5a3a08; --intro-sub: rgba(139,100,20,.55); --intro-ring: rgba(200,160,60,.25); --intro-particle: rgba(200,160,60,.5); --intro-divider: rgba(200,160,60,.5); --intro-quote: #5a3a08; --intro-author: rgba(139,100,20,.6); --intro-footer: rgba(139,100,20,.35); }
+.escuro { --intro-bg: #0a0600; --intro-text: #c8a050; --intro-sub: rgba(200,160,80,.5); --intro-ring: rgba(200,160,60,.2); --intro-particle: rgba(200,160,80,.6); --intro-divider: rgba(200,160,60,.4); --intro-quote: #f0e6d0; --intro-author: rgba(200,160,80,.7); --intro-footer: rgba(200,160,80,.4); }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
 
 body{
-  background: linear-gradient(160deg, #fffef8 0%, #fdf6e3 40%, #f8ecc8 100%);
+  background: var(--intro-bg);
   font-family:'Cormorant Garamond',serif;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
@@ -24,7 +26,7 @@ body{
   top:50%;left:50%;
   transform:translate(-50%,-50%);
   border-radius:50%;
-  border:1.5px solid rgba(200,160,60,.25);
+  border:1.5px solid var(--intro-ring);
   animation:expand 4s ease-out infinite;
   pointer-events:none;
 }
@@ -41,7 +43,7 @@ body{
 .particle{
   position:fixed;
   width:3px;height:3px;
-  background:rgba(200,160,60,.5);
+  background:var(--intro-particle);
   border-radius:50%;
   pointer-events:none;
   animation:float var(--d) ease-in-out infinite var(--delay);
@@ -98,7 +100,7 @@ body{
   font-size:22px;
   font-weight:700;
   letter-spacing:4px;
-  color:#8b6414;
+  color:var(--intro-text);
   text-transform:uppercase;
   margin-top:16px;
   opacity:0;
@@ -110,7 +112,7 @@ body{
 .subtitle{
   font-size:12px;
   letter-spacing:5px;
-  color:rgba(139,100,20,.55);
+  color:var(--intro-sub);
   text-transform:uppercase;
   margin-top:5px;
   opacity:0;
@@ -131,10 +133,10 @@ body{
 }
 .divider-line{
   width:50px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(200,160,60,.5));
+  background:linear-gradient(90deg,transparent,var(--intro-divider));
 }
 .divider-line.right{
-  background:linear-gradient(90deg,rgba(200,160,60,.5),transparent);
+  background:linear-gradient(90deg,var(--intro-divider),transparent);
 }
 .divider-cross{color:#c8a040;font-size:14px;}
 
@@ -151,13 +153,13 @@ body{
   font-size:16px;
   font-style:italic;
   line-height:1.7;
-  color:#5a3a08;
+  color:var(--intro-quote);
 }
 .quote-author{
   font-family:'Cinzel',serif;
   font-size:11px;
   letter-spacing:2px;
-  color:rgba(139,100,20,.6);
+  color:var(--intro-author);
   margin-top:8px;
   text-transform:uppercase;
 }
@@ -167,7 +169,7 @@ body{
   position:fixed;bottom:24px;
   font-size:11px;
   letter-spacing:1px;
-  color:rgba(139,100,20,.35);
+  color:var(--intro-footer);
   font-style:italic;
   opacity:0;
   animation:fadeIn .7s ease forwards 3s;
@@ -249,6 +251,9 @@ const _img1 = new Image(); _img1.src = '/static/sagrada_escura.png';
 const _img2 = new Image(); _img2.src = '/static/sagrada_clara.png';
 const _img3 = new Image(); _img3.src = '/static/maria_escura.png';
 const _img4 = new Image(); _img4.src = '/static/maria_clara.png';
+// Segue preferência do usuário salva no localStorage
+if(localStorage.getItem('modo') !== 'claro') document.body.classList.add('escuro');
+
 // Frase aleatória
 const f = frases[Math.floor(Math.random()*frases.length)];
 document.getElementById('quoteText').textContent = '"' + f.texto + '"';
