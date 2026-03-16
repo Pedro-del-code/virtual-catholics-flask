@@ -13,6 +13,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
+app.config["SESSION_PERMANENT"] = True
+app.config["PERMANENT_SESSION_LIFETIME"] = __import__("datetime").timedelta(days=30)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -113,24 +115,59 @@ def novo_chat_id():
     return datetime.now().strftime("%Y%m%d%H%M%S")
 
 _SANTOS = {
-    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",
-    (1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
-    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",
-    (3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
-    (4,23):"Sao Jorge",(4,29):"Santa Catarina de Siena",
-    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",
-    (6,13):"Santo Antonio de Lisboa",(6,24):"Natividade de Sao Joao Batista",(6,29):"Santos Pedro e Paulo",
-    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",
-    (8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
-    (9,8):"Natividade de Nossa Senhora",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina",
-    (10,1):"Santa Teresinha do Menino Jesus",(10,4):"Sao Francisco de Assis",
-    (10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
-    (11,1):"Todos os Santos",(11,2):"Todos os Fieis Defuntos",
-    (12,8):"Imaculada Conceicao de Maria",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
+    (1,1):"Maria Santíssima, Mãe de Deus",(1,6):"Epifania do Senhor",(1,13):"São Hilário de Poitiers",
+    (1,17):"Santo Antônio Abade",(1,20):"São Sebastião",(1,21):"Santa Inês",
+    (1,24):"São Francisco de Sales",(1,25):"Conversão de São Paulo",(1,28):"Santo Tomás de Aquino",(1,31):"São João Bosco",
+    (2,2):"Apresentação do Senhor",(2,3):"São Brás",(2,5):"Santa Águeda",
+    (2,11):"Nossa Senhora de Lourdes",(2,14):"São Valentim — Santos Cirilo e Metódio",
+    (2,22):"Cátedra de São Pedro",(2,23):"São Policarpo",
+    (3,4):"São Casimiro",(3,7):"Santas Perpétua e Felicidade",(3,8):"São João de Deus",
+    (3,12):"São Gregório Magno",(3,16):"São Heriberto de Colônia",(3,17):"São Patrício",
+    (3,18):"São Cirilo de Jerusalém",(3,19):"São José, Esposo de Maria",
+    (3,23):"São Toríbio de Mogrovejo",(3,25):"Anunciação do Senhor",
+    (4,2):"São Francisco de Paula",(4,4):"São Isidoro de Sevilha",
+    (4,7):"São João Batista de La Salle",(4,23):"São Jorge",(4,25):"São Marcos Evangelista",
+    (4,28):"São Luís Maria Grignion de Montfort",(4,29):"Santa Catarina de Siena",(4,30):"São Pio V",
+    (5,1):"São José Operário",(5,3):"Santos Filipe e Tiago",(5,13):"Nossa Senhora de Fátima",
+    (5,14):"São Matias Apóstolo",(5,22):"Santa Rita de Cássia",(5,24):"Santa Maria Auxiliadora",
+    (5,26):"São Filipe Néri",(5,31):"Visitação de Nossa Senhora",
+    (6,1):"São Justino",(6,5):"São Bonifácio",(6,11):"São Barnabé",
+    (6,13):"Santo Antônio de Lisboa",(6,21):"São Luís Gonzaga",
+    (6,24):"Natividade de São João Batista",(6,27):"Nossa Senhora do Perpétuo Socorro",
+    (6,28):"São Ireneu",(6,29):"Santos Pedro e Paulo",
+    (7,3):"São Tomé Apóstolo",(7,11):"São Bento",(7,16):"Nossa Senhora do Carmo",
+    (7,22):"Santa Maria Madalena",(7,25):"São Tiago Apóstolo",(7,26):"Santos Joaquim e Ana",
+    (7,29):"Santa Marta",(7,31):"Santo Inácio de Loyola",
+    (8,1):"Santo Afonso Maria de Ligório",(8,4):"São João Vianney",
+    (8,6):"Transfiguração do Senhor",(8,8):"São Domingos de Gusmão",
+    (8,10):"São Lourenço",(8,11):"Santa Clara de Assis",
+    (8,14):"São Maximiliano Maria Kolbe",(8,15):"Assunção de Nossa Senhora",
+    (8,20):"São Bernardo",(8,21):"São Pio X",(8,22):"Nossa Senhora Rainha",
+    (8,24):"São Bartolomeu Apóstolo",(8,27):"Santa Mônica",(8,28):"Santo Agostinho",
+    (8,29):"Martírio de São João Batista",
+    (9,3):"São Gregório Magno",(9,8):"Natividade de Nossa Senhora",
+    (9,13):"São João Crisóstomo",(9,14):"Exaltação da Santa Cruz",
+    (9,15):"Nossa Senhora das Dores",(9,21):"São Mateus Apóstolo",
+    (9,23):"Padre Pio de Pietrelcina",(9,27):"São Vicente de Paulo",
+    (9,29):"Santos Miguel, Gabriel e Rafael Arcanjos",(9,30):"São Jerônimo",
+    (10,1):"Santa Teresinha do Menino Jesus",(10,2):"Santos Anjos da Guarda",
+    (10,4):"São Francisco de Assis",(10,7):"Nossa Senhora do Rosário",
+    (10,12):"Nossa Senhora Aparecida — Padroeira do Brasil",
+    (10,15):"Santa Teresa de Ávila",(10,18):"São Lucas Evangelista",
+    (10,22):"São João Paulo II",(10,28):"Santos Simão e Judas Tadeu",
+    (11,1):"Todos os Santos",(11,2):"Todos os Fiéis Defuntos",
+    (11,4):"São Carlos Borromeu",(11,11):"São Martinho de Tours",
+    (11,17):"Santa Isabel da Hungria",(11,21):"Apresentação de Nossa Senhora",
+    (11,22):"Santa Cecília",(11,30):"São André Apóstolo",
+    (12,3):"São Francisco Xavier",(12,6):"São Nicolau",(12,7):"Santo Ambrósio",
+    (12,8):"Imaculada Conceição de Maria",(12,12):"Nossa Senhora de Guadalupe",
+    (12,13):"Santa Lúcia",(12,14):"São João da Cruz",
+    (12,25):"Natividade de Nosso Senhor Jesus Cristo",
+    (12,26):"São Estêvão",(12,27):"São João Apóstolo",
 }
 
 TRADUCOES = {
-    "pt": {"novo_chat":"+ Novo chat","oracoes":"Orações","biblia":"Bíblia","terco":"Terço","liturgia":"Liturgia do Dia","santo":"Santo do Dia","novenas":"Novenas","catecismo":"Catecismo","liturgia_horas":"Liturgia das Horas","canticos":"Cânticos e Hinos","modo_escuro":"Modo Escuro","modo_claro":"Modo Claro","idioma":"Idioma","deletar":"Deletar conversa","bem_vindo":"Bem-vindo(a)","subtitulo":"Assistente Católico","entrar":"Entrar","criar_conta":"Criar conta","erro_login":"Usuário ou senha incorretos!","erro_campos":"Preencha todos os campos!","erro_usuario_existe":"Usuário já existe!","erro_usuario_invalido":"Usuário inválido. Use apenas letras, números e _ (3-20 caracteres).","erro_nome_improprio":"Nome não permitido.","erro_senha_impropria":"Senha não permitida.","placeholder_mensagem":"Manda uma mensagem...","nova_conversa":"Nova conversa","santo_sem":"Nenhum santo registrado para hoje.","nov_titulo":"Novenas","nov_dia":"Dia","nov_anterior":"Anterior","nov_proximo":"Próximo","nov_fim":"Novena concluída!","terco_titulo":"Terço","terco_como":"Como rezar","lit_horas_titulo":"Liturgia das Horas","canticos_titulo":"Cânticos e Hinos Litúrgicos","idioma_instrucao":"REGRA ABSOLUTA DE IDIOMA: Responda SEMPRE e EXCLUSIVAMENTE em português brasileiro.","sair":"Sair","feedback":"Feedback & Suporte","doacoes":"Apoie o Projeto","creditos":"Créditos","exame":"Exame de Consciência","apoio":"Apoio Espiritual","calendario":"Calendário Litúrgico"},
+    "pt": {"novo_chat":"+ Novo chat","oracoes":"Oracoes","biblia":"Biblia","terco":"Terco","liturgia":"Liturgia do Dia","santo":"Santo do Dia","novenas":"Novenas","catecismo":"Catecismo","liturgia_horas":"Liturgia das Horas","canticos":"Canticos e Hinos","modo_escuro":"Modo Escuro","modo_claro":"Modo Claro","idioma":"Idioma","deletar":"Deletar conversa","bem_vindo":"Bem-vindo(a)","subtitulo":"Assistente Catolico","entrar":"Entrar","criar_conta":"Criar conta","erro_login":"Usuario ou senha incorretos!","erro_campos":"Preencha todos os campos!","erro_usuario_existe":"Usuario ja existe!","erro_usuario_invalido":"Usuario invalido. Use apenas letras, numeros e _ (3-20 caracteres).","erro_nome_improprio":"Nome nao permitido.","erro_senha_impropria":"Senha nao permitida.","placeholder_mensagem":"Manda uma mensagem...","nova_conversa":"Nova conversa","santo_sem":"Nenhum santo registrado para hoje.","nov_titulo":"Novenas","nov_dia":"Dia","nov_anterior":"Anterior","nov_proximo":"Proximo","nov_fim":"Novena concluida!","terco_titulo":"Terco","terco_como":"Como rezar","lit_horas_titulo":"Liturgia das Horas","canticos_titulo":"Canticos e Hinos Liturgicos","idioma_instrucao":"REGRA ABSOLUTA DE IDIOMA: Responda SEMPRE e EXCLUSIVAMENTE em portugues brasileiro.","sair":"Sair"},
     "en": {"novo_chat":"+ New chat","oracoes":"Prayers","biblia":"Bible","terco":"Rosary","liturgia":"Liturgy of the Day","santo":"Saint of the Day","novenas":"Novenas","catecismo":"Catechism","liturgia_horas":"Liturgy of the Hours","canticos":"Canticles & Hymns","modo_escuro":"Dark Mode","modo_claro":"Light Mode","idioma":"Language","deletar":"Delete conversation","bem_vindo":"Welcome","subtitulo":"Catholic Assistant","entrar":"Sign in","criar_conta":"Create account","erro_login":"Incorrect username or password!","erro_campos":"Please fill in all fields!","erro_usuario_existe":"Username already exists!","erro_usuario_invalido":"Invalid username.","erro_nome_improprio":"Name not allowed.","erro_senha_impropria":"Password not allowed.","placeholder_mensagem":"Send a message...","nova_conversa":"New conversation","santo_sem":"No saint registered for today.","nov_titulo":"Novenas","nov_dia":"Day","nov_anterior":"Previous","nov_proximo":"Next","nov_fim":"Novena completed!","terco_titulo":"Rosary","terco_como":"How to pray","lit_horas_titulo":"Liturgy of the Hours","canticos_titulo":"Canticles and Liturgical Hymns","idioma_instrucao":"ABSOLUTE LANGUAGE RULE: ALWAYS respond EXCLUSIVELY in English.","sair":"Sign out"},
     "es": {"novo_chat":"+ Nueva conversacion","oracoes":"Oraciones","biblia":"Biblia","terco":"Rosario","liturgia":"Liturgia del Dia","santo":"Santo del Dia","novenas":"Novenas","catecismo":"Catecismo","liturgia_horas":"Liturgia de las Horas","canticos":"Canticos e Himnos","modo_escuro":"Modo Oscuro","modo_claro":"Modo Claro","idioma":"Idioma","deletar":"Eliminar conversacion","bem_vindo":"Bienvenido(a)","subtitulo":"Asistente Catolico","entrar":"Entrar","criar_conta":"Crear cuenta","erro_login":"Usuario o contrasena incorrectos!","erro_campos":"Por favor, completa todos los campos!","erro_usuario_existe":"El usuario ya existe!","erro_usuario_invalido":"Usuario invalido.","erro_nome_improprio":"Nombre no permitido.","erro_senha_impropria":"Contrasena no permitida.","placeholder_mensagem":"Envia un mensaje...","nova_conversa":"Nueva conversacion","santo_sem":"Ningun santo registrado para hoy.","nov_titulo":"Novenas","nov_dia":"Dia","nov_anterior":"Anterior","nov_proximo":"Siguiente","nov_fim":"Novena completada!","terco_titulo":"Rosario","terco_como":"Como rezar","lit_horas_titulo":"Liturgia de las Horas","canticos_titulo":"Canticos e Himnos Liturgicos","idioma_instrucao":"REGLA ABSOLUTA DE IDIOMA: Responde SIEMPRE y EXCLUSIVAMENTE en espanol.","sair":"Salir"},
     "it": {"novo_chat":"+ Nuova chat","oracoes":"Preghiere","biblia":"Bibbia","terco":"Rosario","liturgia":"Liturgia del Giorno","santo":"Santo del Giorno","novenas":"Novene","catecismo":"Catechismo","liturgia_horas":"Liturgia delle Ore","canticos":"Cantici e Inni","modo_escuro":"Modalita Scura","modo_claro":"Modalita Chiara","idioma":"Lingua","deletar":"Elimina conversazione","bem_vindo":"Benvenuto(a)","subtitulo":"Assistente Cattolico","entrar":"Accedi","criar_conta":"Crea account","erro_login":"Nome utente o password errati!","erro_campos":"Per favore, compila tutti i campi!","erro_usuario_existe":"Nome utente gia esistente!","erro_usuario_invalido":"Nome utente non valido.","erro_nome_improprio":"Nome non consentito.","erro_senha_impropria":"Password non consentita.","placeholder_mensagem":"Invia un messaggio...","nova_conversa":"Nuova conversazione","santo_sem":"Nessun santo registrato per oggi.","nov_titulo":"Novene","nov_dia":"Giorno","nov_anterior":"Precedente","nov_proximo":"Successivo","nov_fim":"Novena completata!","terco_titulo":"Rosario","terco_como":"Come pregare","lit_horas_titulo":"Liturgia delle Ore","canticos_titulo":"Cantici e Inni Liturgici","idioma_instrucao":"REGOLA ASSOLUTA DI LINGUA: Rispondi SEMPRE ed ESCLUSIVAMENTE in italiano.","sair":"Esci"},
@@ -155,11 +192,11 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Intro aparece SEMPRE que acessa o login (exceto se veio da própria intro)
-    if not session.get("veio_da_intro"):
-        session["veio_da_intro"] = True
+    # Intro aparece sempre ao acessar o login
+    if not session.get("intro_visto"):
+        session["intro_visto"] = True
         return render_template("intro.html")
-    session.pop("veio_da_intro", None)
+    session.pop("intro_visto", None)  # Reset pra próxima visita
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
@@ -370,8 +407,8 @@ def api_deletar_chat():
 
 @app.route("/api/dados/<tipo>")
 def api_dados(tipo):
-    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS, CATECISMO
-    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS, "catecismo": CATECISMO}
+    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS
+    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS}
     dados = mapa.get(tipo, {})
     nome = request.args.get("nome")
     if nome:
@@ -629,3 +666,33 @@ def api_apoio_topico(topico_id):
         if t["id"] == topico_id:
             return jsonify(t)
     return jsonify({"error": "Tópico não encontrado"}), 404
+
+# ── CRÉDITOS ──────────────────────────────────────────────────────────────────
+@app.route("/api/creditos")
+def api_creditos():
+    return jsonify({
+        "criador": "Pedro",
+        "criador_desc": "Desenvolvedor e idealizador do Virtual Catholics, movido pela fé católica e pelo desejo de levar a fé digital a todos os cristãos.",
+        "agradecimento_nome": "João Lucas",
+        "agradecimento_desc": "Amigo e colaborador que contribuiu com ideias fundamentais para o desenvolvimento do projeto.",
+        "dedicatoria": "A Deus, a Nossa Senhora e a todos os cristãos que buscam fortalecer sua fé no mundo digital.",
+        "versao": "Virtual Catholics © 2025 — Feito com fé e amor",
+    })
+
+# ── INFO / FEEDBACK / DOAÇÕES ─────────────────────────────────────────────────
+@app.route("/api/info")
+def api_info():
+    return jsonify({
+        "email": "virtualcatholics@gmail.com",
+        "versao": "Virtual Catholics © 2025",
+        "criador": "Pedro",
+        "pix_qr": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126360014BR.GOV.BCB.PIX0114%2B55619851019085204000053039865802BR5922Danubia%20Pimentel%20Gomes6009SAO%20PAULO62140510rxGCP8VQVW63043EF7&bgcolor=ffffff&color=a07840&qzone=2",
+    })
+
+# ── NOVO CHAT ─────────────────────────────────────────────────────────────────
+@app.route("/api/novo-chat", methods=["POST"])
+def api_novo_chat():
+    if "username" not in session:
+        return jsonify({"erro": "Nao autenticado"}), 401
+    chat_id = novo_chat_id()
+    return jsonify({"chat_id": chat_id})
