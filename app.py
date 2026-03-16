@@ -13,6 +13,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
+app.config["SESSION_PERMANENT"] = True
+app.config["PERMANENT_SESSION_LIFETIME"] = __import__("datetime").timedelta(days=30)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -113,55 +115,20 @@ def novo_chat_id():
     return datetime.now().strftime("%Y%m%d%H%M%S")
 
 _SANTOS = {
-    (1,1):"Maria Santíssima, Mãe de Deus",(1,6):"Epifania do Senhor",(1,13):"São Hilário de Poitiers",
-    (1,17):"Santo Antônio Abade",(1,20):"São Sebastião",(1,21):"Santa Inês",
-    (1,24):"São Francisco de Sales",(1,25):"Conversão de São Paulo",(1,28):"Santo Tomás de Aquino",(1,31):"São João Bosco",
-    (2,2):"Apresentação do Senhor",(2,3):"São Brás",(2,5):"Santa Águeda",
-    (2,11):"Nossa Senhora de Lourdes",(2,14):"São Valentim — Santos Cirilo e Metódio",
-    (2,22):"Cátedra de São Pedro",(2,23):"São Policarpo",
-    (3,4):"São Casimiro",(3,7):"Santas Perpétua e Felicidade",(3,8):"São João de Deus",
-    (3,12):"São Gregório Magno",(3,16):"São Heriberto de Colônia",(3,17):"São Patrício",
-    (3,18):"São Cirilo de Jerusalém",(3,19):"São José, Esposo de Maria",
-    (3,23):"São Toríbio de Mogrovejo",(3,25):"Anunciação do Senhor",
-    (4,2):"São Francisco de Paula",(4,4):"São Isidoro de Sevilha",
-    (4,7):"São João Batista de La Salle",(4,23):"São Jorge",(4,25):"São Marcos Evangelista",
-    (4,28):"São Luís Maria Grignion de Montfort",(4,29):"Santa Catarina de Siena",(4,30):"São Pio V",
-    (5,1):"São José Operário",(5,3):"Santos Filipe e Tiago",(5,13):"Nossa Senhora de Fátima",
-    (5,14):"São Matias Apóstolo",(5,22):"Santa Rita de Cássia",(5,24):"Santa Maria Auxiliadora",
-    (5,26):"São Filipe Néri",(5,31):"Visitação de Nossa Senhora",
-    (6,1):"São Justino",(6,5):"São Bonifácio",(6,11):"São Barnabé",
-    (6,13):"Santo Antônio de Lisboa",(6,21):"São Luís Gonzaga",
-    (6,24):"Natividade de São João Batista",(6,27):"Nossa Senhora do Perpétuo Socorro",
-    (6,28):"São Ireneu",(6,29):"Santos Pedro e Paulo",
-    (7,3):"São Tomé Apóstolo",(7,11):"São Bento",(7,16):"Nossa Senhora do Carmo",
-    (7,22):"Santa Maria Madalena",(7,25):"São Tiago Apóstolo",(7,26):"Santos Joaquim e Ana",
-    (7,29):"Santa Marta",(7,31):"Santo Inácio de Loyola",
-    (8,1):"Santo Afonso Maria de Ligório",(8,4):"São João Vianney",
-    (8,6):"Transfiguração do Senhor",(8,8):"São Domingos de Gusmão",
-    (8,10):"São Lourenço",(8,11):"Santa Clara de Assis",
-    (8,14):"São Maximiliano Maria Kolbe",(8,15):"Assunção de Nossa Senhora",
-    (8,20):"São Bernardo",(8,21):"São Pio X",(8,22):"Nossa Senhora Rainha",
-    (8,24):"São Bartolomeu Apóstolo",(8,27):"Santa Mônica",(8,28):"Santo Agostinho",
-    (8,29):"Martírio de São João Batista",
-    (9,3):"São Gregório Magno",(9,8):"Natividade de Nossa Senhora",
-    (9,13):"São João Crisóstomo",(9,14):"Exaltação da Santa Cruz",
-    (9,15):"Nossa Senhora das Dores",(9,21):"São Mateus Apóstolo",
-    (9,23):"Padre Pio de Pietrelcina",(9,27):"São Vicente de Paulo",
-    (9,29):"Santos Miguel, Gabriel e Rafael Arcanjos",(9,30):"São Jerônimo",
-    (10,1):"Santa Teresinha do Menino Jesus",(10,2):"Santos Anjos da Guarda",
-    (10,4):"São Francisco de Assis",(10,7):"Nossa Senhora do Rosário",
-    (10,12):"Nossa Senhora Aparecida — Padroeira do Brasil",
-    (10,15):"Santa Teresa de Ávila",(10,18):"São Lucas Evangelista",
-    (10,22):"São João Paulo II",(10,28):"Santos Simão e Judas Tadeu",
-    (11,1):"Todos os Santos",(11,2):"Todos os Fiéis Defuntos",
-    (11,4):"São Carlos Borromeu",(11,11):"São Martinho de Tours",
-    (11,17):"Santa Isabel da Hungria",(11,21):"Apresentação de Nossa Senhora",
-    (11,22):"Santa Cecília",(11,30):"São André Apóstolo",
-    (12,3):"São Francisco Xavier",(12,6):"São Nicolau",(12,7):"Santo Ambrósio",
-    (12,8):"Imaculada Conceição de Maria",(12,12):"Nossa Senhora de Guadalupe",
-    (12,13):"Santa Lúcia",(12,14):"São João da Cruz",
-    (12,25):"Natividade de Nosso Senhor Jesus Cristo",
-    (12,26):"São Estêvão",(12,27):"São João Apóstolo",
+    (1,1):"Maria Santissima Mae de Deus",(1,6):"Epifania do Senhor",(1,17):"Santo Antonio Abade",
+    (1,24):"Sao Francisco de Sales",(1,28):"Santo Tomas de Aquino",(1,31):"Sao Joao Bosco",
+    (2,2):"Apresentacao do Senhor",(2,11):"Nossa Senhora de Lourdes",
+    (3,17):"Santo Patricio",(3,19):"Sao Jose Esposo de Maria",(3,25):"Anunciacao do Senhor",
+    (4,23):"Sao Jorge",(4,29):"Santa Catarina de Siena",
+    (5,1):"Sao Jose Operario",(5,13):"Nossa Senhora de Fatima",(5,22):"Santa Rita de Cassia",
+    (6,13):"Santo Antonio de Lisboa",(6,24):"Natividade de Sao Joao Batista",(6,29):"Santos Pedro e Paulo",
+    (7,16):"Nossa Senhora do Carmo",(7,22):"Santa Maria Madalena",
+    (8,15):"Assuncao de Nossa Senhora",(8,28):"Santo Agostinho",
+    (9,8):"Natividade de Nossa Senhora",(9,15):"Nossa Senhora das Dores",(9,23):"Padre Pio de Pietrelcina",
+    (10,1):"Santa Teresinha do Menino Jesus",(10,4):"Sao Francisco de Assis",
+    (10,7):"Nossa Senhora do Rosario",(10,12):"Nossa Senhora Aparecida",
+    (11,1):"Todos os Santos",(11,2):"Todos os Fieis Defuntos",
+    (12,8):"Imaculada Conceicao de Maria",(12,25):"Natividade de Nosso Senhor Jesus Cristo",
 }
 
 TRADUCOES = {
@@ -190,11 +157,10 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Intro aparece sempre ao acessar o login
-    if not session.get("intro_visto"):
-        session["intro_visto"] = True
+    # Intro aparece SEMPRE — exceto quando veio direto da intro
+    if not session.pop("veio_da_intro", False):
+        session["veio_da_intro"] = True
         return render_template("intro.html")
-    session.pop("intro_visto", None)  # Reset pra próxima visita
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
@@ -364,6 +330,12 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
                 except:
                     pass
             texto = _re.sub(r'\[LEMBRAR:\s*.+?\]', '', texto).strip()
+        # Salvar chat automaticamente após cada resposta
+        chat_id = data.get("chat_id")
+        if chat_id:
+            todas_mensagens = mensagens + [{"role": "assistant", "content": texto}]
+            titulo = mensagens[0]["content"][:40] if mensagens else "Nova conversa"
+            salvar_chat(session["username"], chat_id, titulo, todas_mensagens)
         return jsonify({"resposta": texto})
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
@@ -405,8 +377,8 @@ def api_deletar_chat():
 
 @app.route("/api/dados/<tipo>")
 def api_dados(tipo):
-    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS, CATECISMO
-    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS, "catecismo": CATECISMO}
+    from data import ORACOES, NOVENAS, TERCOS, LITURGIA_HORAS, CANTICOS
+    mapa = {"oracoes": ORACOES, "novenas": NOVENAS, "tercos": TERCOS, "liturgia_horas": LITURGIA_HORAS, "canticos": CANTICOS}
     dados = mapa.get(tipo, {})
     nome = request.args.get("nome")
     if nome:
@@ -419,20 +391,8 @@ def api_santo_dia():
     santo = _SANTOS.get((hoje.month, hoje.day), "")
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
-@app.route("/api/liturgia-dia")
-def api_liturgia_dia():
-    hoje = date.today()
-    meses = ["","Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"]
-    data_fmt = f"{hoje.day} de {meses[hoje.month]} de {hoje.year}"
-    return jsonify({"data": data_fmt, "url_cnbb": "https://liturgiadiaria.site/", "texto": "Para acompanhar as leituras completas da Missa de hoje, acesse o site oficial:"})
-
-@app.route("/api/creditos")
-def api_creditos():
-    return jsonify({"criador": "Pedro", "criador_desc": "Desenvolvedor e idealizador do Virtual Catholics, movido pela fé católica.", "agradecimento_nome": "João Lucas", "agradecimento_desc": "Amigo e colaborador que contribuiu com ideias fundamentais.", "dedicatoria": "A Deus, a Nossa Senhora e a todos os cristãos que buscam fortalecer sua fé.", "versao": "Virtual Catholics © 2025 — Feito com fé e amor"})
-
-@app.route("/api/info")
-def api_info():
-    return jsonify({"email": "virtualcatholics@gmail.com", "versao": "Virtual Catholics © 2025", "criador": "Pedro", "pix_qr": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126360014BR.GOV.BCB.PIX0114%2B55619851019085204000053039865802BR5922Danubia%20Pimentel%20Gomes6009SAO%20PAULO62140510rxGCP8VQVW63043EF7&bgcolor=ffffff&color=a07840&qzone=2"})
+if __name__ == "__main__":
+    app.run(debug=True)
 
 # ── BÍBLIA ────────────────────────────────────────────────────────────────────
 LIVROS_BIBLIA = [
@@ -676,6 +636,3 @@ def api_apoio_topico(topico_id):
         if t["id"] == topico_id:
             return jsonify(t)
     return jsonify({"error": "Tópico não encontrado"}), 404
-
-if __name__ == "__main__":
-    app.run(debug=True)
