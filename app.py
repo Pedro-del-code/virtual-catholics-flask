@@ -688,11 +688,3 @@ def api_info():
         "criador": "Pedro",
         "pix_qr": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126360014BR.GOV.BCB.PIX0114%2B55619851019085204000053039865802BR5922Danubia%20Pimentel%20Gomes6009SAO%20PAULO62140510rxGCP8VQVW63043EF7&bgcolor=ffffff&color=a07840&qzone=2",
     })
-
-# ── NOVO CHAT ─────────────────────────────────────────────────────────────────
-@app.route("/api/novo-chat", methods=["POST"])
-def api_novo_chat():
-    if "username" not in session:
-        return jsonify({"erro": "Nao autenticado"}), 401
-    chat_id = novo_chat_id()
-    return jsonify({"chat_id": chat_id})
