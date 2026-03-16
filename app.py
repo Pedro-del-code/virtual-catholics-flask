@@ -384,8 +384,37 @@ def api_santo_dia():
     santo = _SANTOS.get((hoje.month, hoje.day), "")
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/api/liturgia-dia")
+def api_liturgia_dia():
+    hoje = date.today()
+    meses = ["","Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"]
+    data_fmt = f"{hoje.day} de {meses[hoje.month]} de {hoje.year}"
+    return jsonify({
+        "data": data_fmt,
+        "url_cnbb": "https://liturgiadiaria.site/",
+        "texto": "Para acompanhar as leituras completas da Missa de hoje, acesse o site oficial:",
+    })
+
+@app.route("/api/creditos")
+def api_creditos():
+    return jsonify({
+        "criador": "Pedro",
+        "criador_desc": "Desenvolvedor e idealizador do Virtual Catholics, movido pela fé católica e pelo desejo de levar a fé digital a todos os cristãos.",
+        "agradecimento_nome": "João Lucas",
+        "agradecimento_desc": "Amigo e colaborador que contribuiu com ideias fundamentais para o desenvolvimento do projeto.",
+        "dedicatoria": "A Deus, a Nossa Senhora e a todos os cristãos que buscam fortalecer sua fé no mundo digital.",
+        "versao": "Virtual Catholics © 2025 — Feito com fé e amor",
+    })
+
+@app.route("/api/info")
+def api_info():
+    return jsonify({
+        "email": "virtualcatholics@gmail.com",
+        "versao": "Virtual Catholics © 2025",
+        "criador": "Pedro",
+        "pix_qr": "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126360014BR.GOV.BCB.PIX0114%2B55619851019085204000053039865802BR5922Danubia%20Pimentel%20Gomes6009SAO%20PAULO62140510rxGCP8VQVW63043EF7&bgcolor=ffffff&color=a07840&qzone=2",
+    })
+
 
 # ── BÍBLIA ────────────────────────────────────────────────────────────────────
 LIVROS_BIBLIA = [
@@ -629,3 +658,6 @@ def api_apoio_topico(topico_id):
         if t["id"] == topico_id:
             return jsonify(t)
     return jsonify({"error": "Tópico não encontrado"}), 404
+
+if __name__ == "__main__":
+    app.run(debug=True)
