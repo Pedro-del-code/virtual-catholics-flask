@@ -4,183 +4,344 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Virtual Catholics</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;
-  --bg:#0a0600;--text:#faf6ef;--text2:rgba(250,246,239,.6);
-  --bord:rgba(200,160,80,.15);--bord2:rgba(200,160,80,.3);
+  --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;--gold4:#e8c870;
+  --bg:#1e120600;--text:#f0e8d8;--text2:rgba(240,232,216,.72);
+  --bord:rgba(200,160,80,.2);--bord2:rgba(200,160,80,.4);
+  --card:#2a1608;--card2:#321a0a;
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;}
 
-/* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:11px 14px;background:rgba(10,6,0,.97);
-  border-bottom:1px solid var(--bord);flex-shrink:0;z-index:10;position:relative;}
-.btn-hbg{background:transparent;border:1px solid var(--bord2);border-radius:3px;
-  color:var(--gold);width:36px;height:36px;font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;}
-.hdr-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);
-  position:absolute;left:50%;transform:translateX(-50%);}
-.btn-modo{background:transparent;border:1px solid var(--bord);border-radius:3px;
-  color:var(--text2);font-size:11px;padding:5px 8px;cursor:pointer;
-  font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;}
+html,body{height:100%;overflow:hidden;background:#1e1206;}
+body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;font-size:17px;}
 
-/* FUNDO */
-.fundo{position:fixed;inset:0;z-index:0;background-size:cover;
-  background-position:center;background-repeat:no-repeat;
-  opacity:.18;pointer-events:none;transition:opacity .4s;}
+/* ── HEADER ── */
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(18,8,1,.97);
+  border-bottom:1px solid var(--bord);
+  flex-shrink:0;z-index:10;position:relative;
+}
+.btn-hbg{
+  background:transparent;border:1px solid var(--bord2);
+  border-radius:6px;color:var(--gold);
+  width:40px;height:40px;font-size:20px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.btn-hbg:hover{background:rgba(200,160,80,.1);}
+.hdr-title{
+  font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);
+  position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;
+}
+.btn-modo{
+  background:transparent;border:1px solid var(--bord);border-radius:6px;
+  color:var(--text2);font-size:11px;padding:6px 10px;cursor:pointer;
+  font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;transition:all .2s;
+}
+.btn-modo:hover{border-color:var(--gold);color:var(--gold);}
 
-/* CHAT */
-.chat{flex:1;overflow-y:auto;padding:14px;
-  display:flex;flex-direction:column;gap:10px;
-  position:relative;z-index:2;}
+/* ── FUNDO ── */
+.fundo{
+  position:fixed;inset:0;z-index:0;
+  background-size:cover;background-position:center;
+  opacity:.12;pointer-events:none;transition:opacity .4s;
+}
+
+/* ── CHAT ── */
+.chat{
+  flex:1;overflow-y:auto;padding:18px 16px;
+  display:flex;flex-direction:column;gap:14px;
+  position:relative;z-index:2;
+}
 .chat::-webkit-scrollbar{width:3px;}
-.chat::-webkit-scrollbar-thumb{background:var(--bord2);}
+.chat::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px;}
 
-/* WELCOME */
-.welcome{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;gap:10px;padding:30px 20px;min-height:55vh;}
-.wc-cross{font-size:26px;color:var(--gold);opacity:.6;}
-.wc-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold2);letter-spacing:2px;}
-.wc-sub{font-size:14px;color:var(--text2);font-style:italic;max-width:270px;line-height:1.6;}
-.wc-santo{font-size:12px;color:rgba(200,160,80,.5);font-style:italic;}
+/* ── WELCOME ── */
+.welcome{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:14px;padding:30px 20px;min-height:55vh;
+}
+.wc-cross{font-size:32px;color:var(--gold);opacity:.7;}
+.wc-title{font-family:'Cinzel',serif;font-size:17px;color:var(--gold2);letter-spacing:2px;}
+.wc-sub{font-size:17px;color:var(--text2);font-style:italic;max-width:290px;line-height:1.7;}
+.wc-santo{
+  font-size:14px;color:var(--gold);font-style:italic;
+  background:rgba(200,160,80,.08);border:1px solid var(--bord);
+  border-radius:8px;padding:8px 14px;max-width:290px;
+}
 
-/* MSGS */
-.msg{max-width:85%;padding:13px 16px;font-size:16px;line-height:1.85;border-radius:4px;position:relative;}
+/* ── MENSAGENS ── */
+.msg{max-width:87%;font-size:17px;line-height:1.85;border-radius:12px;padding:14px 18px;position:relative;}
 .mu{
   align-self:flex-end;
-  background:linear-gradient(135deg,rgba(200,160,80,.18),rgba(180,130,50,.12));
-  border:1px solid rgba(200,160,80,.3);
-  border-bottom-right-radius:2px;
+  background:linear-gradient(135deg,rgba(200,160,80,.22),rgba(160,110,40,.15));
+  border:1px solid rgba(200,160,80,.32);
+  border-bottom-right-radius:4px;
   color:var(--text);
 }
 .mb{
   align-self:flex-start;
-  background:linear-gradient(135deg,rgba(30,15,3,.85),rgba(20,10,2,.75));
-  border:1px solid rgba(200,160,80,.18);
-  border-bottom-left-radius:2px;
-  color:rgba(240,228,205,.95);
-  box-shadow:0 2px 12px rgba(0,0,0,.3);
+  background:linear-gradient(135deg,rgba(42,22,8,.95),rgba(30,14,2,.88));
+  border:1px solid rgba(200,160,80,.2);
+  border-bottom-left-radius:4px;
+  color:rgba(240,228,205,.97);
+  box-shadow:0 3px 14px rgba(0,0,0,.4);
 }
 .mb-autor{
   font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
-  color:var(--gold);margin-bottom:7px;
-  display:flex;align-items:center;gap:5px;
+  color:var(--gold);margin-bottom:8px;
+  display:flex;align-items:center;gap:5px;opacity:.85;
 }
-.mb-autor::before{content:'✝';font-size:8px;}
-.typing{display:flex;gap:4px;padding:4px 0;}
-.typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:tp 1.2s ease-in-out infinite;}
+.typing{display:flex;gap:5px;padding:4px 0;}
+.typing span{
+  width:7px;height:7px;background:var(--gold);border-radius:50%;
+  opacity:.4;animation:tp 1.2s ease-in-out infinite;
+}
 .typing span:nth-child(2){animation-delay:.2s;}
 .typing span:nth-child(3){animation-delay:.4s;}
-@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
+@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-5px)}}
 
-/* INPUT */
-.inp-wrap{padding:10px 14px;border-top:1px solid var(--bord);
-  display:flex;gap:8px;align-items:flex-end;
-  position:relative;z-index:2;background:rgba(10,6,0,.85);flex-shrink:0;}
-textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--bord2);
-  border-radius:3px;padding:10px 12px;color:var(--text);
-  font-family:'Cormorant Garamond',serif;font-size:15px;
-  resize:none;outline:none;min-height:44px;max-height:110px;line-height:1.5;}
-textarea::placeholder{color:rgba(200,160,80,.25);}
-textarea:focus{border-color:rgba(200,160,80,.5);}
-.btn-env{width:44px;height:44px;flex-shrink:0;
+/* ── INPUT ── */
+.inp-wrap{
+  padding:12px 16px;border-top:1px solid var(--bord);
+  display:flex;gap:10px;align-items:flex-end;
+  position:relative;z-index:2;
+  background:rgba(16,8,1,.94);flex-shrink:0;
+}
+textarea{
+  flex:1;background:rgba(255,255,255,.05);
+  border:1px solid var(--bord2);border-radius:10px;
+  padding:12px 14px;color:var(--text);
+  font-family:'Cormorant Garamond',serif;font-size:17px;
+  resize:none;outline:none;min-height:48px;max-height:120px;line-height:1.5;
+  transition:border-color .2s;
+}
+textarea::placeholder{color:rgba(200,160,80,.28);}
+textarea:focus{border-color:rgba(200,160,80,.6);}
+.btn-env{
+  width:48px;height:48px;flex-shrink:0;
   background:linear-gradient(135deg,var(--gold3),var(--gold));
-  border:none;border-radius:3px;color:var(--bg);font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;}
-.btn-env:disabled{opacity:.4;cursor:not-allowed;}
+  border:none;border-radius:10px;color:#1a0800;
+  font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;box-shadow:0 2px 10px rgba(200,160,80,.3);
+}
+.btn-env:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(200,160,80,.4);}
+.btn-env:disabled{opacity:.4;cursor:not-allowed;transform:none;}
 
-/* OVERLAY */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;}
+/* ── OVERLAY ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:90;backdrop-filter:blur(2px);}
 .overlay.aberto{display:block;}
 
-/* SIDEBAR */
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:78vw;max-width:288px;
-  background:rgba(8,4,0,.98);border-right:1px solid var(--bord2);
-  z-index:100;transform:translateX(-100%);transition:transform .24s ease;
-  display:flex;flex-direction:column;overflow:hidden;}
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:82vw;max-width:300px;
+  background:rgba(15,7,1,.99);border-right:1px solid var(--bord2);
+  z-index:100;transform:translateX(-100%);transition:transform .25s ease;
+  display:flex;flex-direction:column;overflow:hidden;
+}
 .sidebar.aberto{transform:translateX(0);}
-.sb-head{padding:15px;border-bottom:1px solid var(--bord);text-align:center;flex-shrink:0;}
-.sb-logo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);}
-.sb-sub{font-size:9px;color:rgba(200,160,80,.35);letter-spacing:3px;margin-top:3px;}
-.sb-body{flex:1;overflow-y:auto;padding-bottom:10px;}
-.sb-sec{padding:9px 12px 3px;font-family:'Cinzel',serif;font-size:9px;
-  letter-spacing:2px;color:rgba(200,160,80,.35);margin-top:5px;}
-.btn-novo{margin:10px 10px 4px;padding:9px;
-  background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.22);
-  border-radius:2px;color:var(--gold2);font-family:'Cinzel',serif;
-  font-size:10px;letter-spacing:2px;cursor:pointer;text-align:center;}
-.ci{padding:9px 12px;font-size:13px;color:var(--text2);cursor:pointer;
+.sb-head{
+  padding:18px;border-bottom:1px solid var(--bord);
+  text-align:center;flex-shrink:0;
+  background:linear-gradient(180deg,rgba(200,160,80,.06),transparent);
+}
+.sb-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);}
+.sb-sub{font-size:10px;color:rgba(200,160,80,.4);letter-spacing:3px;margin-top:4px;}
+.sb-body{flex:1;overflow-y:auto;padding-bottom:12px;}
+.sb-sec{
+  padding:12px 14px 4px;font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:2px;color:rgba(200,160,80,.4);margin-top:6px;
+}
+.btn-novo{
+  margin:12px 12px 6px;padding:11px;
+  background:linear-gradient(135deg,rgba(200,160,80,.15),rgba(160,110,40,.1));
+  border:1px solid rgba(200,160,80,.3);border-radius:8px;
+  color:var(--gold2);font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:2px;cursor:pointer;text-align:center;
+  transition:all .2s;
+}
+.btn-novo:hover{background:rgba(200,160,80,.2);}
+.ci{
+  padding:10px 14px;font-size:14px;color:var(--text2);cursor:pointer;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  margin:1px 8px;border-radius:2px;border:1px solid transparent;}
-.ci:hover,.ci.ativo{background:rgba(200,160,80,.08);color:var(--gold2);}
-.mi{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:13px;
-  color:rgba(250,246,239,.6);cursor:pointer;margin:1px 8px;border-radius:2px;}
-.mi:hover{background:rgba(200,160,80,.08);color:var(--gold2);}
-.sb-foot{padding:11px;border-top:1px solid var(--bord);flex-shrink:0;}
-.lang-row{display:flex;gap:3px;margin-bottom:8px;}
-.lang-btn{flex:1;padding:4px;background:transparent;border:1px solid var(--bord);
-  border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;}
-.lang-btn.ativo,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
-.user-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.user-foto{width:28px;height:28px;border-radius:50%;border:1px solid var(--bord2);
+  margin:2px 10px;border-radius:8px;border:1px solid transparent;
+  transition:all .2s;
+}
+.ci:hover,.ci.ativo{background:rgba(200,160,80,.1);color:var(--gold2);border-color:var(--bord);}
+.mi{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;font-size:15px;
+  color:rgba(240,232,216,.72);cursor:pointer;
+  margin:2px 10px;border-radius:8px;transition:all .2s;
+}
+.mi:hover{background:rgba(200,160,80,.09);color:var(--gold2);}
+.sb-foot{
+  padding:14px;border-top:1px solid var(--bord);flex-shrink:0;
+  background:linear-gradient(0deg,rgba(200,160,80,.04),transparent);
+}
+.lang-row{display:flex;gap:5px;margin-bottom:10px;}
+.lang-btn{
+  flex:1;padding:6px;background:transparent;
+  border:1px solid var(--bord);border-radius:6px;
+  color:rgba(200,160,80,.45);font-size:11px;cursor:pointer;text-align:center;
+  transition:all .2s;
+}
+.lang-btn.ativo,.lang-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,160,80,.08);}
+.user-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.user-foto{
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--bord2);overflow:hidden;
   background:rgba(200,160,80,.1);display:flex;align-items:center;justify-content:center;
-  font-size:12px;flex-shrink:0;overflow:hidden;}
+  font-size:14px;flex-shrink:0;
+}
 .user-foto img{width:100%;height:100%;object-fit:cover;}
-.user-nome{font-size:13px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-sair{width:100%;padding:7px;background:transparent;border:1px solid var(--bord);
-  border-radius:2px;color:rgba(200,160,80,.4);font-size:12px;cursor:pointer;letter-spacing:1px;}
+.user-nome{font-size:15px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-sair{
+  width:100%;padding:9px;background:transparent;
+  border:1px solid var(--bord);border-radius:8px;
+  color:rgba(200,160,80,.5);font-size:13px;cursor:pointer;
+  letter-spacing:1px;transition:all .2s;
+}
+.btn-sair:hover{border-color:rgba(200,160,80,.4);color:rgba(200,160,80,.8);}
 
-/* PAINEL */
-.painel{position:fixed;inset:0;background:rgba(10,6,0,.99);z-index:110;
-  transform:translateX(100%);transition:transform .24s ease;
-  display:flex;flex-direction:column;}
+/* ── PAINEL ── */
+.painel{
+  position:fixed;inset:0;
+  background:rgba(14,7,1,.99);
+  z-index:110;transform:translateX(100%);
+  transition:transform .25s ease;display:flex;flex-direction:column;
+}
 .painel.aberto{transform:translateX(0);}
-.pan-head{padding:13px 15px;border-bottom:1px solid var(--bord);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.pan-titulo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);}
-.btn-xpan{background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;}
-.pan-body{flex:1;overflow-y:auto;padding:12px;}
-.pan-nav{display:none;flex-shrink:0;padding:10px 12px;border-top:1px solid var(--bord);gap:8px;}
+.pan-head{
+  padding:15px 18px;border-bottom:1px solid var(--bord);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  background:linear-gradient(180deg,rgba(200,160,80,.06),transparent);
+}
+.pan-titulo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
+.btn-xpan{background:transparent;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:4px;transition:color .2s;}
+.btn-xpan:hover{color:var(--gold);}
+.pan-body{flex:1;overflow-y:auto;padding:16px;}
+.pan-nav{display:none;flex-shrink:0;padding:12px 14px;border-top:1px solid var(--bord);gap:8px;}
 .pan-nav.show{display:flex;}
-.btn-nav{flex:1;padding:8px;background:rgba(200,160,80,.1);border:1px solid var(--bord2);
-  border-radius:2px;color:var(--gold2);font-size:12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;}
-.pi{padding:11px 12px;border:1px solid var(--bord);border-radius:2px;
-  cursor:pointer;font-size:14px;color:var(--text2);margin-bottom:6px;line-height:1.5;}
-.pi:hover{border-color:var(--bord2);color:var(--gold2);background:rgba(200,160,80,.05);}
-.pt{font-size:14px;line-height:1.9;color:rgba(250,246,239,.85);white-space:pre-wrap;padding:6px 0;}
+.btn-nav{
+  flex:1;padding:10px;background:rgba(200,160,80,.1);
+  border:1px solid var(--bord2);border-radius:8px;
+  color:var(--gold2);font-size:13px;cursor:pointer;
+  font-family:'Cinzel',serif;letter-spacing:1px;transition:all .2s;
+}
+.btn-nav:hover{background:rgba(200,160,80,.2);}
 
-/* MODO CLARO */
-body.claro{background:#f5f0e8;color:#2a1a08;}
-body.claro .hdr{background:rgba(255,248,225,.97);border-bottom-color:rgba(180,130,40,.2);}
-body.claro .sidebar{background:rgba(255,248,225,.99);border-right-color:rgba(180,130,40,.2);}
-body.claro .sb-logo{color:var(--gold3);}
-body.claro .sb-sub,.claro .sb-sec{color:rgba(80,50,10,.5);}
-body.claro .mi{color:rgba(60,35,5,.75);}
-body.claro .mi:hover{color:#3a1a00;}
-body.claro .ci{color:rgba(60,35,5,.7);}
-body.claro .ci.ativo{color:#3a1a00;}
-body.claro .user-nome{color:var(--gold3);}
-body.claro .lang-btn{color:rgba(80,50,10,.5);border-color:rgba(180,130,40,.2);}
-body.claro .lang-btn.ativo{color:var(--gold3);border-color:var(--gold3);}
-body.claro .btn-sair{color:rgba(80,50,10,.5);border-color:rgba(180,130,40,.2);}
-body.claro .btn-hbg{color:var(--gold3);}
-body.claro .btn-modo{color:rgba(80,50,10,.6);}
-body.claro .mu{background:rgba(200,160,80,.15);color:#2a1a08;}
-body.claro .mu{background:linear-gradient(135deg,rgba(180,130,40,.2),rgba(160,110,30,.13));color:#1e0f04;border-color:rgba(180,130,40,.3);}
-body.claro .mb{background:linear-gradient(135deg,rgba(245,235,205,.95),rgba(238,225,190,.88));color:#1e0f04;border-color:rgba(160,110,30,.22);box-shadow:0 2px 8px rgba(140,90,20,.1);}
+/* ── CARD (estilo Streamlit) ── */
+.card{
+  background:linear-gradient(135deg,rgba(42,22,8,.92),rgba(30,15,3,.88));
+  border:1px solid rgba(200,160,80,.22);
+  border-radius:14px;padding:18px;margin-bottom:10px;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.card-titulo{
+  font-family:'Cinzel',serif;font-size:15px;
+  color:var(--gold);margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-sub{font-size:13px;color:var(--text2);margin-bottom:10px;}
+.card-texto{font-size:16px;line-height:1.85;color:rgba(240,228,205,.9);white-space:pre-wrap;}
+
+/* ── ITEM DE LISTA ── */
+.pi{
+  padding:13px 16px;
+  background:linear-gradient(135deg,rgba(32,16,4,.85),rgba(24,12,2,.78));
+  border:1px solid rgba(200,160,80,.18);border-radius:10px;
+  cursor:pointer;font-size:16px;color:rgba(240,228,205,.8);
+  margin-bottom:8px;line-height:1.5;
+  transition:all .2s;
+}
+.pi:hover{
+  border-color:rgba(200,160,80,.4);color:var(--gold2);
+  background:linear-gradient(135deg,rgba(42,22,8,.92),rgba(30,15,3,.85));
+  transform:translateX(4px);
+}
+.pi-back{
+  padding:10px 14px;
+  background:rgba(200,160,80,.07);
+  border:1px solid var(--bord);border-radius:8px;
+  cursor:pointer;font-size:14px;color:var(--gold);
+  margin-bottom:12px;display:flex;align-items:center;gap:6px;
+  transition:all .2s;
+}
+.pi-back:hover{background:rgba(200,160,80,.12);}
+
+/* ── BTN IA (botão ask ai) ── */
+.btn-ia{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;margin-top:6px;
+  background:linear-gradient(135deg,rgba(30,15,2,.95),rgba(20,10,1,.9));
+  border:1px solid rgba(200,160,80,.3);border-radius:10px;
+  color:var(--gold2);font-size:15px;cursor:pointer;
+  transition:all .2s;text-decoration:none;
+}
+.btn-ia:hover{background:rgba(200,160,80,.12);border-color:var(--gold);transform:scale(1.01);}
+
+/* ── BTN LINK ── */
+.btn-link{
+  display:block;padding:14px;
+  background:linear-gradient(135deg,rgba(200,160,80,.18),rgba(160,110,40,.12));
+  border:1px solid rgba(200,160,80,.38);border-radius:10px;
+  color:var(--gold2);font-size:15px;font-weight:600;
+  text-align:center;text-decoration:none;
+  margin-bottom:8px;transition:all .2s;
+}
+.btn-link:hover{background:rgba(200,160,80,.28);transform:scale(1.01);}
+
+/* ── MODO CLARO ── */
+body.claro{background:#d8c89a;color:#1a0d04;font-size:17px;}
+body.claro .hdr{background:rgba(220,200,148,.98);border-bottom-color:rgba(160,110,30,.3);}
+body.claro .sidebar{background:rgba(228,210,155,.99);border-right-color:rgba(160,110,30,.3);}
+body.claro .painel{background:rgba(228,210,155,.99);}
+body.claro .sb-logo{color:#5a3200;} body.claro .sb-sub{color:rgba(80,50,10,.5);}
+body.claro .sb-sec{color:rgba(80,50,10,.5);}
+body.claro .btn-novo{color:#5a3200;border-color:rgba(140,90,20,.4);background:rgba(160,110,30,.15);}
+body.claro .mi{color:rgba(30,15,2,.82);}
+body.claro .mi:hover{background:rgba(160,110,30,.12);color:#3a1800;}
+body.claro .ci{color:rgba(40,20,2,.75);}
+body.claro .ci.ativo{background:rgba(160,110,30,.14);color:#3a1800;}
+body.claro .user-nome{color:#5a3200;}
+body.claro .lang-btn{color:rgba(90,50,10,.55);border-color:rgba(160,110,30,.25);}
+body.claro .lang-btn.ativo{color:#5a3200;border-color:#8b6820;background:rgba(139,104,32,.1);}
+body.claro .btn-sair{color:rgba(90,50,10,.55);border-color:rgba(160,110,30,.22);}
+body.claro .btn-hbg{color:#5a3200;border-color:rgba(160,110,30,.4);}
+body.claro .btn-modo{color:rgba(60,30,5,.7);}
+body.claro .mu{background:linear-gradient(135deg,rgba(160,110,30,.22),rgba(130,90,20,.15));color:#1a0d04;border-color:rgba(160,110,30,.3);}
+body.claro .mb{background:linear-gradient(135deg,rgba(248,238,210,.97),rgba(240,228,195,.92));color:#1a0d04;border-color:rgba(160,110,30,.25);box-shadow:0 3px 10px rgba(100,60,10,.15);}
 body.claro .mb-autor{color:#7a5010;}
-body.claro textarea{background:rgba(255,252,240,.72);color:#2a1a08;border-color:rgba(200,160,80,.3);}
-body.claro textarea::placeholder{color:rgba(80,50,10,.35);}
-body.claro .inp-wrap{background:rgba(255,248,225,.92);}
-body.claro .painel{background:rgba(255,250,235,.99);}
-body.claro .pi{color:#3a1a00;border-color:rgba(180,130,40,.2);}
-body.claro .pt{color:#2a1a08;}
-body.claro .wc-sub{color:rgba(80,50,10,.6);}
-body.claro .fundo{opacity:.12;}
+body.claro textarea{background:rgba(248,238,210,.85);color:#1a0d04;border-color:rgba(160,110,30,.4);}
+body.claro textarea::placeholder{color:rgba(90,50,10,.4);}
+body.claro .inp-wrap{background:rgba(220,200,148,.97);}
+body.claro .card{background:linear-gradient(135deg,rgba(248,238,210,.97),rgba(240,228,192,.92));border-color:rgba(160,110,30,.28);box-shadow:0 4px 16px rgba(100,60,10,.15);}
+body.claro .card-titulo{color:#7a5010;}
+body.claro .card-sub{color:rgba(60,30,5,.65);}
+body.claro .card-texto{color:#1a0d04;}
+body.claro .pi{background:linear-gradient(135deg,rgba(248,238,210,.92),rgba(238,222,182,.85));border-color:rgba(160,110,30,.25);color:#2a1204;}
+body.claro .pi:hover{background:rgba(160,110,30,.18);color:#3a1800;border-color:rgba(160,110,30,.4);}
+body.claro .pi-back{background:rgba(160,110,30,.12);border-color:rgba(160,110,30,.25);color:#7a5010;}
+body.claro .btn-ia{background:rgba(30,15,2,.85);color:var(--gold2);}
+body.claro .btn-link{background:linear-gradient(135deg,rgba(160,110,30,.22),rgba(130,90,20,.15));border-color:rgba(160,110,30,.4);color:#5a3200;}
+body.claro .btn-link:hover{background:rgba(160,110,30,.3);}
+body.claro .pan-titulo{color:#7a5010;}
+body.claro .pan-head{background:linear-gradient(180deg,rgba(160,110,30,.08),transparent);}
+body.claro .btn-xpan{color:rgba(60,30,5,.6);}
+body.claro .fundo{opacity:.07;}
+body.claro .wc-title{color:#7a5010;}
+body.claro .wc-sub{color:rgba(40,20,2,.65);}
+body.claro .wc-santo{background:rgba(160,110,30,.1);border-color:rgba(160,110,30,.25);color:#7a5010;}
+body.claro .sb-head{background:linear-gradient(180deg,rgba(160,110,30,.08),transparent);}
+body.claro .sb-foot{background:linear-gradient(0deg,rgba(160,110,30,.06),transparent);}
+body.claro .btn-nav{background:rgba(160,110,30,.15);border-color:rgba(160,110,30,.3);color:#5a3200;}
 </style>
 </head>
 <body id="body">
@@ -270,41 +431,42 @@ body.claro .fundo{opacity:.12;}
   <div class="pan-body" id="panBody"></div>
   <div class="pan-nav" id="panNav">
     <button class="btn-nav" onclick="navNov(-1)">← {{ T.nov_anterior }}</button>
-    <span id="navInfo" style="display:flex;align-items:center;font-size:12px;color:var(--gold);padding:0 8px;white-space:nowrap"></span>
+    <span id="navInfo" style="display:flex;align-items:center;font-size:13px;color:var(--gold);padding:0 8px;white-space:nowrap"></span>
     <button class="btn-nav" onclick="navNov(1)">{{ T.nov_proximo }} →</button>
   </div>
 </div>
 
 <script>
-const IMG_ESC = "{{ url_for('static', filename='sagrada_escura.png') }}";
-const IMG_CLA = "{{ url_for('static', filename='sagrada_clara.png') }}";
-let claro = localStorage.getItem('modo') === 'claro';
-let chatAtual = null, mensagens = [], carregando = false;
-let novDias = [], novDia = 0;
+const IMG_ESC="{{ url_for('static',filename='sagrada_escura.png') }}";
+const IMG_CLA="{{ url_for('static',filename='sagrada_clara.png') }}";
+let claro=localStorage.getItem('modo')==='claro';
+let chatAtual=null,mensagens=[],carregando=false;
+let novDias=[],novDia=0;
 
-// Init
 aplicarModo();
-[IMG_ESC, IMG_CLA].forEach(s=>{const i=new Image();i.src=s;});
-const primeiroChat = document.querySelector('.ci');
-if(primeiroChat) abrirChat(primeiroChat.id.replace('ci-',''), primeiroChat);
+[IMG_ESC,IMG_CLA].forEach(s=>{const i=new Image();i.src=s;});
+const pc=document.querySelector('.ci');
+if(pc)abrirChat(pc.id.replace('ci-',''),pc);
 
-function aplicarModo() {
-  const body=document.getElementById('body'), f=document.getElementById('fundo'), b=document.getElementById('btnModo');
-  if(claro){body.classList.add('claro');f.style.backgroundImage=`url('${IMG_CLA}')`;if(b)b.textContent='🌙 {{ T.modo_escuro }}';}
-  else{body.classList.remove('claro');f.style.backgroundImage=`url('${IMG_ESC}')`;if(b)b.textContent='☀️ {{ T.modo_claro }}';}
+function aplicarModo(){
+  const b=document.getElementById('body'),f=document.getElementById('fundo'),btn=document.getElementById('btnModo');
+  if(claro){b.classList.add('claro');f.style.backgroundImage=`url('${IMG_CLA}')`;if(btn)btn.textContent='🌙 {{ T.modo_escuro }}';}
+  else{b.classList.remove('claro');f.style.backgroundImage=`url('${IMG_ESC}')`;if(btn)btn.textContent='☀️ {{ T.modo_claro }}';}
 }
 function toggleModo(){claro=!claro;localStorage.setItem('modo',claro?'claro':'escuro');aplicarModo();}
-
 function abrirSB(){document.getElementById('sidebar').classList.add('aberto');document.getElementById('overlay').classList.add('aberto');}
 function fecharSB(){document.getElementById('sidebar').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
 function fecharPainel(){document.getElementById('painel').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
 function fecharTudo(){fecharSB();fecharPainel();}
 
-async function abrirPainel(tipo) {
+// ── PAINEL ──────────────────────────────────────────────────────────────────
+function card(html){return `<div class="card">${html}</div>`;}
+function piBack(label,fn){const d=document.createElement('div');d.className='pi-back';d.innerHTML=`← ${label}`;d.onclick=fn;return d;}
+
+async function abrirPainel(tipo){
   fecharSB();
-  const pan=document.getElementById('painel'), body=document.getElementById('panBody'), nav=document.getElementById('panNav');
-  // Limpa IMEDIATAMENTE antes de qualquer fetch — evita conteúdo antigo aparecer
-  body.innerHTML='<div class="pt" style="opacity:.5;text-align:center;padding-top:40px">Carregando... 🕯️</div>';
+  const pan=document.getElementById('painel'),body=document.getElementById('panBody'),nav=document.getElementById('panNav');
+  body.innerHTML=`<div style="text-align:center;padding:40px 20px;opacity:.5;font-size:16px">Carregando... 🕯️</div>`;
   nav.classList.remove('show');
   pan.classList.add('aberto');
   document.getElementById('overlay').classList.add('aberto');
@@ -312,165 +474,307 @@ async function abrirPainel(tipo) {
   if(tipo==='santo'){
     document.getElementById('panTitulo').textContent='SANTO DO DIA';
     const r=await fetch('/api/santo-dia'),d=await r.json();
-    body.innerHTML=d.santo?`<div class="pt">⭐ ${d.data}\n\n${d.santo}</div>`:'<div class="pt">Nenhum santo registrado para hoje.</div>';
+    if(d.santo){
+      const nome=d.santo.split('—')[0].trim();
+      body.innerHTML=card(`
+        <div style="text-align:center;padding:8px 0 16px">
+          <div style="font-size:40px;margin-bottom:8px">⭐</div>
+          <div style="font-size:13px;color:var(--gold);opacity:.7;font-family:'Cinzel',serif;letter-spacing:1px">${d.data}</div>
+          <div class="card-titulo" style="font-size:22px;justify-content:center;margin:10px 0">${nome}</div>
+          <div class="card-texto" style="font-style:italic;font-size:15px;color:rgba(240,228,205,.7);text-align:center">
+Que a intercessão deste santo(a) nos alcance as graças de que tanto precisamos. Que sua vida seja inspiração para nós neste dia. Amém.</div>
+        </div>
+      `)+`<div class="btn-ia" onclick="perguntarIA('${nome}')">🤖 Saiba mais sobre ${nome} com a IA</div>`;
+    } else {
+      body.innerHTML=card(`<div class="card-texto" style="text-align:center;padding:20px 0">Nenhum santo registrado para hoje.</div>`);
+    }
     return;
   }
+
   if(tipo==='calendario'){
     document.getElementById('panTitulo').textContent='CALENDÁRIO LITÚRGICO';
-    body.innerHTML='<div class="pt">Carregando... 🕯️</div>';
     const r=await fetch('/api/calendario'),d=await r.json();
-    const cs={verde:'#4a8c4a',roxo:'#7a3d9a',branco:'#8b6914',vermelho:'#8b1a1a'};
+    const cs={verde:'#4a9c4a',roxo:'#8a4daa',branco:'#9b7a14',vermelho:'#aa2a2a'};
     const c=cs[d.cor_liturgica]||'#c8a050';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${d.dia_semana}, ${d.hoje}</b>\n\n<div style="background:${c}22;border:1px solid ${c}44;border-radius:4px;padding:10px"><b style="color:${c}">${d.tempo_liturgico}</b>\n<small>${d.descricao}</small></div>\n\n${d.santo_dia?`<b style="color:var(--gold)">⭐ Santo do dia</b>\n${d.santo_dia}\n\n`:''}<b style="color:var(--gold)">📅 Próximas datas</b>\n${d.proximas_datas.map(p=>`${p.nome} — ${p.data} (${p.label})`).join('\n')}</div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo">🗓️ ${d.dia_semana}, ${d.hoje}</div>
+      <div style="background:${c}25;border:1px solid ${c}55;border-radius:10px;padding:14px;margin:8px 0">
+        <div style="color:${c};font-family:'Cinzel',serif;font-size:16px;font-weight:600">${d.tempo_liturgico}</div>
+        <div style="font-size:14px;margin-top:4px;opacity:.8">${d.descricao}</div>
+      </div>
+      ${d.santo_dia?`<div style="color:var(--gold);font-size:14px;margin:10px 0">⭐ <b>Santo do dia:</b> ${d.santo_dia}</div>`:''}
+      <div class="card-titulo" style="margin-top:12px">📅 Próximas datas</div>
+      ${d.proximas_datas.map(p=>`<div style="padding:7px 0;border-bottom:1px solid var(--bord);font-size:15px"><b>${p.nome}</b><br><small style="opacity:.7">${p.data} — <span style="color:var(--gold)">${p.label}</span></small></div>`).join('')}
+    `);
     return;
   }
+
   if(tipo==='liturgia_dia'){
     document.getElementById('panTitulo').textContent='LITURGIA DO DIA';
     const r=await fetch('/api/liturgia-dia'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📖 Liturgia do Dia</b>\n<small style="opacity:.7">${d.data}</small>\n\n${d.texto}</div><a href="${d.url_cnbb}" target="_blank" style="display:block;background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.3);border-radius:3px;padding:12px;text-align:center;color:var(--gold);text-decoration:none;font-weight:600;margin:8px 0">📖 Ver Liturgia de Hoje (CNBB)</a><div class="pi" onclick="comentarioLiturgia()">✨ Pedir comentário da IA sobre a liturgia de hoje</div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo">📖 Liturgia do Dia</div>
+      <div class="card-sub">${d.data}</div>
+      <div class="card-texto">${d.texto}</div>
+    `)+`<a href="${d.url_cnbb}" target="_blank" class="btn-link">📖 Ver Liturgia de Hoje (CNBB)</a>`+
+    `<div class="btn-ia" onclick="comentarioLiturgia()">✨ Pedir comentário da IA sobre a liturgia de hoje</div>`;
     return;
   }
+
   if(tipo==='biblia'){
     document.getElementById('panTitulo').textContent='BÍBLIA SAGRADA';
-    body.innerHTML='<div class="pt">Carregando... 📜</div>';
     const r=await fetch('/api/biblia/livros'),livros=await r.json();
-    body.innerHTML='<div class="pt"><b style="color:var(--gold)">📜 Antigo Testamento</b></div>';
+    body.innerHTML=card(`<div class="card-titulo">📜 Antigo Testamento</div>`);
     let nt=false;
     livros.forEach(l=>{
-      if(l.testamento==='NT'&&!nt){nt=true;const s=document.createElement('div');s.className='pt';s.innerHTML='<b style="color:var(--gold)">✝️ Novo Testamento</b>';body.appendChild(s);}
+      if(l.testamento==='NT'&&!nt){
+        nt=true;
+        const s=document.createElement('div');
+        s.innerHTML=card(`<div class="card-titulo">✝️ Novo Testamento</div>`);
+        body.appendChild(s);
+      }
       const el=document.createElement('div');el.className='pi';
-      el.innerHTML=`<span style="color:var(--gold);font-size:11px;margin-right:6px">${l.abrev}</span>${l.nome}`;
+      el.innerHTML=`<span style="color:var(--gold);font-size:12px;font-family:'Cinzel',serif;margin-right:8px">${l.abrev}</span>${l.nome}`;
       el.onclick=()=>abrirLivro(l);body.appendChild(el);
     });
     return;
   }
+
   if(tipo==='exame'){
     document.getElementById('panTitulo').textContent='EXAME DE CONSCIÊNCIA';
-    body.innerHTML='<div class="pt">Carregando... 🙏</div>';
     const r=await fetch('/api/exame-consciencia'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">🙏 Oração inicial</b>\n<i>${d.oracao_inicio}</i>\n\nClique em cada mandamento:</div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo">🙏 Oração inicial</div>
+      <div class="card-texto" style="font-style:italic">${d.oracao_inicio}</div>
+    `)+`<div style="font-size:14px;opacity:.7;margin-bottom:8px;padding:0 4px">Clique em cada mandamento:</div>`;
     d.mandamentos.forEach(m=>{
       const el=document.createElement('div');el.className='pi';
-      el.innerHTML=`<b style="color:var(--gold)">${m.numero}º</b> ${m.mandamento}`;
+      el.innerHTML=`<span style="color:var(--gold);font-weight:600;margin-right:8px">${m.numero}º</span>${m.mandamento}`;
       el.onclick=()=>abrirMandamento(m,d.ato_contricao,d.conselho_final);body.appendChild(el);
     });
     return;
   }
+
   if(tipo==='apoio'){
     document.getElementById('panTitulo').textContent='APOIO ESPIRITUAL';
-    body.innerHTML='<div class="pt"><b style="color:var(--gold)">🆘 Estou passando por...</b>\nEscolha um tema:</div>';
+    body.innerHTML=card(`
+      <div class="card-titulo">🆘 Estou passando por...</div>
+      <div class="card-sub">Escolha um tema e receba orientação espiritual e prática.</div>
+    `);
     const r=await fetch('/api/apoio'),lista=await r.json();
-    lista.forEach(t=>{const el=document.createElement('div');el.className='pi';el.textContent=t.titulo;el.onclick=()=>abrirApoio(t.id);body.appendChild(el);});
+    lista.forEach(t=>{
+      const el=document.createElement('div');el.className='pi';
+      el.textContent=t.titulo;el.onclick=()=>abrirApoio(t.id);body.appendChild(el);
+    });
     return;
   }
+
   if(tipo==='catecismo'){
     document.getElementById('panTitulo').textContent='CATECISMO';
     const r=await fetch('/api/dados/catecismo'),pilares=await r.json();
-    body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b>\nEscolha um pilar:</div>';
-    pilares.forEach(p=>{const el=document.createElement('div');el.className='pi';el.textContent=p;el.onclick=()=>abrirPilar(p);body.appendChild(el);});
+    body.innerHTML=card(`
+      <div class="card-titulo">📖 Catecismo da Igreja Católica</div>
+      <div class="card-sub">Escolha um dos 4 pilares da fé:</div>
+    `);
+    pilares.forEach(p=>{
+      const el=document.createElement('div');el.className='pi';
+      el.textContent=p;el.onclick=()=>abrirPilar(p);body.appendChild(el);
+    });
     return;
   }
+
   if(tipo==='creditos'){
     document.getElementById('panTitulo').textContent='CRÉDITOS';
     const r=await fetch('/api/creditos'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\n${d.criador}\n<small>${d.criador_desc}</small>\n\n<b style="color:var(--gold)">💡 Agradecimento</b>\n${d.agradecimento_nome}\n<small>${d.agradecimento_desc}</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>${d.dedicatoria}</small>\n\n<small style="opacity:.5">${d.versao} ✝️</small></div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo">✝️ Virtual Catholics</div>
+      <div class="card-sub">Assistente Católico Digital</div>
+    `)+card(`
+      <div class="card-titulo">👨‍💻 Criador</div>
+      <div style="font-size:18px;font-weight:600;color:var(--gold2);margin:4px 0">${d.criador}</div>
+      <div class="card-sub">${d.criador_desc}</div>
+    `)+card(`
+      <div class="card-titulo">💡 Agradecimento Especial</div>
+      <div style="font-size:16px;font-weight:600;color:var(--gold2);margin:4px 0">${d.agradecimento_nome}</div>
+      <div class="card-sub">${d.agradecimento_desc}</div>
+    `)+card(`
+      <div class="card-titulo">🙏 Dedicado a</div>
+      <div class="card-sub">${d.dedicatoria}</div>
+    `)+`<div style="text-align:center;font-size:13px;opacity:.45;padding:10px">${d.versao} ✝️</div>`;
     return;
   }
+
   if(tipo==='feedback'){
     document.getElementById('panTitulo').textContent='FEEDBACK & SUPORTE';
     const r=await fetch('/api/info'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:1rem;font-weight:600">${d.email}</span>\n\n<small>Envie suas sugestões e dúvidas. Respondemos com caridade! 🙏</small></div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo">📧 Entre em contato</div>
+      <div class="card-sub">Envie suas sugestões, dúvidas ou relatos de problemas.</div>
+      <div style="font-size:19px;font-weight:600;color:var(--gold2);margin:12px 0;letter-spacing:.5px">${d.email}</div>
+      <div class="card-sub" style="font-style:italic">Respondemos com caridade! 🙏</div>
+    `);
     return;
   }
+
   if(tipo==='doacoes'){
     document.getElementById('panTitulo').textContent='APOIE O PROJETO';
     const r=await fetch('/api/info'),d=await r.json();
-    body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua doação mantém este ministério digital.</small>\n\n<b style="color:var(--gold)">📱 Pix — escaneie o QR Code:</b></div><div style="text-align:center;padding:10px"><img src="${d.pix_qr}" style="border-radius:10px;border:2px solid var(--gold);width:160px" alt="Pix QR"></div><div class="pt" style="text-align:center;opacity:.6"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
+    body.innerHTML=card(`
+      <div class="card-titulo" style="justify-content:center">💚 Apoie o Virtual Catholics</div>
+      <div class="card-sub" style="text-align:center">Sua doação ajuda a manter e expandir este ministério digital.</div>
+      <div style="background:rgba(200,160,80,.08);border-radius:10px;padding:14px;margin:10px 0;font-size:15px">
+        🌐 <b>Manter o site no ar</b> — servidores e hospedagem<br>
+        🔗 <b>Domínio próprio</b> — endereço exclusivo<br>
+        ⚙️ <b>Desenvolvimento</b> — novas funcionalidades<br>
+        📱 <b>App mobile</b> — para que o projeto cresça
+      </div>
+      <div style="text-align:center;margin:16px 0">
+        <div class="card-titulo" style="justify-content:center;margin-bottom:8px">📱 Chave Pix</div>
+        <img src="${d.pix_qr}" style="border-radius:14px;border:2px solid var(--gold);width:180px" alt="QR Code Pix">
+        <div style="font-size:13px;opacity:.55;margin-top:8px">Aponte a câmera para pagar via Pix</div>
+      </div>
+      <div style="text-align:center;font-size:14px;opacity:.6;font-style:italic">Que Deus abençoe imensamente cada pessoa que contribui! ✝️</div>
+    `);
     return;
   }
-  // Genérico
-  document.getElementById('panTitulo').textContent=tipo.replace('_',' ').toUpperCase();
-  body.innerHTML='<div class="pt">Carregando...</div>';
+
+  // Genérico (oracoes, novenas, tercos, liturgia_horas, canticos)
+  document.getElementById('panTitulo').textContent=tipo.replace(/_/g,' ').toUpperCase();
   const r=await fetch(`/api/dados/${tipo}`),lista=await r.json();
   body.innerHTML='';
-  lista.forEach(nome=>{const el=document.createElement('div');el.className='pi';el.textContent=nome;el.onclick=()=>abrirItem(tipo,nome);body.appendChild(el);});
+  lista.forEach(nome=>{
+    const el=document.createElement('div');el.className='pi';
+    el.textContent=nome;el.onclick=()=>abrirItem(tipo,nome);body.appendChild(el);
+  });
 }
 
 async function abrirItem(tipo,nome){
   const body=document.getElementById('panBody'),nav=document.getElementById('panNav');
   document.getElementById('panTitulo').textContent=nome.substring(0,30).toUpperCase();
   const r=await fetch(`/api/dados/${tipo}?nome=${encodeURIComponent(nome)}`),d=await r.json();
-  const c=d.conteudo; nav.classList.remove('show');
+  const c=d.conteudo;nav.classList.remove('show');
   if(tipo==='novenas'&&Array.isArray(c)){novDias=c;novDia=0;mostrarDia();nav.classList.add('show');return;}
   body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar';back.onclick=()=>abrirPainel(tipo);body.appendChild(back);
+  body.appendChild(piBack('Voltar',()=>abrirPainel(tipo)));
   if(Array.isArray(c)){
-    c.forEach(item=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:10px';
-      if(Array.isArray(item))el.innerHTML=`<b>${item[0]}</b>\n\n${item[1]}`;else el.textContent=item;body.appendChild(el);});
-  } else {const el=document.createElement('div');el.className='pt';el.textContent=String(c);body.appendChild(el);}
+    c.forEach(item=>{
+      const el=document.createElement('div');
+      if(Array.isArray(item)){el.innerHTML=card(`<div class="card-titulo">${item[0]}</div><div class="card-texto">${item[1]}</div>`);}
+      else{el.innerHTML=card(`<div class="card-texto">${item}</div>`);}
+      body.appendChild(el);
+    });
+  } else {
+    body.innerHTML+=card(`<div class="card-texto">${String(c)}</div>`);
+  }
 }
-function mostrarDia(){const b=document.getElementById('panBody');document.getElementById('navInfo').textContent=`Dia ${novDia+1}/${novDias.length}`;b.innerHTML=`<div class="pt"><b style="color:var(--gold)">Dia ${novDia+1}</b>\n\n${novDias[novDia]}</div>`;}
+
+function mostrarDia(){
+  const body=document.getElementById('panBody');
+  document.getElementById('navInfo').textContent=`Dia ${novDia+1}/${novDias.length}`;
+  body.innerHTML=card(`<div class="card-titulo">Dia ${novDia+1}</div><div class="card-texto">${novDias[novDia]}</div>`);
+}
 function navNov(d){novDia=Math.max(0,Math.min(novDias.length-1,novDia+d));mostrarDia();}
 
 async function abrirLivro(l){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=l.abrev.toUpperCase();
+  const body=document.getElementById('panBody');
+  document.getElementById('panTitulo').textContent=l.abrev.toUpperCase();
   const r=await fetch(`/api/biblia/capitulos/${l.id}`),d=await r.json();
-  body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${l.nome}</b>\n${d.total} capítulos</div>`;
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar à Bíblia';back.onclick=()=>abrirPainel('biblia');body.appendChild(back);
-  for(let c=1;c<=d.total;c++){const el=document.createElement('div');el.className='pi';el.textContent=`Capítulo ${c}`;el.onclick=(()=>{const cap=c;return()=>abrirCap(l,cap);})();body.appendChild(el);}
-}
-async function abrirCap(l,cap){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=`${l.abrev} ${cap}`;
-  body.innerHTML='<div class="pt">Carregando... 📖</div>';
-  const r=await fetch(`/api/biblia/versiculo?livro=${l.id}&capitulo=${cap}`),d=await r.json();
   body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao livro';back.onclick=()=>abrirLivro(l);body.appendChild(back);
-  if(d.verses)d.verses.forEach(v=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:8px';el.innerHTML=`<b style="color:var(--gold);font-size:11px">${v.verse}</b> ${v.text}`;body.appendChild(el);});
-  else body.innerHTML+='<div class="pt">Versículos não disponíveis nesta tradução.</div>';
-}
-async function abrirMandamento(m,ato,cons){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=`${m.numero}º MANDAMENTO`;
-  body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao exame';back.onclick=()=>abrirPainel('exame');body.appendChild(back);
-  const t=document.createElement('div');t.className='pt';t.innerHTML=`<b style="color:var(--gold)">${m.mandamento}</b>`;body.appendChild(t);
-  m.perguntas.forEach(p=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.35);padding-left:10px;margin-bottom:8px';el.innerHTML=`<label style="display:flex;gap:8px;cursor:pointer"><input type="checkbox" style="accent-color:var(--gold);margin-top:3px;flex-shrink:0"> <span>${p}</span></label>`;body.appendChild(el);});
-  const fim=document.createElement('div');fim.className='pt';fim.innerHTML=`\n<b style="color:var(--gold)">🙏 Ato de Contrição</b>\n<i>${ato}</i>\n\n<b style="color:var(--gold)">✝️ Próximo passo</b>\n${cons}`;body.appendChild(fim);
-}
-async function abrirApoio(id){
-  const body=document.getElementById('panBody');body.innerHTML='<div class="pt">Carregando... 🙏</div>';
-  const r=await fetch(`/api/apoio/${id}`),d=await r.json();
-  document.getElementById('panTitulo').textContent=d.titulo;
-  body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao apoio';back.onclick=()=>abrirPainel('apoio');body.appendChild(back);
-  [{titulo:'',txt:`<b style="color:var(--gold)">${d.titulo}</b>\n\n${d.intro}`},{titulo:'📋 O que fazer',txt:d.passos.map((p,i)=>`${i+1}. ${p}`).join('\n')},{titulo:'🙏 Oração',txt:`<i>${d.oracao}</i>`},{titulo:'📖 Palavra de Deus',txt:`<i>${d.citacao}</i>`}].forEach(item=>{
-    const el=document.createElement('div');el.className='pt';
-    el.innerHTML=item.titulo?`<b style="color:var(--gold)">${item.titulo}</b>\n${item.txt}`:item.txt;
-    el.style.marginBottom='10px';body.appendChild(el);
-  });
-  const prox=document.createElement('div');prox.className='pt';prox.style.cssText='background:rgba(200,160,80,.08);border-radius:4px;padding:10px;border:1px solid rgba(200,160,80,.2)';
-  prox.innerHTML=`<b style="color:var(--gold)">✅ Próximo passo agora</b>\n${d.proximo_passo}`;body.appendChild(prox);
-}
-async function abrirPilar(pilar){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=pilar.substring(0,25).toUpperCase();
-  const r=await fetch(`/api/dados/catecismo?nome=${encodeURIComponent(pilar)}`),d=await r.json();
-  body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar aos pilares';back.onclick=()=>abrirPainel('catecismo');body.appendChild(back);
-  if(Array.isArray(d.conteudo))d.conteudo.forEach(([num,txt])=>{const el=document.createElement('div');el.className='pt';el.innerHTML=`<b style="color:var(--gold)">📜 ${num}</b>\n${txt}`;el.style.cssText='border-left:2px solid rgba(200,160,80,.35);padding-left:10px;margin-bottom:12px';body.appendChild(el);});
-}
-async function comentarioLiturgia(){
-  fecharPainel();await novoChat();
-  const hoje=new Date().toLocaleDateString('pt-BR');
-  const inp=document.getElementById('inputMsg');
-  inp.value=`Comente a liturgia do dia de hoje (${hoje}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
-  autoResize(inp);inp.focus();
+  body.appendChild(piBack('Voltar à Bíblia',()=>abrirPainel('biblia')));
+  body.innerHTML+=card(`<div class="card-titulo">${l.nome}</div><div class="card-sub">${d.total} capítulos</div>`);
+  for(let c=1;c<=d.total;c++){
+    const el=document.createElement('div');el.className='pi';
+    el.textContent=`Capítulo ${c}`;
+    el.onclick=(()=>{const cap=c;return()=>abrirCap(l,cap);})();body.appendChild(el);
+  }
 }
 
-// CHAT
+async function abrirCap(l,cap){
+  const body=document.getElementById('panBody');
+  document.getElementById('panTitulo').textContent=`${l.abrev} ${cap}`;
+  body.innerHTML=`<div style="text-align:center;padding:30px;opacity:.5">Carregando... 📖</div>`;
+  const r=await fetch(`/api/biblia/versiculo?livro=${l.id}&capitulo=${cap}`),d=await r.json();
+  body.innerHTML='';
+  body.appendChild(piBack(`Voltar a ${l.nome}`,()=>abrirLivro(l)));
+  if(d.verses){
+    d.verses.forEach(v=>{
+      const el=document.createElement('div');
+      el.innerHTML=card(`<span style="color:var(--gold);font-size:12px;font-family:'Cinzel',serif;margin-right:6px">${v.verse}</span><span style="font-size:16px;line-height:1.8">${v.text}</span>`);
+      body.appendChild(el);
+    });
+  } else body.innerHTML+=card(`<div class="card-texto">Versículos não disponíveis nesta tradução.</div>`);
+}
+
+async function abrirMandamento(m,ato,cons){
+  const body=document.getElementById('panBody');
+  document.getElementById('panTitulo').textContent=`${m.numero}º MANDAMENTO`;
+  body.innerHTML='';
+  body.appendChild(piBack('Voltar ao Exame',()=>abrirPainel('exame')));
+  body.innerHTML+=card(`<div class="card-titulo">${m.numero}º ${m.mandamento}</div>`);
+  m.perguntas.forEach(p=>{
+    const el=document.createElement('div');
+    el.innerHTML=card(`<label style="display:flex;gap:10px;cursor:pointer;font-size:16px;line-height:1.6"><input type="checkbox" style="accent-color:var(--gold);margin-top:4px;flex-shrink:0;width:16px;height:16px"> <span>${p}</span></label>`);
+    body.appendChild(el);
+  });
+  body.innerHTML+=card(`<div class="card-titulo">🙏 Ato de Contrição</div><div class="card-texto" style="font-style:italic">${ato}</div>`);
+  body.innerHTML+=card(`<div class="card-titulo">✝️ Próximo passo</div><div class="card-texto">${cons}</div>`);
+}
+
+async function abrirApoio(id){
+  const body=document.getElementById('panBody');
+  body.innerHTML=`<div style="text-align:center;padding:30px;opacity:.5">Carregando... 🙏</div>`;
+  const r=await fetch(`/api/apoio/${id}`),d=await r.json();
+  document.getElementById('panTitulo').textContent=d.titulo.replace(/[🔒🍷💙👨‍👩‍👧🕯️🤔]/gu,'').trim().toUpperCase();
+  body.innerHTML='';
+  body.appendChild(piBack('Voltar ao Apoio',()=>abrirPainel('apoio')));
+  body.innerHTML+=card(`<div class="card-titulo">${d.titulo}</div><div class="card-texto">${d.intro}</div>`);
+  body.innerHTML+=card(`<div class="card-titulo">📋 O que fazer</div><div class="card-texto">${d.passos.map((p,i)=>`${i+1}. ${p}`).join('\n')}</div>`);
+  body.innerHTML+=card(`<div class="card-titulo">🙏 Oração</div><div class="card-texto" style="font-style:italic">${d.oracao}</div>`);
+  body.innerHTML+=card(`<div class="card-titulo">📖 Palavra de Deus</div><div class="card-texto" style="font-style:italic">${d.citacao}</div>`);
+  body.innerHTML+=card(`<div class="card-titulo">✅ Próximo passo agora</div><div class="card-texto">${d.proximo_passo}</div>`);
+}
+
+async function abrirPilar(pilar){
+  const body=document.getElementById('panBody');
+  document.getElementById('panTitulo').textContent=pilar.substring(0,25).toUpperCase();
+  const r=await fetch(`/api/dados/catecismo?nome=${encodeURIComponent(pilar)}`),d=await r.json();
+  body.innerHTML='';
+  body.appendChild(piBack('Voltar aos Pilares',()=>abrirPainel('catecismo')));
+  if(Array.isArray(d.conteudo)){
+    d.conteudo.forEach(([num,txt])=>{
+      body.innerHTML+=card(`<div class="card-titulo">📜 ${num}</div><div class="card-texto">${txt}</div>`);
+    });
+  }
+}
+
+function perguntarIA(nome){
+  fecharPainel();
+  setTimeout(async()=>{
+    await novoChat();
+    const inp=document.getElementById('inputMsg');
+    inp.value=`Me conte sobre ${nome} — quem foi, sua vida, sua espiritualidade e o que podemos aprender com este santo.`;
+    autoResize(inp);inp.focus();
+  },300);
+}
+
+async function comentarioLiturgia(){
+  fecharPainel();
+  setTimeout(async()=>{
+    await novoChat();
+    const hoje=new Date().toLocaleDateString('pt-BR');
+    const inp=document.getElementById('inputMsg');
+    inp.value=`Comente a liturgia do dia de hoje (${hoje}) — as leituras da Missa, o Evangelho e uma reflexão espiritual.`;
+    autoResize(inp);inp.focus();
+  },300);
+}
+
+// ── CHAT ────────────────────────────────────────────────────────────────────
 async function novoChat(){
   fecharSB();chatAtual=null;mensagens=[];
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
   document.getElementById('chatArea').innerHTML=`<div class="welcome"><div class="wc-cross">✝</div><div class="wc-title">Nova conversa 🙏</div><div class="wc-sub">Como posso te ajudar?</div></div>`;
 }
+
 async function abrirChat(id,el){
   fecharSB();chatAtual=id;
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
@@ -482,15 +786,17 @@ async function abrirChat(id,el){
   else mensagens.forEach(m=>addMsg(m.role,m.content));
   area.scrollTop=area.scrollHeight;
 }
+
 function addMsg(role,txt){
   const area=document.getElementById('chatArea');
   const w=document.getElementById('welcome');if(w)w.remove();
   const div=document.createElement('div');div.className=`msg ${role==='user'?'mu':'mb'}`;
-  if(role!=='user'){const a=document.createElement('div');a.className='mb-autor';a.textContent='✝ VIRTUAL CATHOLICS';div.appendChild(a);}
+  if(role!=='user'){const a=document.createElement('div');a.className='mb-autor';a.textContent='VIRTUAL CATHOLICS';div.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;div.appendChild(t);
   area.appendChild(div);area.scrollTop=area.scrollHeight;
   return div;
 }
+
 async function enviarMsg(){
   if(carregando)return;
   const inp=document.getElementById('inputMsg'),txt=inp.value.trim();
@@ -500,22 +806,27 @@ async function enviarMsg(){
     const r=await fetch('/api/novo-chat',{method:'POST'}),d=await r.json();
     chatAtual=d.chat_id;
     const el=document.createElement('div');el.className='ci ativo';el.id=`ci-${chatAtual}`;
-    el.textContent=txt.substring(0,35);el.onclick=function(){abrirChat(chatAtual,this);};
+    el.textContent=txt.substring(0,35)+(txt.length>35?'...':'');
+    el.onclick=function(){abrirChat(chatAtual,this);};
     document.getElementById('listaChats').prepend(el);
   }
   mensagens.push({role:'user',content:txt});addMsg('user',txt);
   const area=document.getElementById('chatArea');
-  const typ=document.createElement('div');typ.className='msg mb';typ.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';area.appendChild(typ);area.scrollTop=area.scrollHeight;
+  const typ=document.createElement('div');typ.className='msg mb';
+  typ.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+  area.appendChild(typ);area.scrollTop=area.scrollHeight;
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
     const d=await r.json();typ.remove();
     if(d.resposta){mensagens.push({role:'assistant',content:d.resposta});addMsg('assistant',d.resposta);}
   }catch(e){typ.remove();addMsg('assistant','Desculpe, ocorreu um erro. Tente novamente. 🙏');}
-  carregando=false;document.getElementById('btnEnv').disabled=false;document.getElementById('inputMsg').focus();
+  carregando=false;document.getElementById('btnEnv').disabled=false;
+  document.getElementById('inputMsg').focus();
 }
+
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 </script>
 </body>
