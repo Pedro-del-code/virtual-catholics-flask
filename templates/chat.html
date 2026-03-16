@@ -9,13 +9,13 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;--gold4:#e8c870;
-  --bg:#1e120600;--text:#f0e8d8;--text2:rgba(240,232,216,.72);
-  --bord:rgba(200,160,80,.2);--bord2:rgba(200,160,80,.4);
-  --card:#2a1608;--card2:#321a0a;
+  --bg:#2a1608;--text:#f0e8d8;--text2:rgba(240,232,216,.78);
+  --bord:rgba(200,160,80,.22);--bord2:rgba(200,160,80,.42);
+  --card:#3a1e08;--card2:#421f0a;
 }
 
-html,body{height:100%;overflow:hidden;background:#1e1206;}
-body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;font-size:17px;}
+html,body{height:100%;overflow:hidden;background:#2a1608;}
+body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;font-size:18px;}
 
 /* ── HEADER ── */
 .hdr{
@@ -298,50 +298,51 @@ textarea:focus{border-color:rgba(200,160,80,.6);}
 }
 .btn-link:hover{background:rgba(200,160,80,.28);transform:scale(1.01);}
 
-/* ── MODO CLARO ── */
-body.claro{background:#d8c89a;color:#1a0d04;font-size:17px;}
-body.claro .hdr{background:rgba(220,200,148,.98);border-bottom-color:rgba(160,110,30,.3);}
-body.claro .sidebar{background:rgba(228,210,155,.99);border-right-color:rgba(160,110,30,.3);}
-body.claro .painel{background:rgba(228,210,155,.99);}
-body.claro .sb-logo{color:#5a3200;} body.claro .sb-sub{color:rgba(80,50,10,.5);}
-body.claro .sb-sec{color:rgba(80,50,10,.5);}
-body.claro .btn-novo{color:#5a3200;border-color:rgba(140,90,20,.4);background:rgba(160,110,30,.15);}
-body.claro .mi{color:rgba(30,15,2,.82);}
-body.claro .mi:hover{background:rgba(160,110,30,.12);color:#3a1800;}
-body.claro .ci{color:rgba(40,20,2,.75);}
-body.claro .ci.ativo{background:rgba(160,110,30,.14);color:#3a1800;}
-body.claro .user-nome{color:#5a3200;}
-body.claro .lang-btn{color:rgba(90,50,10,.55);border-color:rgba(160,110,30,.25);}
-body.claro .lang-btn.ativo{color:#5a3200;border-color:#8b6820;background:rgba(139,104,32,.1);}
-body.claro .btn-sair{color:rgba(90,50,10,.55);border-color:rgba(160,110,30,.22);}
-body.claro .btn-hbg{color:#5a3200;border-color:rgba(160,110,30,.4);}
-body.claro .btn-modo{color:rgba(60,30,5,.7);}
-body.claro .mu{background:linear-gradient(135deg,rgba(160,110,30,.22),rgba(130,90,20,.15));color:#1a0d04;border-color:rgba(160,110,30,.3);}
-body.claro .mb{background:linear-gradient(135deg,rgba(248,238,210,.97),rgba(240,228,195,.92));color:#1a0d04;border-color:rgba(160,110,30,.25);box-shadow:0 3px 10px rgba(100,60,10,.15);}
-body.claro .mb-autor{color:#7a5010;}
-body.claro textarea{background:rgba(248,238,210,.85);color:#1a0d04;border-color:rgba(160,110,30,.4);}
-body.claro textarea::placeholder{color:rgba(90,50,10,.4);}
-body.claro .inp-wrap{background:rgba(220,200,148,.97);}
-body.claro .card{background:linear-gradient(135deg,rgba(248,238,210,.97),rgba(240,228,192,.92));border-color:rgba(160,110,30,.28);box-shadow:0 4px 16px rgba(100,60,10,.15);}
-body.claro .card-titulo{color:#7a5010;}
-body.claro .card-sub{color:rgba(60,30,5,.65);}
-body.claro .card-texto{color:#1a0d04;}
-body.claro .pi{background:linear-gradient(135deg,rgba(248,238,210,.92),rgba(238,222,182,.85));border-color:rgba(160,110,30,.25);color:#2a1204;}
-body.claro .pi:hover{background:rgba(160,110,30,.18);color:#3a1800;border-color:rgba(160,110,30,.4);}
-body.claro .pi-back{background:rgba(160,110,30,.12);border-color:rgba(160,110,30,.25);color:#7a5010;}
-body.claro .btn-ia{background:rgba(30,15,2,.85);color:var(--gold2);}
-body.claro .btn-link{background:linear-gradient(135deg,rgba(160,110,30,.22),rgba(130,90,20,.15));border-color:rgba(160,110,30,.4);color:#5a3200;}
-body.claro .btn-link:hover{background:rgba(160,110,30,.3);}
-body.claro .pan-titulo{color:#7a5010;}
-body.claro .pan-head{background:linear-gradient(180deg,rgba(160,110,30,.08),transparent);}
-body.claro .btn-xpan{color:rgba(60,30,5,.6);}
-body.claro .fundo{opacity:.07;}
-body.claro .wc-title{color:#7a5010;}
-body.claro .wc-sub{color:rgba(40,20,2,.65);}
-body.claro .wc-santo{background:rgba(160,110,30,.1);border-color:rgba(160,110,30,.25);color:#7a5010;}
-body.claro .sb-head{background:linear-gradient(180deg,rgba(160,110,30,.08),transparent);}
-body.claro .sb-foot{background:linear-gradient(0deg,rgba(160,110,30,.06),transparent);}
-body.claro .btn-nav{background:rgba(160,110,30,.15);border-color:rgba(160,110,30,.3);color:#5a3200;}
+/* ── MODO CLARO — bem claro, dourado forte, fontes pretas ── */
+body.claro{background:#faf3e0;color:#1a0a00;font-size:18px;}
+body.claro .hdr{background:rgba(255,248,220,1);border-bottom:2px solid rgba(180,130,20,.4);}
+body.claro .sidebar{background:rgba(255,248,215,1);border-right:2px solid rgba(180,130,20,.3);}
+body.claro .painel{background:rgba(255,248,215,1);}
+body.claro .sb-logo{color:#4a2800;font-weight:700;}
+body.claro .sb-sub{color:rgba(100,60,0,.6);}
+body.claro .sb-sec{color:rgba(100,60,0,.55);font-weight:700;}
+body.claro .btn-novo{color:#4a2800;border-color:rgba(160,100,0,.5);background:rgba(200,150,30,.18);font-weight:700;}
+body.claro .mi{color:#2a1000;font-weight:500;}
+body.claro .mi:hover{background:rgba(180,130,20,.15);color:#3a1800;}
+body.claro .ci{color:#2a1000;font-weight:500;}
+body.claro .ci.ativo{background:rgba(180,130,20,.15);color:#3a1800;border-color:rgba(160,110,0,.3);}
+body.claro .user-nome{color:#4a2800;font-weight:600;}
+body.claro .lang-btn{color:rgba(100,60,0,.65);border-color:rgba(180,130,20,.3);}
+body.claro .lang-btn.ativo{color:#4a2800;border-color:#8b6820;background:rgba(139,104,32,.15);font-weight:700;}
+body.claro .btn-sair{color:rgba(100,60,0,.65);border-color:rgba(180,130,20,.28);}
+body.claro .btn-hbg{color:#4a2800;border-color:rgba(160,110,0,.5);}
+body.claro .btn-modo{color:#4a2800;border-color:rgba(160,110,0,.35);font-weight:600;}
+body.claro .mu{background:linear-gradient(135deg,rgba(180,130,20,.25),rgba(140,90,10,.18));color:#1a0a00;border-color:rgba(160,110,0,.38);}
+body.claro .mb{background:linear-gradient(135deg,rgba(255,250,230,.99),rgba(250,240,210,.95));color:#1a0a00;border-color:rgba(160,110,0,.28);box-shadow:0 3px 12px rgba(100,60,10,.12);}
+body.claro .mb-autor{color:#7a4800;font-weight:700;}
+body.claro textarea{background:rgba(255,250,225,.92);color:#1a0a00;border-color:rgba(160,110,0,.45);font-weight:500;}
+body.claro textarea::placeholder{color:rgba(100,60,0,.45);}
+body.claro .inp-wrap{background:rgba(255,248,210,.99);border-top:1px solid rgba(160,110,0,.3);}
+body.claro .card{background:linear-gradient(135deg,rgba(255,250,228,.99),rgba(250,240,205,.95));border-color:rgba(160,110,0,.3);box-shadow:0 4px 16px rgba(100,60,10,.1);}
+body.claro .card-titulo{color:#6a3800;font-weight:700;}
+body.claro .card-sub{color:rgba(60,30,0,.65);}
+body.claro .card-texto{color:#1a0a00;font-weight:500;}
+body.claro .pi{background:linear-gradient(135deg,rgba(255,248,220,.97),rgba(248,235,190,.9));border-color:rgba(160,110,0,.28);color:#1a0a00;font-weight:500;}
+body.claro .pi:hover{background:rgba(200,150,30,.2);color:#3a1800;border-color:rgba(160,110,0,.5);}
+body.claro .pi-back{background:rgba(180,130,20,.15);border-color:rgba(160,110,0,.28);color:#6a3800;font-weight:600;}
+body.claro .btn-ia{background:rgba(30,15,2,.88);color:var(--gold2);border-color:rgba(200,160,80,.5);}
+body.claro .btn-link{background:linear-gradient(135deg,rgba(180,130,20,.25),rgba(140,90,10,.18));border-color:rgba(160,110,0,.45);color:#4a2800;font-weight:700;}
+body.claro .btn-link:hover{background:rgba(180,130,20,.35);}
+body.claro .pan-titulo{color:#6a3800;font-weight:700;}
+body.claro .pan-head{background:linear-gradient(180deg,rgba(180,130,20,.1),transparent);border-bottom:1px solid rgba(160,110,0,.25);}
+body.claro .btn-xpan{color:rgba(80,40,0,.7);}
+body.claro .fundo{opacity:.06;}
+body.claro .wc-title{color:#6a3800;font-weight:700;}
+body.claro .wc-sub{color:rgba(60,30,0,.7);}
+body.claro .wc-santo{background:rgba(180,130,20,.12);border-color:rgba(160,110,0,.3);color:#5a2800;}
+body.claro .btn-nav{background:rgba(180,130,20,.18);border-color:rgba(160,110,0,.35);color:#4a2800;font-weight:600;}
+body.claro .hdr-title{color:#6a3800;}
+body.claro .wc-cross{color:#8b6820;}
 </style>
 </head>
 <body id="body">
