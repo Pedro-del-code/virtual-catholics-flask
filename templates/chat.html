@@ -9,79 +9,87 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;
-  --bg:#1c0e04;--text:#f0e6d0;--text2:rgba(240,230,208,.75);
-  --bord:rgba(200,160,80,.2);--bord2:rgba(200,160,80,.45);
+  --bg:#0a0600;--text:#faf6ef;--text2:rgba(250,246,239,.6);
+  --bord:rgba(200,160,80,.15);--bord2:rgba(200,160,80,.3);
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;font-size:17px;}
+body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;
-  background:rgba(20,10,2,.96);
-  border-bottom:1px solid rgba(200,160,80,.25);
-  flex-shrink:0;z-index:10;position:relative;}
-.btn-hbg{background:transparent;border:1px solid rgba(200,160,80,.4);border-radius:6px;
+.hdr{display:flex;align-items:center;
+  padding:10px 14px;background:rgba(10,6,0,.97);
+  border-bottom:1px solid var(--bord);flex-shrink:0;z-index:10;gap:8px;}
+.btn-hbg{background:transparent;border:1px solid var(--bord2);border-radius:6px;
   color:var(--gold);width:38px;height:38px;font-size:20px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;}
-.hdr-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);
-  position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;}
-.btn-modo{background:transparent;border:1px solid rgba(200,160,80,.25);border-radius:6px;
-  color:rgba(240,230,208,.7);font-size:11px;padding:6px 10px;cursor:pointer;
-  font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;}
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hdr-center{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;min-width:0;}
+.hdr-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);white-space:nowrap;}
+.btn-modo{background:transparent;border:1px solid rgba(200,160,80,.3);border-radius:6px;
+  color:rgba(200,160,80,.65);font-size:10px;padding:3px 10px;cursor:pointer;
+  font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;flex-shrink:0;}
+.hdr-right{width:38px;flex-shrink:0;}
 
-/* FUNDO — imagem aparece bem nos dois modos */
+/* FUNDO — sem overlay, imagem direta */
 .fundo{position:fixed;inset:0;z-index:0;background-size:cover;
   background-position:center;background-repeat:no-repeat;
   opacity:.65;pointer-events:none;transition:opacity .4s;}
 
 /* CHAT */
-.chat{flex:1;overflow-y:auto;padding:16px;
-  display:flex;flex-direction:column;gap:12px;
+.chat{flex:1;overflow-y:auto;padding:14px;
+  display:flex;flex-direction:column;gap:10px;
   position:relative;z-index:2;}
 .chat::-webkit-scrollbar{width:3px;}
-.chat::-webkit-scrollbar-thumb{background:rgba(200,160,80,.3);}
+.chat::-webkit-scrollbar-thumb{background:var(--bord2);}
 
 /* WELCOME */
 .welcome{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;gap:12px;padding:30px 20px;min-height:55vh;}
-.wc-cross{font-size:30px;color:var(--gold);opacity:.8;}
-.wc-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.5);}
-.wc-sub{font-size:17px;color:rgba(240,230,208,.9);font-style:italic;max-width:280px;line-height:1.7;text-shadow:0 1px 6px rgba(0,0,0,.6);}
-.wc-santo{font-size:14px;color:var(--gold);font-style:italic;
-  background:rgba(20,10,2,.6);border:1px solid rgba(200,160,80,.3);
-  border-radius:8px;padding:8px 14px;max-width:290px;backdrop-filter:blur(4px);}
+  justify-content:center;text-align:center;gap:14px;padding:30px 20px;min-height:55vh;}
+.wc-cross{font-size:30px;color:var(--gold);opacity:.9;text-shadow:0 0 20px rgba(200,160,80,.5);}
+.wc-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);letter-spacing:2px;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);}
+.wc-sub{font-size:17px;color:rgba(240,230,208,.95);font-style:italic;max-width:280px;line-height:1.7;
+  text-shadow:0 1px 8px rgba(0,0,0,.9);}
+
+/* CARD SANTO DO DIA — bonito e decorado */
+.wc-santo{
+  max-width:300px;
+  background:linear-gradient(135deg,rgba(15,7,1,.85),rgba(25,12,2,.82));
+  border:1px solid rgba(200,160,80,.45);
+  border-radius:14px;padding:16px 18px;
+  text-align:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(200,160,80,.2);
+}
+.wc-santo-ico{font-size:26px;margin-bottom:6px;}
+.wc-santo-data{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;
+  color:rgba(200,160,80,.6);margin-bottom:4px;}
+.wc-santo-nome{font-family:'Cinzel',serif;font-size:15px;color:var(--gold2);
+  font-weight:600;margin-bottom:10px;}
+.wc-santo-msg{font-size:14px;color:rgba(240,230,208,.8);font-style:italic;line-height:1.6;}
 
 /* MSGS */
-.msg{max-width:86%;padding:13px 16px;font-size:17px;line-height:1.85;border-radius:12px;}
-.mu{align-self:flex-end;
-  background:rgba(200,160,80,.2);border:1px solid rgba(200,160,80,.35);
-  border-bottom-right-radius:4px;color:var(--text);}
-.mb{align-self:flex-start;
-  background:rgba(25,12,3,.88);border:1px solid rgba(200,160,80,.22);
-  border-bottom-left-radius:4px;color:rgba(240,230,208,.97);
-  box-shadow:0 2px 12px rgba(0,0,0,.4);}
-.mb-autor{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
-  color:var(--gold);margin-bottom:7px;opacity:.85;}
+.msg{max-width:82%;padding:11px 13px;font-size:15px;line-height:1.7;border-radius:3px;}
+.mu{align-self:flex-end;background:rgba(200,160,80,.13);border:1px solid rgba(200,160,80,.22);color:var(--text);}
+.mb{align-self:flex-start;background:rgba(255,255,255,.04);border:1px solid var(--bord);color:rgba(250,246,239,.9);}
+.mb-autor{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:5px;}
 .typing{display:flex;gap:4px;padding:4px 0;}
 .typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:tp 1.2s ease-in-out infinite;}
 .typing span:nth-child(2){animation-delay:.2s;}
 .typing span:nth-child(3){animation-delay:.4s;}
-@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-5px)}}
+@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
 
 /* INPUT */
-.inp-wrap{padding:12px 16px;border-top:1px solid rgba(200,160,80,.2);
-  display:flex;gap:10px;align-items:flex-end;
-  position:relative;z-index:2;background:rgba(16,8,1,.95);flex-shrink:0;}
-textarea{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(200,160,80,.35);
-  border-radius:10px;padding:12px 14px;color:var(--text);
-  font-family:'Cormorant Garamond',serif;font-size:17px;
-  resize:none;outline:none;min-height:48px;max-height:120px;line-height:1.5;}
-textarea::placeholder{color:rgba(200,160,80,.3);}
-textarea:focus{border-color:rgba(200,160,80,.6);}
-.btn-env{width:48px;height:48px;flex-shrink:0;
-  background:linear-gradient(135deg,#7a5010,var(--gold));
-  border:none;border-radius:10px;color:#1a0800;font-size:18px;cursor:pointer;
+.inp-wrap{padding:10px 14px;border-top:1px solid var(--bord);
+  display:flex;gap:8px;align-items:flex-end;
+  position:relative;z-index:2;background:rgba(10,6,0,.85);flex-shrink:0;}
+textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--bord2);
+  border-radius:3px;padding:10px 12px;color:var(--text);
+  font-family:'Cormorant Garamond',serif;font-size:15px;
+  resize:none;outline:none;min-height:44px;max-height:110px;line-height:1.5;}
+textarea::placeholder{color:rgba(200,160,80,.25);}
+textarea:focus{border-color:rgba(200,160,80,.5);}
+.btn-env{width:44px;height:44px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  border:none;border-radius:3px;color:var(--bg);font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;}
 .btn-env:disabled{opacity:.4;cursor:not-allowed;}
 
@@ -89,108 +97,110 @@ textarea:focus{border-color:rgba(200,160,80,.6);}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;}
 .overlay.aberto{display:block;}
 
-/* SIDEBAR — fundo sólido escuro sem gradiente */
+/* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:82vw;max-width:300px;
-  background:rgba(10,4,0,.96);
-  border-right:1px solid rgba(200,160,80,.28);
+  background:rgba(12,5,0,.99);border-right:1px solid rgba(200,160,80,.28);
   z-index:100;transform:translateX(-100%);transition:transform .25s ease;
   display:flex;flex-direction:column;overflow:hidden;}
 .sidebar.aberto{transform:translateX(0);}
-.sb-head{padding:18px;border-bottom:1px solid rgba(200,160,80,.18);text-align:center;flex-shrink:0;}
+.sb-head{padding:16px;border-bottom:1px solid rgba(200,160,80,.18);text-align:center;flex-shrink:0;}
 .sb-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);}
-.sb-sub{font-size:9px;color:rgba(200,160,80,.45);letter-spacing:3px;margin-top:4px;}
+.sb-sub{font-size:9px;color:rgba(200,160,80,.45);letter-spacing:3px;margin-top:3px;}
 .sb-body{flex:1;overflow-y:auto;padding-bottom:10px;}
 .sb-sec{padding:10px 14px 4px;font-family:'Cinzel',serif;font-size:9px;
   letter-spacing:2px;color:rgba(200,160,80,.5);margin-top:6px;}
-.btn-novo{margin:12px 12px 6px;padding:11px;
-  background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.3);border-radius:8px;
-  color:var(--gold2);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;text-align:center;}
-/* CHATS — bem visíveis */
-.ci{padding:10px 14px;font-size:15px;color:rgba(240,230,208,.8);cursor:pointer;
+.btn-novo{margin:12px 12px 6px;padding:10px;
+  background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.28);
+  border-radius:8px;color:var(--gold2);font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:2px;cursor:pointer;text-align:center;}
+.ci{padding:10px 14px;font-size:15px;color:rgba(240,230,208,.88);cursor:pointer;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   margin:2px 10px;border-radius:8px;border:1px solid transparent;transition:all .15s;}
-.ci:hover{background:rgba(200,160,80,.1);color:var(--gold2);border-color:rgba(200,160,80,.2);}
-.ci.ativo{background:rgba(200,160,80,.15);color:var(--gold2);border-color:rgba(200,160,80,.35);}
-.mi{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:15px;
-  color:rgba(240,230,208,.75);cursor:pointer;margin:2px 10px;border-radius:8px;transition:all .15s;}
+.ci:hover{background:rgba(200,160,80,.1);color:var(--gold2);border-color:rgba(200,160,80,.22);}
+.ci.ativo{background:rgba(200,160,80,.14);color:var(--gold2);border-color:rgba(200,160,80,.32);}
+.mi{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:15px;
+  color:rgba(250,246,239,.95);cursor:pointer;margin:1px 8px;border-radius:8px;}
 .mi:hover{background:rgba(200,160,80,.08);color:var(--gold2);}
-.sb-foot{padding:12px;border-top:1px solid rgba(200,160,80,.15);flex-shrink:0;}
-.lang-row{display:flex;gap:4px;margin-bottom:10px;}
-.lang-btn{flex:1;padding:5px;background:transparent;border:1px solid rgba(200,160,80,.18);
-  border-radius:6px;color:rgba(200,160,80,.5);font-size:11px;cursor:pointer;text-align:center;}
+.sb-foot{padding:11px;border-top:1px solid var(--bord);flex-shrink:0;}
+.lang-row{display:flex;gap:3px;margin-bottom:8px;}
+.lang-btn{flex:1;padding:4px;background:transparent;border:1px solid var(--bord);
+  border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;}
 .lang-btn.ativo,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
-.user-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.user-foto{width:30px;height:30px;border-radius:50%;border:1px solid rgba(200,160,80,.4);
+.user-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.user-foto{width:28px;height:28px;border-radius:50%;border:1px solid var(--bord2);
   background:rgba(200,160,80,.1);display:flex;align-items:center;justify-content:center;
-  font-size:13px;flex-shrink:0;overflow:hidden;}
+  font-size:12px;flex-shrink:0;overflow:hidden;}
 .user-foto img{width:100%;height:100%;object-fit:cover;}
-.user-nome{font-size:15px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-sair{width:100%;padding:8px;background:transparent;border:1px solid rgba(200,160,80,.2);
-  border-radius:8px;color:rgba(200,160,80,.55);font-size:13px;cursor:pointer;letter-spacing:1px;}
+.user-nome{font-size:13px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-sair{width:100%;padding:7px;background:transparent;border:1px solid var(--bord);
+  border-radius:2px;color:rgba(200,160,80,.4);font-size:12px;cursor:pointer;letter-spacing:1px;}
 
-/* PAINEL — escuro decorado com moldura dourada */
-.painel{position:fixed;inset:0;
-  background:linear-gradient(160deg,rgba(20,10,2,.99) 0%,rgba(14,6,0,.99) 100%);
-  z-index:110;transform:translateX(100%);transition:transform .25s ease;
+/* PAINEL */
+.painel{position:fixed;inset:0;background:rgba(10,6,0,.99);z-index:110;
+  transform:translateX(100%);transition:transform .24s ease;
   display:flex;flex-direction:column;}
 .painel.aberto{transform:translateX(0);}
-.pan-head{padding:15px 18px;
-  border-bottom:1px solid rgba(200,160,80,.25);
-  background:linear-gradient(180deg,rgba(200,160,80,.07),transparent);
+.pan-head{padding:13px 15px;border-bottom:1px solid var(--bord);
   display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.pan-titulo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
-.btn-xpan{background:transparent;border:none;color:rgba(200,160,80,.6);font-size:22px;cursor:pointer;padding:4px;}
-.pan-body{flex:1;overflow-y:auto;padding:14px;}
-.pan-nav{display:none;flex-shrink:0;padding:12px;border-top:1px solid rgba(200,160,80,.2);gap:8px;}
+.pan-titulo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);}
+.btn-xpan{background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;}
+.pan-body{flex:1;overflow-y:auto;padding:12px;}
+.pan-nav{display:none;flex-shrink:0;padding:10px 12px;border-top:1px solid var(--bord);gap:8px;}
 .pan-nav.show{display:flex;}
-.btn-nav{flex:1;padding:9px;background:rgba(200,160,80,.1);border:1px solid rgba(200,160,80,.3);
-  border-radius:8px;color:var(--gold2);font-size:13px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;}
+.btn-nav{flex:1;padding:8px;background:rgba(200,160,80,.1);border:1px solid var(--bord2);
+  border-radius:2px;color:var(--gold2);font-size:12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;}
+.pi{padding:11px 12px;border:1px solid var(--bord);border-radius:2px;
+  cursor:pointer;font-size:14px;color:var(--text2);margin-bottom:6px;line-height:1.5;}
+.pi:hover{border-color:var(--bord2);color:var(--gold2);background:rgba(200,160,80,.05);}
+.pt{font-size:17px;line-height:1.95;color:rgba(240,230,208,.93);white-space:pre-wrap;padding:6px 0;}
+.btn-ia{display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;margin-top:8px;
+  background:linear-gradient(135deg,rgba(200,160,80,.16),rgba(160,110,30,.1));
+  border:1px solid rgba(200,160,80,.36);border-radius:10px;
+  color:var(--gold2);font-size:16px;cursor:pointer;transition:all .2s;text-align:center;}
+.btn-ia:hover{background:rgba(200,160,80,.22);border-color:var(--gold);}
 
-/* ITENS DO PAINEL */
-.pi{padding:14px 16px;
-  background:rgba(30,15,3,.75);
-  border:1px solid rgba(200,160,80,.22);border-radius:10px;
-  cursor:pointer;font-size:17px;color:rgba(240,230,208,.9);
-  margin-bottom:8px;line-height:1.6;transition:all .18s;}
-.pi:hover{border-color:rgba(200,160,80,.5);color:var(--gold2);background:rgba(200,160,80,.1);transform:translateX(3px);}
-.pt{font-size:17px;line-height:2.0;color:rgba(240,230,208,.92);white-space:pre-wrap;padding:8px 2px;}
-
-/* MODO CLARO — fundo creme elegante, imagem visível, textos escuros */
-body.claro{background:#e8ddc8;color:#1a0d04;}
-body.claro .hdr{background:rgba(232,220,185,.98);border-bottom-color:rgba(160,110,20,.3);}
-body.claro .fundo{opacity:.28;}
-body.claro .sidebar{background:rgba(238,222,178,.97);border-right-color:rgba(150,100,10,.28);}
-body.claro .painel{background:rgba(240,228,195,.99);}
-body.claro .sb-head{background:linear-gradient(180deg,rgba(160,110,20,.08),transparent);}
-body.claro .sb-logo{color:#5a2e00;}
-body.claro .sb-sub{color:rgba(90,46,0,.5);}
-body.claro .sb-sec{color:rgba(90,46,0,.55);}
-body.claro .btn-novo{color:#5a2e00;border-color:rgba(160,110,20,.4);background:rgba(160,110,20,.12);}
-body.claro .ci{color:#2a1200;} body.claro .ci:hover{background:rgba(160,110,20,.12);color:#4a2000;}
-body.claro .ci.ativo{background:rgba(160,110,20,.18);color:#4a2000;border-color:rgba(160,110,20,.3);}
-body.claro .mi{color:#2a1200;} body.claro .mi:hover{background:rgba(160,110,20,.1);color:#4a2000;}
-body.claro .user-nome{color:#5a2e00;}
-body.claro .lang-btn{color:rgba(90,46,0,.55);border-color:rgba(160,110,20,.25);}
-body.claro .lang-btn.ativo{color:#5a2e00;border-color:#8b6820;}
-body.claro .btn-sair{color:rgba(90,46,0,.55);border-color:rgba(160,110,20,.22);}
-body.claro .btn-hbg{color:#5a2e00;border-color:rgba(160,110,20,.4);}
-body.claro .btn-modo{color:rgba(60,28,0,.7);}
-body.claro .mu{background:rgba(160,110,20,.2);color:#1a0d04;border-color:rgba(160,110,20,.3);}
-body.claro .mb{background:rgba(250,240,215,.95);color:#1a0d04;border-color:rgba(160,110,20,.22);box-shadow:0 2px 8px rgba(100,60,10,.1);}
-body.claro .mb-autor{color:#7a4800;}
-body.claro textarea{background:rgba(252,242,218,.88);color:#1a0d04;border-color:rgba(160,110,20,.4);}
-body.claro textarea::placeholder{color:rgba(90,46,0,.4);}
-body.claro .inp-wrap{background:rgba(232,220,185,.98);}
-body.claro .pi{background:rgba(250,240,215,.88);border-color:rgba(160,110,20,.25);color:#1a0d04;}
-body.claro .pi:hover{background:rgba(160,110,20,.15);color:#3a1800;border-color:rgba(160,110,20,.45);}
-body.claro .pt{color:#1a0d04;}
-body.claro .pan-titulo{color:#5a2e00;}
-body.claro .pan-head{background:linear-gradient(180deg,rgba(160,110,20,.08),transparent);border-bottom-color:rgba(160,110,20,.22);}
-body.claro .btn-xpan{color:rgba(60,28,0,.6);}
-body.claro .btn-nav{background:rgba(160,110,20,.15);border-color:rgba(160,110,20,.3);color:#5a2e00;}
-body.claro .wc-title{color:#5a2e00;text-shadow:0 2px 8px rgba(255,255,255,.5);}
-body.claro .wc-sub{color:rgba(30,15,2,.8);text-shadow:0 1px 6px rgba(255,255,255,.4);}
-body.claro .wc-santo{background:rgba(240,228,195,.85);border-color:rgba(160,110,20,.3);color:#5a2e00;}
+/* MODO CLARO — creme quente, textos bem pretos, legível */
+body.claro{background:#ede0c4;color:#180a00;}
+body.claro .hdr{background:rgba(235,220,175,.99);border-bottom-color:rgba(150,100,10,.3);}
+body.claro .fundo{opacity:.22;}
+body.claro .sidebar{background:rgba(242,228,185,.99);border-right-color:rgba(150,100,10,.28);}
+body.claro .painel{background:rgba(242,228,185,.99);}
+body.claro .sb-logo{color:#4a2400;}
+body.claro .sb-sub{color:rgba(80,40,0,.55);}
+body.claro .sb-sec{color:rgba(80,40,0,.55);}
+body.claro .btn-novo{color:#4a2400;border-color:rgba(150,100,10,.38);background:rgba(150,100,10,.12);}
+body.claro .ci{color:#180a00;}
+body.claro .ci:hover{background:rgba(150,100,10,.12);color:#3a1400;}
+body.claro .ci.ativo{background:rgba(150,100,10,.16);color:#3a1400;border-color:rgba(150,100,10,.28);}
+body.claro .mi{color:#180a00;}
+body.claro .mi:hover{background:rgba(150,100,10,.1);color:#3a1400;}
+body.claro .user-nome{color:#4a2400;}
+body.claro .lang-btn{color:rgba(80,40,0,.6);border-color:rgba(150,100,10,.22);}
+body.claro .lang-btn.ativo{color:#4a2400;border-color:#8b6820;}
+body.claro .btn-sair{color:rgba(80,40,0,.6);border-color:rgba(150,100,10,.2);}
+body.claro .btn-hbg{color:#4a2400;border-color:rgba(150,100,10,.4);}
+body.claro .btn-modo{color:#4a2400;}
+body.claro .mu{background:rgba(150,100,10,.2);color:#180a00;border-color:rgba(150,100,10,.3);}
+body.claro .mb{background:rgba(252,242,215,.97);color:#180a00;border-color:rgba(150,100,10,.2);}
+body.claro .mb-autor{color:#6a3800;}
+body.claro textarea{background:rgba(252,242,215,.92);color:#180a00;border-color:rgba(150,100,10,.38);}
+body.claro textarea::placeholder{color:rgba(80,40,0,.42);}
+body.claro .inp-wrap{background:rgba(235,220,175,.99);}
+body.claro .pi{background:rgba(252,242,215,.92);border-color:rgba(150,100,10,.2);color:#180a00;}
+body.claro .pi:hover{background:rgba(150,100,10,.14);color:#3a1400;}
+body.claro .pt{color:#180a00;}
+body.claro .pan-titulo{color:#4a2400;}
+body.claro .pan-head{border-bottom-color:rgba(150,100,10,.2);}
+body.claro .btn-xpan{color:rgba(60,25,0,.65);}
+body.claro .btn-nav{background:rgba(150,100,10,.14);border-color:rgba(150,100,10,.28);color:#4a2400;}
+body.claro .wc-title{color:#4a2400;text-shadow:0 2px 10px rgba(255,240,200,.7);}
+body.claro .wc-sub{color:#180a00;text-shadow:0 1px 8px rgba(255,240,200,.6);}
+body.claro .wc-santo{background:rgba(245,232,192,.9);border-color:rgba(150,100,10,.32);color:#4a2400;}
+body.claro .wc-santo-nome{color:#4a2400;}
+body.claro .wc-santo-data{color:rgba(80,40,0,.6);}
+body.claro .wc-santo-msg{color:rgba(30,12,0,.75);}
+body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
 </style>
 </head>
 <body id="body">
@@ -201,8 +211,11 @@ body.claro .wc-santo{background:rgba(240,228,195,.85);border-color:rgba(160,110,
 <!-- Header -->
 <div class="hdr">
   <button class="btn-hbg" onclick="abrirSB()">☰</button>
-  <div class="hdr-title">✝ VIRTUAL CATHOLICS</div>
-  <button class="btn-modo" id="btnModo" onclick="toggleModo()">🌙 {{ T.modo_escuro }}</button>
+  <div class="hdr-center">
+    <div class="hdr-title">✝ VIRTUAL CATHOLICS</div>
+    <button class="btn-modo" id="btnModo" onclick="toggleModo()">🌙 {{ T.modo_escuro }}</button>
+  </div>
+  <div class="hdr-right"></div>
 </div>
 
 <!-- Chat -->
@@ -211,7 +224,6 @@ body.claro .wc-santo{background:rgba(240,228,195,.85);border-color:rgba(160,110,
     <div class="wc-cross">✝</div>
     <div class="wc-title">{{ T.bem_vindo }}, {{ usuario.nome }}</div>
     <div class="wc-sub">Que posso fazer por você hoje? Estou aqui para guiar, orar e caminhar junto contigo na fé.</div>
-    {% if santo_hoje %}{# santo disponível no painel lateral #}{% endif %}
   </div>
 </div>
 
@@ -320,7 +332,23 @@ async function abrirPainel(tipo) {
   if(tipo==='santo'){
     document.getElementById('panTitulo').textContent='SANTO DO DIA';
     const r=await fetch('/api/santo-dia'),d=await r.json();
-    body.innerHTML=d.santo?`<div class="pt">⭐ ${d.data}\n\n${d.santo}</div>`:'<div class="pt">Nenhum santo registrado para hoje.</div>';
+    if(d.santo){
+      const nome=d.santo;
+      body.innerHTML=`
+        <div style="text-align:center;padding:20px 10px 16px">
+          <div style="font-size:42px;margin-bottom:8px">⭐</div>
+          <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div>
+          <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold2);margin-bottom:14px;line-height:1.3">${nome}</div>
+          <div style="font-size:15px;font-style:italic;color:rgba(240,230,208,.75);line-height:1.7;padding:0 8px">
+            Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏
+          </div>
+        </div>
+        <div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\\'")}')">
+          ✨ Perguntar à IA sobre ${nome}
+        </div>`;
+    } else {
+      body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0">Nenhum santo registrado para hoje.</div>';
+    }
     return;
   }
   if(tipo==='calendario'){
@@ -472,6 +500,12 @@ async function comentarioLiturgia(){
   inp.value=`Comente a liturgia do dia de hoje (${hoje}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
   autoResize(inp);inp.focus();
 }
+async function perguntarSanto(nome){
+  fecharPainel();await novoChat();
+  const inp=document.getElementById('inputMsg');
+  inp.value=`Me fale sobre ${nome} — quem foi, sua vida, sua espiritualidade e o que podemos aprender com este(a) santo(a).`;
+  autoResize(inp);inp.focus();
+}
 
 // CHAT
 async function novoChat(){
@@ -523,8 +557,17 @@ async function enviarMsg(){
   carregando=false;document.getElementById('btnEnv').disabled=false;document.getElementById('inputMsg').focus();
 }
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
+
+// Teclado mobile — sobe o input quando teclado abre
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{
+    const wrap=document.querySelector('.inp-wrap');
+    const diff=window.innerHeight-window.visualViewport.height;
+    wrap.style.paddingBottom=diff>50?`${diff+8}px`:'12px';
+  });
+}
 </script>
 </body>
 </html>
