@@ -4,3 +4,4 @@ supabase
 authlib
 requests
 PyPDF2
+gunicorn
