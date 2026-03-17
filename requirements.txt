@@ -5,3 +5,4 @@ authlib
 requests
 PyPDF2
 gunicorn
+python-dotenv
