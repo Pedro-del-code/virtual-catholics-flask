@@ -327,20 +327,26 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
         historico_limitado = mensagens[-20:] if len(mensagens) > 20 else mensagens
 
         if arquivo and tipo_arquivo == "imagem":
-            # Imagem — usa modelo de visão, lê diretamente do stream sem base64 pesado
             img_bytes = arquivo.read()
             mime = arquivo.mimetype or "image/jpeg"
             img_b64 = _b64.b64encode(img_bytes).decode()
-            ultima_msg = {
-                "role": "user",
-                "content": [
-                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{img_b64}"}},
-                    {"type": "text", "text": ultima or "Analise esta imagem no contexto católico."}
-                ]
-            }
-            msgs = [{"role": "system", "content": system_prompt}] + historico_limitado[:-1] + [ultima_msg]
+            # Modelo de visão — system prompt vai como texto no user message
+            prompt_visao = (f"{system_prompt}\n\nO usuário enviou uma imagem e perguntou: "
+                           f"{ultima or 'Analise esta imagem no contexto católico.'}\n\n"
+                           f"Responda SOMENTE se a imagem tiver conteúdo católico (santos, bíblia, arte sacra, etc). "
+                           f"Se não tiver relação com a fé católica, responda: "
+                           f"'O arquivo ou imagem não convém para o que eu fui criado. Por favor, envie algo que seja católico. 🙏'")
+            msgs = [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{img_b64}"}},
+                        {"type": "text", "text": prompt_visao}
+                    ]
+                }
+            ]
             resposta = groq_client.chat.completions.create(
-                model="llama-3.2-11b-vision-preview",
+                model="llama-3.2-90b-vision-preview",
                 messages=msgs,
                 max_tokens=1024
             )
