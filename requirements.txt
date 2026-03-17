@@ -1,7 +1,6 @@
 flask
+groq
+supabase
 authlib
 requests
-python-dotenv
-groq
-gunicorn
-supabase
+PyPDF2

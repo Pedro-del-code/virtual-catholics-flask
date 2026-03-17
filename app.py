@@ -13,8 +13,6 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
-app.config["SESSION_PERMANENT"] = True
-app.config["PERMANENT_SESSION_LIFETIME"] = __import__("datetime").timedelta(days=30)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -157,10 +155,11 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Intro aparece SEMPRE — exceto quando veio direto da intro
-    if not session.pop("veio_da_intro", False):
-        session["veio_da_intro"] = True
+    # Intro aparece sempre ao acessar o login
+    if not session.get("intro_visto"):
+        session["intro_visto"] = True
         return render_template("intro.html")
+    session.pop("intro_visto", None)  # Reset pra próxima visita
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
@@ -263,6 +262,7 @@ def api_chat():
         return jsonify({"erro": "Nao autenticado"}), 401
     data = request.get_json()
     mensagens = data.get("mensagens", [])
+    arquivo = data.get("arquivo")  # {tipo, base64, nome, mimetype}
     idioma = session.get("idioma", "pt")
     T = TRADUCOES[idioma]
     nome = session.get("nome", "")
@@ -271,6 +271,32 @@ def api_chat():
         return jsonify({"resposta": "Nao e possivel alterar as instrucoes do Virtual Catholics."})
     if contem_palavrao(ultima):
         return jsonify({"resposta": "Por favor, use um vocabulario mais respeitoso."})
+
+    # ── Processar arquivo anexado ──────────────────────────────────────────────
+    texto_arquivo = ""
+    imagem_b64 = None
+    imagem_mime = None
+    MSG_FORA_CONTEXTO = "O arquivo ou imagem não convém para o que eu fui criado. Por favor, caso queira enviar algo, envie algo que realmente seja católico. 🙏"
+
+    if arquivo:
+        tipo = arquivo.get("tipo")
+        b64 = arquivo.get("base64", "")
+        mimetype = arquivo.get("mimetype", "")
+
+        if tipo == "pdf":
+            # Extrai texto do PDF
+            try:
+                import PyPDF2, io, base64 as b64lib
+                pdf_bytes = b64lib.b64decode(b64)
+                reader = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+                texto_pdf = " ".join(p.extract_text() or "" for p in reader.pages[:10])
+                texto_arquivo = texto_pdf[:3000]  # Limita para não explodir o contexto
+            except Exception as e:
+                texto_arquivo = ""
+
+        elif tipo == "imagem":
+            imagem_b64 = b64
+            imagem_mime = mimetype
     try:
         mem = carregar_memoria(session["username"])
         fatos = mem.get("fatos", [])
@@ -310,12 +336,46 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
 
     try:
         historico_limitado = mensagens[-20:] if len(mensagens) > 20 else mensagens
-        resposta = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "system", "content": system_prompt}] + historico_limitado,
-            max_tokens=1024
-        )
-        texto = resposta.choices[0].message.content
+
+        # Monta mensagem final com arquivo se houver
+        if imagem_b64:
+            # Usa modelo de visão para imagens
+            ultima_msg = {
+                "role": "user",
+                "content": [
+                    {"type": "image_url", "image_url": {"url": f"data:{imagem_mime};base64,{imagem_b64}"}},
+                    {"type": "text", "text": ultima or "Analise esta imagem no contexto católico."}
+                ]
+            }
+            msgs_com_arquivo = [{"role": "system", "content": system_prompt}] + historico_limitado[:-1] + [ultima_msg]
+            resposta = groq_client.chat.completions.create(
+                model="llama-3.2-11b-vision-preview",
+                messages=msgs_com_arquivo,
+                max_tokens=1024
+            )
+            texto = resposta.choices[0].message.content
+            # Verifica se é fora do contexto católico
+            palavras_fora = ["não é católico", "não tem relação", "não convém", "fora do contexto", "secular", "mundano"]
+            if any(p in texto.lower() for p in ["nude", "explicit", "sexual", "violência"]):
+                return jsonify({"resposta": MSG_FORA_CONTEXTO})
+
+        elif texto_arquivo:
+            # PDF — adiciona o texto extraído ao prompt
+            msgs_pdf = [{"role": "system", "content": system_prompt + f"\n\nConteúdo do PDF enviado pelo usuário:\n{texto_arquivo}"}] + historico_limitado
+            resposta = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=msgs_pdf,
+                max_tokens=1024
+            )
+            texto = resposta.choices[0].message.content
+
+        else:
+            resposta = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[{"role": "system", "content": system_prompt}] + historico_limitado,
+                max_tokens=1024
+            )
+            texto = resposta.choices[0].message.content
         import re as _re
         if "[LEMBRAR:" in texto:
             matches = _re.findall(r'\[LEMBRAR:\s*(.+?)\]', texto)
@@ -330,12 +390,6 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
                 except:
                     pass
             texto = _re.sub(r'\[LEMBRAR:\s*.+?\]', '', texto).strip()
-        # Salvar chat automaticamente após cada resposta
-        chat_id = data.get("chat_id")
-        if chat_id:
-            todas_mensagens = mensagens + [{"role": "assistant", "content": texto}]
-            titulo = mensagens[0]["content"][:40] if mensagens else "Nova conversa"
-            salvar_chat(session["username"], chat_id, titulo, todas_mensagens)
         return jsonify({"resposta": texto})
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
