@@ -456,27 +456,6 @@ def api_santo_dia():
     santo = _SANTOS.get((hoje.month, hoje.day), "")
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
-@app.route("/ping")
-def ping():
-    return "ok", 200
-
-# ── KEEP ALIVE — evita hibernação no Render free tier ─────────────────────────
-import threading, time, urllib.request
-
-def keep_alive():
-    url = os.environ.get("RENDER_EXTERNAL_URL", "")
-    if not url:
-        return
-    while True:
-        time.sleep(600)  # Ping a cada 10 minutos
-        try:
-            urllib.request.urlopen(f"{url}/ping", timeout=10)
-        except:
-            pass
-
-_t = threading.Thread(target=keep_alive, daemon=True)
-_t.start()
-
 if __name__ == "__main__":
     app.run(debug=True)
 
