@@ -155,9 +155,8 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Intro aparece SEMPRE — veio_da_intro só fica True após ver a intro
-    if not session.pop("veio_da_intro", False):
-        session["veio_da_intro"] = True
+    # Intro aparece SEMPRE exceto quando redirecionado da própria intro (?from=intro)
+    if request.args.get("from") != "intro":
         return render_template("intro.html")
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
@@ -343,8 +342,8 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
                     ]
                 }
             ]
-            # Tenta 90b primeiro, cai para 11b se falhar
-            for model_visao in ["llama-3.2-90b-vision-preview", "llama-3.2-11b-vision-preview"]:
+            # Tenta Llama 4 Scout (atual), depois 90b e 11b como fallback
+            for model_visao in ["meta-llama/llama-4-scout-17b-16e-instruct", "llama-3.2-90b-vision-preview", "llama-3.2-11b-vision-preview"]:
                 try:
                     resposta = groq_client.chat.completions.create(
                         model=model_visao,
