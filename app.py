@@ -155,11 +155,10 @@ def index():
 def login_page():
     if "username" in session:
         return redirect("/")
-    # Intro aparece sempre ao acessar o login
-    if not session.get("intro_visto"):
-        session["intro_visto"] = True
+    # Intro aparece SEMPRE — veio_da_intro só fica True após ver a intro
+    if not session.pop("veio_da_intro", False):
+        session["veio_da_intro"] = True
         return render_template("intro.html")
-    session.pop("intro_visto", None)  # Reset pra próxima visita
     idioma = request.args.get("lang", "pt")
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
@@ -330,13 +329,12 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
             img_bytes = arquivo.read()
             mime = arquivo.mimetype or "image/jpeg"
             img_b64 = _b64.b64encode(img_bytes).decode()
-            # Modelo de visão — system prompt vai como texto no user message
             prompt_visao = (f"{system_prompt}\n\nO usuário enviou uma imagem e perguntou: "
                            f"{ultima or 'Analise esta imagem no contexto católico.'}\n\n"
                            f"Responda SOMENTE se a imagem tiver conteúdo católico (santos, bíblia, arte sacra, etc). "
                            f"Se não tiver relação com a fé católica, responda: "
                            f"'O arquivo ou imagem não convém para o que eu fui criado. Por favor, envie algo que seja católico. 🙏'")
-            msgs = [
+            msgs_visao = [
                 {
                     "role": "user",
                     "content": [
@@ -345,11 +343,19 @@ IMPORTANTE: Quando perguntado sobre um santo especifico, fale SOMENTE sobre esse
                     ]
                 }
             ]
-            resposta = groq_client.chat.completions.create(
-                model="llama-3.2-90b-vision-preview",
-                messages=msgs,
-                max_tokens=1024
-            )
+            # Tenta 90b primeiro, cai para 11b se falhar
+            for model_visao in ["llama-3.2-90b-vision-preview", "llama-3.2-11b-vision-preview"]:
+                try:
+                    resposta = groq_client.chat.completions.create(
+                        model=model_visao,
+                        messages=msgs_visao,
+                        max_tokens=1024
+                    )
+                    break
+                except Exception:
+                    continue
+            else:
+                return jsonify({"resposta": "Não consegui analisar a imagem agora. Tente novamente em instantes. 🙏"})
 
         elif arquivo and tipo_arquivo == "pdf":
             # PDF — extrai texto, limita a 2000 chars pra não pesar
