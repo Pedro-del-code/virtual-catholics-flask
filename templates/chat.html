@@ -79,8 +79,9 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 
 /* INPUT */
 .inp-wrap{padding:10px 14px;border-top:1px solid var(--bord);
-  display:flex;gap:8px;align-items:flex-end;
+  display:flex;flex-direction:column;gap:5px;
   position:relative;z-index:2;background:rgba(10,6,0,.85);flex-shrink:0;}
+.inp-row{display:flex;gap:8px;align-items:flex-end;}
 textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--bord2);
   border-radius:3px;padding:10px 12px;color:var(--text);
   font-family:'Cormorant Garamond',serif;font-size:15px;
@@ -98,7 +99,7 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 .btn-anexo:hover{background:rgba(200,160,80,.08);}
 .preview-anexo{display:none;align-items:center;gap:8px;padding:5px 10px;
   background:rgba(200,160,80,.08);border:1px solid var(--bord);border-radius:6px;
-  font-size:13px;color:var(--gold2);margin-bottom:4px;}
+  font-size:13px;color:var(--gold2);}
 .preview-anexo.show{display:flex;}
 .preview-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .btn-remover{background:transparent;border:none;color:rgba(200,160,80,.5);font-size:16px;cursor:pointer;padding:0 4px;}
@@ -246,7 +247,7 @@ body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
     <span class="preview-nome" id="previewNome"></span>
     <button class="btn-remover" onclick="removerAnexo()">✕</button>
   </div>
-  <div style="display:flex;gap:8px;align-items:flex-end;">
+  <div class="inp-row">
     <button class="btn-anexo" onclick="document.getElementById('inputFile').click()" title="Anexar imagem ou PDF">📎</button>
     <input type="file" id="inputFile" accept="image/*,.pdf" style="display:none" onchange="selecionarArquivo(this)">
     <textarea id="inputMsg" placeholder="{{ T.placeholder_mensagem }}" rows="1"
@@ -564,19 +565,28 @@ async function enviarMsg(){
     const r=await fetch('/api/novo-chat',{method:'POST'}),d=await r.json();
     chatAtual=d.chat_id;
     const el=document.createElement('div');el.className='ci ativo';el.id=`ci-${chatAtual}`;
-    el.textContent=(txt||arquivoAnexo.nome).substring(0,35);el.onclick=function(){abrirChat(chatAtual,this);};
+    el.textContent=(txt||arquivoAnexo.file.name).substring(0,35);el.onclick=function(){abrirChat(chatAtual,this);};
     document.getElementById('listaChats').prepend(el);
   }
-  const txtExibir=txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.nome}`:'');
-  mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.nome}]`:'')});
+  const txtExibir=txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:'');
+  mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.file.name}]`:'')});
   addMsg('user',txtExibir);
   const area=document.getElementById('chatArea');
   const typ=document.createElement('div');typ.className='msg mb';typ.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';area.appendChild(typ);area.scrollTop=area.scrollHeight;
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
-    const payload={chat_id:chatAtual,mensagens};
-    if(arquivoAnexo)payload.arquivo=arquivoAnexo;
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    let r;
+    if(arquivoAnexo){
+      // Multipart — arquivo vai como stream, sem base64
+      const fd=new FormData();
+      fd.append('mensagens',JSON.stringify(mensagens));
+      fd.append('chat_id',chatAtual);
+      fd.append('arquivo',arquivoAnexo.file);
+      fd.append('tipo_arquivo',arquivoAnexo.tipo);
+      r=await fetch('/api/chat',{method:'POST',body:fd});
+    } else {
+      r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
+    }
     const d=await r.json();typ.remove();
     if(d.resposta){mensagens.push({role:'assistant',content:d.resposta});addMsg('assistant',d.resposta);}
   }catch(e){typ.remove();addMsg('assistant','Desculpe, ocorreu um erro. Tente novamente. 🙏');}
@@ -588,19 +598,19 @@ function selecionarArquivo(input){
   const isPDF=file.type==='application/pdf';
   const isImg=file.type.startsWith('image/');
   if(!isPDF&&!isImg){alert('Apenas imagens e PDFs são permitidos.');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    arquivoAnexo={tipo:isPDF?'pdf':'imagem',base64:e.target.result.split(',')[1],nome:file.name,mimetype:file.type};
-    document.getElementById('previewIco').textContent=isPDF?'📄':'🖼️';
-    document.getElementById('previewNome').textContent=file.name;
-    document.getElementById('previewAnexo').classList.add('show');
-  };
-  reader.readAsDataURL(file);
+  // Limita tamanho: imagem 4MB, PDF 8MB
+  const maxMB=isPDF?8:4;
+  if(file.size>maxMB*1024*1024){alert(`Arquivo muito grande. Máximo ${maxMB}MB.`);return;}
+  arquivoAnexo={tipo:isPDF?'pdf':'imagem',file};
+  document.getElementById('previewIco').textContent=isPDF?'📄':'🖼️';
+  document.getElementById('previewNome').textContent=file.name;
+  document.getElementById('previewAnexo').classList.add('show');
   input.value='';
 }
 function removerAnexo(){
   arquivoAnexo=null;
-  document.getElementById('previewAnexo').classList.remove('show');
+  const p=document.getElementById('previewAnexo');
+  if(p)p.classList.remove('show');
 }
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
