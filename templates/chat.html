@@ -47,20 +47,123 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 /* ── HOME VIEW ── */
 #homeView{display:flex;flex-direction:column;}
 
-/* Banner */
-.banner{position:relative;min-height:52vw;max-height:260px;overflow:hidden;flex-shrink:0;}
-.banner-bg{position:absolute;inset:0;background-size:cover;background-position:center top;
-  opacity:.75;transition:opacity .4s;}
-.banner-grad{position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(10,6,0,.1) 0%,rgba(10,6,0,.7) 75%,var(--bg) 100%);}
-.banner-info{position:absolute;bottom:14px;left:14px;right:14px;}
-.banner-bem{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1.5px;color:var(--gold2);
-  text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:3px;}
-.banner-sub{font-size:13px;font-style:italic;color:rgba(240,230,208,.8);
+/* ── HERO (substitui banner) ── */
+.hero{position:relative;overflow:hidden;flex-shrink:0;background:var(--bg);}
+
+/* Imagem do santo (biblioteca) */
+.hero-saint-img{
+  width:100%;height:200px;object-fit:cover;object-position:center top;
+  display:block;opacity:0;transition:opacity .5s;
+}
+.hero-saint-img.loaded{opacity:1;}
+.hero-saint-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,6,0,.15) 0%,rgba(10,6,0,.82) 100%);
+}
+
+/* Perfil do usuário dentro do hero */
+.hero-user{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:14px 16px 16px;
+  display:flex;align-items:flex-end;gap:12px;
+}
+.hero-avatar-wrap{position:relative;flex-shrink:0;}
+.hero-avatar{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid rgba(200,160,80,.6);
+  background:rgba(200,160,80,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;overflow:hidden;cursor:pointer;
+  transition:border-color .2s;
+}
+.hero-avatar:hover{border-color:var(--gold);}
+.hero-avatar img{width:100%;height:100%;object-fit:cover;}
+.hero-edit-badge{
+  position:absolute;bottom:0;right:0;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--gold);color:#0a0600;
+  font-size:9px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1.5px solid var(--bg);
+}
+.hero-info{flex:1;min-width:0;}
+.hero-bem{
+  font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.2px;
+  color:var(--gold2);text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:2px;
+}
+.hero-sub{font-size:12px;font-style:italic;color:rgba(240,230,208,.65);
   text-shadow:0 1px 6px rgba(0,0,0,.9);}
-.banner-tag{display:inline-block;background:rgba(0,0,0,.45);border:1px solid rgba(200,160,80,.4);
-  border-radius:20px;padding:3px 10px;font-size:10px;font-family:'Cinzel',serif;
-  letter-spacing:1px;color:var(--gold);margin-bottom:6px;}
+.hero-tag{
+  display:inline-block;background:rgba(0,0,0,.5);
+  border:1px solid rgba(200,160,80,.4);border-radius:20px;
+  padding:2px 9px;font-size:9px;font-family:'Cinzel',serif;
+  letter-spacing:1px;color:var(--gold);margin-bottom:5px;
+}
+.hero-saint-btn{
+  flex-shrink:0;background:rgba(0,0,0,.45);border:1px solid rgba(200,160,80,.35);
+  border-radius:8px;padding:6px 8px;color:var(--gold);font-size:10px;
+  cursor:pointer;text-align:center;line-height:1.3;min-width:48px;
+  font-family:'Cinzel',serif;letter-spacing:.5px;
+}
+.hero-saint-btn:hover{border-color:var(--gold);background:rgba(200,160,80,.15);}
+
+/* Modo claro hero */
+body.claro .hero-bem{color:#4a2400;text-shadow:none;}
+body.claro .hero-sub{color:rgba(60,25,0,.65);}
+
+/* Modal editar perfil */
+.modal-perfil{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.75);align-items:flex-end;justify-content:center;
+}
+.modal-perfil.aberto{display:flex;}
+.modal-card{
+  background:#0e0a04;border:1px solid rgba(200,160,80,.28);
+  border-radius:18px 18px 0 0;padding:20px 18px 30px;
+  width:100%;max-width:480px;
+}
+.modal-titulo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;
+  color:var(--gold);margin-bottom:16px;text-align:center;}
+.modal-avatar-big{
+  width:72px;height:72px;border-radius:50%;border:2px solid rgba(200,160,80,.5);
+  background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;
+  font-size:28px;overflow:hidden;margin:0 auto 14px;cursor:pointer;
+}
+.modal-avatar-big img{width:100%;height:100%;object-fit:cover;}
+.modal-avatar-hint{font-size:11px;font-style:italic;color:rgba(200,160,80,.5);
+  text-align:center;margin-bottom:16px;}
+.modal-field{margin-bottom:12px;}
+.modal-field label{display:block;font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:2px;color:rgba(200,160,80,.6);margin-bottom:5px;}
+.modal-field input{width:100%;background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,160,80,.22);border-radius:4px;
+  color:var(--text);font-family:'Cormorant Garamond',serif;font-size:15px;
+  padding:9px 12px;outline:none;}
+.modal-field input:focus{border-color:rgba(200,160,80,.5);}
+.modal-btns{display:flex;gap:8px;margin-top:4px;}
+.btn-modal-cancel{flex:1;padding:11px;background:transparent;
+  border:1px solid rgba(200,160,80,.22);border-radius:4px;
+  color:rgba(200,160,80,.6);font-size:13px;cursor:pointer;}
+.btn-modal-save{flex:2;padding:11px;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;
+  font-size:11px;letter-spacing:1.5px;cursor:pointer;}
+
+/* Modal biblioteca de santos */
+.modal-biblioteca{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.85);flex-direction:column;
+}
+.modal-biblioteca.aberto{display:flex;}
+.bib-head{padding:14px 16px;border-bottom:1px solid rgba(200,160,80,.2);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.bib-titulo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
+.bib-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
+.bib-item{border-radius:10px;overflow:hidden;border:1px solid rgba(200,160,80,.2);
+  cursor:pointer;transition:all .2s;position:relative;}
+.bib-item:hover,.bib-item.ativo{border-color:var(--gold);}
+.bib-item img{width:100%;height:130px;object-fit:cover;display:block;}
+.bib-nome{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;
+  color:var(--gold2);padding:7px 8px;background:rgba(10,6,0,.9);text-align:center;}
 
 /* Botão IA rápido */
 .btn-ia-rapido{margin:14px 14px 0;padding:14px 16px;
@@ -305,15 +408,53 @@ body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,
   <!-- HOME VIEW -->
   <div id="homeView">
 
-    <!-- Banner boas-vindas -->
-    <div class="banner">
-      <div class="banner-bg" id="bannerBg"></div>
-      <div class="banner-grad"></div>
-      <div class="banner-info">
-        <div class="banner-tag" id="bannerSanto">⭐ Santo do Dia</div>
-        <div class="banner-bem">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
-        <div class="banner-sub" id="bannerTempoLiturgico">Carregando tempo litúrgico...</div>
+    <!-- Hero -->
+    <div class="hero">
+      <img class="hero-saint-img" id="heroSaintImg" src="" alt="">
+      <div class="hero-saint-overlay"></div>
+      <div class="hero-user">
+        <div class="hero-avatar-wrap" onclick="abrirModalPerfil()">
+          <div class="hero-avatar" id="heroAvatar">
+            {% if usuario.foto %}<img src="{{ usuario.foto }}" id="heroAvatarImg" alt="">{% else %}<span id="heroAvatarEmoji">🙏</span>{% endif %}
+          </div>
+          <div class="hero-edit-badge">✏</div>
+        </div>
+        <div class="hero-info">
+          <div class="hero-tag" id="bannerSanto">⭐ Santo do Dia</div>
+          <div class="hero-bem">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
+          <div class="hero-sub" id="bannerTempoLiturgico">Carregando...</div>
+        </div>
+        <button class="hero-saint-btn" onclick="abrirBiblioteca()" title="Escolher imagem do santo">🖼<br>Santos</button>
       </div>
+    </div>
+
+    <!-- Modal editar perfil -->
+    <div class="modal-perfil" id="modalPerfil">
+      <div class="modal-card">
+        <div class="modal-titulo">✝ EDITAR PERFIL</div>
+        <div class="modal-avatar-big" id="modalAvatarBig" onclick="document.getElementById('inputFotoPerfil').click()">
+          {% if usuario.foto %}<img src="{{ usuario.foto }}" id="modalAvatarImg" alt="">{% else %}🙏{% endif %}
+        </div>
+        <div class="modal-avatar-hint">Toque para trocar a foto</div>
+        <input type="file" id="inputFotoPerfil" accept="image/*" style="display:none" onchange="previewFotoPerfil(this)">
+        <div class="modal-field">
+          <label>Nome exibido</label>
+          <input type="text" id="inputNomePerfil" value="{{ usuario.nome }}" placeholder="Seu nome">
+        </div>
+        <div class="modal-btns">
+          <button class="btn-modal-cancel" onclick="fecharModalPerfil()">Cancelar</button>
+          <button class="btn-modal-save" onclick="salvarPerfil()">SALVAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal biblioteca de santos -->
+    <div class="modal-biblioteca" id="modalBiblioteca">
+      <div class="bib-head">
+        <div class="bib-titulo">📸 BIBLIOTECA DE SANTOS</div>
+        <button style="background:transparent;border:none;color:var(--text2);font-size:22px;cursor:pointer" onclick="fecharBiblioteca()">✕</button>
+      </div>
+      <div class="bib-grid" id="bibGrid"></div>
     </div>
 
     <!-- Botão IA rápido -->
@@ -519,9 +660,7 @@ function aplicarModo(){
   const body=document.getElementById('body'),f=document.getElementById('fundo'),b=document.getElementById('btnModo');
   if(claro){body.classList.add('claro');f.style.backgroundImage=`url('${IMG_CLA}')`;if(b)b.textContent='🌙 {{ T.modo_escuro }}';}
   else{body.classList.remove('claro');f.style.backgroundImage=`url('${IMG_ESC}')`;if(b)b.textContent='☀️ {{ T.modo_claro }}';}
-  // banner usa mesma imagem
-  const bb=document.getElementById('bannerBg');
-  if(bb)bb.style.backgroundImage=claro?`url('${IMG_CLA}')`:`url('${IMG_ESC}')`;
+  // hero saint image não muda com modo
 }
 function toggleModo(){claro=!claro;localStorage.setItem('modo',claro?'claro':'escuro');aplicarModo();}
 
@@ -561,7 +700,6 @@ function setNbAtivo(id){
 // ── HOME: carrega dados ──
 async function carregarHome(){
   // Banner imagem
-  const bb=document.getElementById('bannerBg');
   if(bb)bb.style.backgroundImage=claro?`url('${IMG_CLA}')`:`url('${IMG_ESC}')`;
   // Santo do dia
   try{
@@ -863,6 +1001,106 @@ if(window.visualViewport){
     wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb-h'))}px`:'var(--nb-h)';
   });
 }
+</script>
+
+<script>
+// ── BIBLIOTECA DE SANTOS ──
+const SANTOS_BIBLIOTECA = [
+  {nome:"Nossa Senhora Aparecida", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/800px-Nossa_Senhora_Aparecida.jpg"},
+  {nome:"Nossa Senhora de Fátima", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/800px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
+  {nome:"São Francisco de Assis", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/800px-Francisco_de_Zurbaran_006.jpg"},
+  {nome:"Santo Antônio de Lisboa", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/800px-Anthony_of_Padua_with_Christ_Child.jpg"},
+  {nome:"Santa Teresinha", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/800px-ThereseLisieuxPhoto.jpg"},
+  {nome:"São José", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/800px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
+  {nome:"São Pedro Apóstolo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/800px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
+  {nome:"Santa Maria Madalena", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/800px-Mariam_magdalene.jpg"},
+  {nome:"São João Batista", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/800px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
+  {nome:"Nossa Senhora do Carmo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg/800px-Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg"},
+  {nome:"Santo Agostinho", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/800px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
+  {nome:"Santa Rita de Cássia", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/800px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
+];
+
+let santoSelecionado = localStorage.getItem('heroSanto') || null;
+
+function carregarHeroSanto(){
+  const img = document.getElementById('heroSaintImg');
+  if(!img) return;
+  let url = santoSelecionado;
+  if(!url && SANTOS_BIBLIOTECA.length > 0){
+    // Rotaciona pelo dia do mês
+    const idx = new Date().getDate() % SANTOS_BIBLIOTECA.length;
+    url = SANTOS_BIBLIOTECA[idx].url;
+  }
+  if(url){
+    img.onload = () => img.classList.add('loaded');
+    img.src = url;
+  }
+}
+
+function abrirBiblioteca(){
+  const grid = document.getElementById('bibGrid');
+  grid.innerHTML = '';
+  SANTOS_BIBLIOTECA.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'bib-item' + (s.url === santoSelecionado ? ' ativo' : '');
+    div.innerHTML = `<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
+    div.onclick = () => selecionarSanto(s.url);
+    grid.appendChild(div);
+  });
+  document.getElementById('modalBiblioteca').classList.add('aberto');
+}
+
+function fecharBiblioteca(){
+  document.getElementById('modalBiblioteca').classList.remove('aberto');
+}
+
+function selecionarSanto(url){
+  santoSelecionado = url;
+  localStorage.setItem('heroSanto', url);
+  const img = document.getElementById('heroSaintImg');
+  img.classList.remove('loaded');
+  img.onload = () => img.classList.add('loaded');
+  img.src = url;
+  fecharBiblioteca();
+}
+
+// ── MODAL PERFIL ──
+function abrirModalPerfil(){
+  document.getElementById('modalPerfil').classList.add('aberto');
+}
+function fecharModalPerfil(){
+  document.getElementById('modalPerfil').classList.remove('aberto');
+}
+
+function previewFotoPerfil(input){
+  if(!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = e.target.result;
+    // Atualiza modal
+    const big = document.getElementById('modalAvatarBig');
+    big.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    // Atualiza hero
+    const av = document.getElementById('heroAvatar');
+    av.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover">`;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function salvarPerfil(){
+  const nome = document.getElementById('inputNomePerfil').value.trim();
+  if(!nome){ alert('Informe um nome.'); return; }
+  // Atualiza visual imediato
+  document.querySelectorAll('.hero-bem').forEach(el => {
+    el.textContent = el.textContent.replace(/,.+$/, ', ' + nome.split(' ')[0]);
+  });
+  document.querySelectorAll('.user-nome').forEach(el => el.textContent = nome);
+  fecharModalPerfil();
+  // TODO: chamar API /api/atualizar-perfil para persistir no Supabase
+}
+
+// Inicializa hero ao carregar
+document.addEventListener('DOMContentLoaded', carregarHeroSanto);
 </script>
 </body>
 </html>
