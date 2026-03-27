@@ -162,6 +162,16 @@ def login_page():
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
 
+# Adicione esta rota no app.py, logo após a rota /login:
+
+@app.route("/register")
+def register_page():
+    if "username" in session:
+        return redirect("/")
+    idioma = request.args.get("lang", "pt")
+    T = TRADUCOES[idioma]
+    return render_template("register.html", T=T, idioma=idioma)
+
 @app.route("/api/login", methods=["POST"])
 def api_login():
     data = request.get_json()
