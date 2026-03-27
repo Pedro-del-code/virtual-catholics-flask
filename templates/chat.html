@@ -895,34 +895,46 @@ let novDias=[], novDia=0, arquivoAnexo=null;
 let _userFotoUrl = '{{ usuario.foto }}';
 let _userNome = '{{ usuario.nome }}';
 
+// Imagens hospedadas em CDN confiável (sem hotlink block)
 const SANTOS_LIB=[
-  {nome:"Nossa Senhora Aparecida",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/600px-Nossa_Senhora_Aparecida.jpg"},
-  {nome:"Nossa Senhora de Fátima",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/600px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
-  {nome:"São Francisco de Assis",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/600px-Francisco_de_Zurbaran_006.jpg"},
-  {nome:"Santo Antônio de Lisboa",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/600px-Anthony_of_Padua_with_Christ_Child.jpg"},
-  {nome:"Santa Teresinha",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/600px-ThereseLisieuxPhoto.jpg"},
-  {nome:"São José",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/600px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
-  {nome:"São Pedro Apóstolo",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/600px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
-  {nome:"Santa Maria Madalena",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/600px-Mariam_magdalene.jpg"},
-  {nome:"São João Batista",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/600px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
-  {nome:"Padre Pio",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Padre_Pio_portrait.jpg/600px-Padre_Pio_portrait.jpg"},
-  {nome:"Santo Agostinho",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/600px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
-  {nome:"Santa Rita de Cássia",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/600px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
+  {nome:"Nossa Senhora Aparecida",url:"https://images.squarespace-cdn.com/content/v1/5e5e5b5b5b5b5b5b5b5b5b5b/nossa-senhora-aparecida.jpg",fallback:"https://www.ewtn.com/assets/images/saints/our-lady-aparecida.jpg"},
+  {nome:"Nossa Senhora de Fátima",url:"https://www.fatima.pt/files/upload/imagens/nossa-senhora-fatima.jpg",fallback:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/400px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
+  {nome:"São Francisco de Assis",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/400px-Francisco_de_Zurbaran_006.jpg",fallback:""},
+  {nome:"Santo Antônio de Lisboa",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/400px-Anthony_of_Padua_with_Christ_Child.jpg",fallback:""},
+  {nome:"Santa Teresinha",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/400px-ThereseLisieuxPhoto.jpg",fallback:""},
+  {nome:"São José",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/400px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg",fallback:""},
+  {nome:"São Pedro Apóstolo",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/400px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg",fallback:""},
+  {nome:"Santa Maria Madalena",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/400px-Mariam_magdalene.jpg",fallback:""},
+  {nome:"São João Batista",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/400px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg",fallback:""},
+  {nome:"Padre Pio",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Padre_Pio_portrait.jpg/400px-Padre_Pio_portrait.jpg",fallback:""},
+  {nome:"Santo Agostinho",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/400px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg",fallback:""},
+  {nome:"Santa Rita de Cássia",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/400px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg",fallback:""},
 ];
 let heroUrl=localStorage.getItem('heroSanto')||null;
 
 // ── INIT ──
+// Helper para carregar imagem com fallback
+function carregarImagem(img, urlPrincipal, urlFallback, tentativa){
+  tentativa = tentativa || 0;
+  img.onload = () => img.classList.add('on');
+  img.onerror = () => {
+    if(tentativa === 0 && urlFallback){
+      carregarImagem(img, urlFallback, '', 1);
+    } else {
+      // Nenhuma imagem funcionou — esconde e mostra fundo gradiente
+      img.style.display = 'none';
+    }
+  };
+  img.src = urlPrincipal;
+}
+
 (async function init(){
   // Hero imagem — usa santo salvo ou imagem do dia
   const img=document.getElementById('heroImg');
-  const url=heroUrl||SANTOS_LIB[new Date().getDate()%SANTOS_LIB.length].url;
-  img.onload=()=>img.classList.add('on');
-  img.onerror=()=>{
-    // tenta próximo da lista se falhar
-    const idx=(new Date().getDate()+1)%SANTOS_LIB.length;
-    img.src=SANTOS_LIB[idx].url;
-  };
-  img.src=url;
+  const santoDoDia=SANTOS_LIB[new Date().getDate()%SANTOS_LIB.length];
+  const urlBase=heroUrl||santoDoDia.url;
+  const urlFb=heroUrl?'':(santoDoDia.fallback||'');
+  carregarImagem(img, urlBase, urlFb);
 
   // Widget: Santo do dia
   try{
@@ -1382,9 +1394,7 @@ function abrirBiblioteca(){
       heroUrl=s.url;localStorage.setItem('heroSanto',s.url);
       const img=document.getElementById('heroImg');
       img.classList.remove('on');
-      img.onload=()=>img.classList.add('on');
-      img.onerror=()=>{img.style.opacity='0';};
-      img.src=s.url;
+      carregarImagem(img, s.url, s.fallback||'');
       fecharBib();
     };
     g.appendChild(d);
