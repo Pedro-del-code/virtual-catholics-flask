@@ -897,8 +897,8 @@ let _userNome = '{{ usuario.nome }}';
 
 // Imagens hospedadas em CDN confiável (sem hotlink block)
 const SANTOS_LIB=[
-  {nome:"Nossa Senhora Aparecida",url:"https://images.squarespace-cdn.com/content/v1/5e5e5b5b5b5b5b5b5b5b5b5b/nossa-senhora-aparecida.jpg",fallback:"https://www.ewtn.com/assets/images/saints/our-lady-aparecida.jpg"},
-  {nome:"Nossa Senhora de Fátima",url:"https://www.fatima.pt/files/upload/imagens/nossa-senhora-fatima.jpg",fallback:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/400px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
+  {nome:"Nossa Senhora Aparecida",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/NS_Aparecida_orignal.jpg/400px-NS_Aparecida_orignal.jpg",fallback:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Our_Lady_of_Aparecida.jpg/400px-Our_Lady_of_Aparecida.jpg"},
+  {nome:"Nossa Senhora de Fátima",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/400px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg",fallback:""},
   {nome:"São Francisco de Assis",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/400px-Francisco_de_Zurbaran_006.jpg",fallback:""},
   {nome:"Santo Antônio de Lisboa",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/400px-Anthony_of_Padua_with_Christ_Child.jpg",fallback:""},
   {nome:"Santa Teresinha",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/400px-ThereseLisieuxPhoto.jpg",fallback:""},
@@ -923,6 +923,7 @@ function carregarImagem(img, urlPrincipal, urlFallback, tentativa){
     } else {
       // Nenhuma imagem funcionou — esconde e mostra fundo gradiente
       img.style.display = 'none';
+      if(img.parentElement) img.parentElement.style.background = 'linear-gradient(135deg, #0d0a1e, #1a1040)';
     }
   };
   img.src = urlPrincipal;
