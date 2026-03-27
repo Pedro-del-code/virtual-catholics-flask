@@ -5,18 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virtual Catholics — Entrar</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --gold:#c8a050;
-  --gold-light:#e8cc88;
-  --gold-dark:#8b6820;
-  --bg:#0f0d0a;
-  --input:#1e1a12;
-  --input-border:rgba(200,160,80,.15);
-  --input-focus:rgba(200,160,80,.4);
-  --text:#f5edd8;
-  --text-muted:rgba(245,237,216,.4);
+  --gold:#b8922a;--gold-mid:#c9a84c;--gold-soft:#d4b568;
+  --card:#fffdf8;--input:#faf7f0;
+  --border:rgba(160,120,40,.18);--border-focus:rgba(160,120,40,.45);
+  --text:#1c1508;--text-soft:#5a4318;--text-muted:#9a8050;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{min-height:100%}
@@ -24,207 +18,96 @@ body{
   font-family:'Cormorant Garamond',serif;
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:24px 20px;
-  background:radial-gradient(ellipse 90% 50% at 50% -5%,rgba(200,160,80,.07) 0%,transparent 55%),#0f0d0a;
+  background:radial-gradient(ellipse 100% 60% at 50% 0%,rgba(200,160,60,.08) 0%,transparent 60%),linear-gradient(160deg,#f7f3ec 0%,#ede4d0 100%);
 }
-.stars{position:fixed;inset:0;z-index:0;pointer-events:none}
-.star{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(245,220,150,.55);animation:twinkle var(--d) ease-in-out infinite var(--delay)}
-@keyframes twinkle{0%,100%{opacity:.08}50%{opacity:.7}}
-
-.wrap{
-  position:relative;z-index:1;
-  width:100%;max-width:370px;
-  animation:fadeUp .65s cubic-bezier(.16,1,.3,1) both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-.top{text-align:center;margin-bottom:44px}
-.cross{
-  display:block;font-size:38px;color:var(--gold);margin-bottom:14px;
-  text-shadow:0 0 30px rgba(200,160,80,.55),0 0 70px rgba(200,160,80,.2);
-  animation:glow 3s ease-in-out infinite alternate;
-}
-@keyframes glow{to{text-shadow:0 0 50px rgba(200,160,80,.75),0 0 100px rgba(200,160,80,.3)}}
-.title{
-  font-family:'Cinzel',serif;font-size:26px;font-weight:600;
-  letter-spacing:2px;color:var(--text);margin-bottom:8px;
-}
-.subtitle{font-size:15px;color:var(--text-muted);font-style:italic}
-
-.erro{
-  background:rgba(110,15,15,.55);border:1px solid rgba(200,60,60,.25);
-  border-radius:12px;color:#ffaaaa;font-size:14px;
-  padding:12px 16px;margin-bottom:16px;display:none;
-}
+body::before{content:'✝';position:fixed;font-size:420px;color:rgba(180,140,40,.04);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;font-family:'Cinzel',serif;z-index:0}
+.wrap{position:relative;z-index:1;width:100%;max-width:385px;animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid rgba(180,140,40,.13);border-radius:20px;padding:44px 36px 36px;box-shadow:0 2px 0 rgba(180,140,40,.07),0 8px 32px rgba(100,70,10,.10),0 32px 64px rgba(100,70,10,.05)}
+.top{text-align:center;margin-bottom:36px}
+.cross{display:inline-block;font-size:34px;color:var(--gold-mid);margin-bottom:14px;filter:drop-shadow(0 2px 8px rgba(180,140,40,.22))}
+.title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:2.5px;color:var(--text);margin-bottom:6px}
+.subtitle{font-size:14px;font-style:italic;color:var(--text-muted);letter-spacing:.5px}
+.divider-top{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-mid),transparent);margin:14px auto 0;opacity:.45}
+.erro{background:rgba(160,30,30,.06);border:1px solid rgba(180,60,60,.18);border-radius:10px;color:#8b2020;font-size:14px;padding:11px 14px;margin-bottom:14px;display:none}
 .erro.show{display:block}
-
-.fields{display:flex;flex-direction:column;gap:14px;margin-bottom:8px}
+.fields{display:flex;flex-direction:column;gap:13px;margin-bottom:8px}
 .field{position:relative}
-.field input{
-  width:100%;padding:17px 20px;
-  background:var(--input);
-  border:1px solid var(--input-border);
-  border-radius:14px;
-  color:var(--text);
-  font-family:'Cormorant Garamond',serif;font-size:17px;
-  outline:none;transition:all .25s;
-}
-.field input::placeholder{color:var(--text-muted)}
-.field input:focus{
-  border-color:var(--input-focus);
-  background:rgba(30,26,18,.95);
-  box-shadow:0 0 0 3px rgba(200,160,80,.06);
-}
-.eye{
-  position:absolute;right:18px;top:50%;transform:translateY(-50%);
-  color:var(--text-muted);cursor:pointer;font-size:16px;
-  transition:color .2s;user-select:none;
-}
-.eye:hover{color:var(--gold)}
-
-.forgot{
-  display:block;text-align:right;margin-bottom:26px;margin-top:4px;
-  font-style:italic;font-size:14px;color:var(--gold);opacity:.7;
-  text-decoration:none;transition:opacity .2s;
-}
+.field input{width:100%;padding:15px 18px;background:var(--input);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:17px;outline:none;transition:all .25s}
+.field input::placeholder{color:rgba(130,100,40,.38)}
+.field input:focus{border-color:var(--border-focus);background:#fff;box-shadow:0 0 0 3px rgba(160,120,40,.07)}
+.eye{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);cursor:pointer;font-size:15px;transition:color .2s;user-select:none;opacity:.6}
+.eye:hover{opacity:1;color:var(--gold)}
+.forgot{display:block;text-align:right;margin-bottom:22px;margin-top:5px;font-style:italic;font-size:13.5px;color:var(--gold);opacity:.8;text-decoration:none;transition:opacity .2s}
 .forgot:hover{opacity:1}
-
-.btn-main{
-  width:100%;padding:17px;
-  background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--gold-light));
-  border:none;border-radius:14px;
-  color:#0a0700;
-  font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:3px;
-  text-transform:uppercase;cursor:pointer;
-  box-shadow:0 4px 24px rgba(200,160,80,.22);
-  transition:all .3s;margin-bottom:14px;
-}
-.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(200,160,80,.38)}
+.btn-main{width:100%;padding:15px;background:linear-gradient(135deg,var(--gold),var(--gold-soft));border:none;border-radius:12px;color:#fff;font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;box-shadow:0 3px 16px rgba(160,120,40,.28);transition:all .3s;margin-bottom:16px}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(160,120,40,.38)}
 .btn-main:active{transform:translateY(0)}
-.btn-main.loading{opacity:.65;pointer-events:none}
-
-.divider{
-  display:flex;align-items:center;gap:12px;margin-bottom:14px;
-  color:var(--text-muted);font-size:11px;letter-spacing:2px;font-family:'Cinzel',serif;
-}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(200,160,80,.1)}
-
-.btn-google{
-  width:100%;padding:15px 20px;
-  background:#fff;border:none;border-radius:14px;
-  color:#1a1208;
-  font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;
-  cursor:pointer;transition:all .25s;
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  box-shadow:0 2px 16px rgba(0,0,0,.25);
-  margin-bottom:10px;
-}
-.btn-google:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,0,0,.35)}
-.btn-google svg{width:20px;height:20px;flex-shrink:0}
-
-.footer-link{
-  text-align:center;margin-top:34px;
-  font-size:15px;color:var(--text-muted);
-}
-.footer-link a{color:var(--gold);text-decoration:none;transition:opacity .2s}
+.btn-main.loading{opacity:.6;pointer-events:none}
+.or{display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--text-muted);font-size:11px;letter-spacing:2px;font-family:'Cinzel',serif}
+.or::before,.or::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-google{width:100%;padding:13px 18px;background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:12px;color:var(--text-soft);font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.btn-google:hover{border-color:rgba(0,0,0,.16);box-shadow:0 3px 14px rgba(0,0,0,.12);transform:translateY(-1px)}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
+.footer-link{text-align:center;margin-top:26px;font-size:15px;color:var(--text-muted)}
+.footer-link a{color:var(--gold);font-weight:500;text-decoration:none;transition:opacity .2s}
 .footer-link a:hover{opacity:.75}
-
-.blessing{
-  text-align:center;margin-top:28px;
-  font-style:italic;font-size:13px;
-  color:rgba(200,160,80,.25);letter-spacing:1px;
-}
+.blessing{text-align:center;margin-top:18px;font-style:italic;font-size:12.5px;color:rgba(160,120,40,.32);letter-spacing:.5px}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
 <div class="wrap">
-  <div class="top">
-    <span class="cross">✝</span>
-    <div class="title">Bem-vindo de volta</div>
-    <div class="subtitle">Entre na sua conta</div>
-  </div>
-
-  <div id="erro" class="erro"></div>
-
-  <div class="fields">
-    <div class="field">
-      <input type="email" id="email" placeholder="E-mail" autocomplete="email">
+  <div class="card">
+    <div class="top">
+      <span class="cross">✝</span>
+      <div class="title">Virtual Catholics</div>
+      <div class="subtitle">Entre na sua conta</div>
+      <div class="divider-top"></div>
     </div>
-    <div class="field">
-      <input type="password" id="senha" placeholder="Senha" autocomplete="current-password">
-      <span class="eye" onclick="toggleSenha('senha',this)">👁</span>
+
+    <div id="erro" class="erro"></div>
+
+    <div class="fields">
+      <div class="field">
+        <input type="text" id="login-user" placeholder="Usuário" autocomplete="username">
+      </div>
+      <div class="field">
+        <input type="password" id="login-senha" placeholder="Senha" autocomplete="current-password">
+        <span class="eye" onclick="toggleSenha('login-senha',this)">👁</span>
+      </div>
     </div>
+
+    <a href="#" class="forgot">Esqueci minha senha</a>
+    <button class="btn-main" id="btn-entrar" onclick="fazerLogin()">✝ &nbsp; {{ T.entrar }}</button>
+    <div class="or">ou</div>
+    <button class="btn-google" onclick="window.location.href='/auth/google'">
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuar com Google
+    </button>
+    <div class="footer-link">Não tem conta? <a href="/register">{{ T.criar_conta }}</a></div>
+    <div class="blessing">Que Deus te abençoe &nbsp;✦&nbsp; Paz e Bem</div>
   </div>
-
-  <a href="/reset" class="forgot">Esqueci minha senha</a>
-
-  <button class="btn-main" id="btn-entrar" onclick="fazerLogin()">✝ &nbsp; Entrar</button>
-
-  <div class="divider">ou</div>
-
-  <button class="btn-google" onclick="loginGoogle()">
-    <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-    Continuar com Google
-  </button>
-
-  <div class="footer-link">
-    Não tem conta? <a href="/register">Criar conta</a>
-  </div>
-  <div class="blessing">Que Deus te abençoe ✦ Paz e Bem</div>
 </div>
-
 <script>
-// ── SUPABASE — substitua pelas suas chaves ──
-const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// estrelas
-const sc = document.getElementById('stars');
-for(let i=0;i<55;i++){
-  const s=document.createElement('div');
-  s.className='star';
-  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*5}s;--delay:${Math.random()*5}s`;
-  sc.appendChild(s);
-}
-
+let idioma='{{ idioma }}';
 function mostrarErro(m){const e=document.getElementById('erro');e.textContent=m;e.classList.add('show')}
 function limparErro(){document.getElementById('erro').classList.remove('show')}
-
-function toggleSenha(id,el){
-  const inp=document.getElementById(id);
-  inp.type=inp.type==='password'?'text':'password';
-  el.textContent=inp.type==='password'?'👁':'🙈';
-}
-
+function toggleSenha(id,el){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';el.textContent=inp.type==='password'?'👁':'🙈'}
 async function fazerLogin(){
   limparErro();
-  const email=document.getElementById('email').value.trim();
-  const senha=document.getElementById('senha').value;
-  if(!email||!senha){mostrarErro('Preencha todos os campos.');return}
+  const u=document.getElementById('login-user').value.trim();
+  const s=document.getElementById('login-senha').value;
+  if(!u||!s){mostrarErro('{{ T.erro_campos }}');return}
   const btn=document.getElementById('btn-entrar');
   btn.textContent='...';btn.classList.add('loading');
-  const {error}=await sb.auth.signInWithPassword({email,password:senha});
-  if(error)mostrarErro(traduzirErro(error.message));
-  else window.location.href='/';
-  btn.innerHTML='✝ &nbsp; Entrar';btn.classList.remove('loading');
+  try{
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,senha:s,idioma})});
+    const d=await r.json();
+    if(d.ok)window.location.href='/';
+    else mostrarErro(d.erro);
+  }catch(e){mostrarErro('Erro de conexão. Tente novamente.')}
+  btn.innerHTML='✝ &nbsp; {{ T.entrar }}';btn.classList.remove('loading');
 }
-
-async function loginGoogle(){
-  await sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{redirectTo:window.location.origin+'/'}
-  });
-}
-
-function traduzirErro(msg){
-  if(msg.includes('Invalid login'))return 'E-mail ou senha incorretos.';
-  if(msg.includes('Email not confirmed'))return 'Confirme seu e-mail antes de entrar.';
-  if(msg.includes('Too many'))return 'Muitas tentativas. Aguarde um momento.';
-  return 'Erro ao entrar. Tente novamente.';
-}
-
 document.addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin()});
 </script>
 </body>
