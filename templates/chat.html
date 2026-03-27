@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Virtual Catholics</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
-  --bg:#09070d;
-  --bg2:#111018;
-  --card:#16131f;
+  --bg:#05030a;
+  --bg2:#080611;
+  --card:#0f0c1a;
   --gold:#c8a04a;
   --gold2:#e8cc88;
   --gold3:#7a5c1e;
@@ -20,32 +20,82 @@
   --bord2:rgba(200,160,74,.32);
   --nb:58px;
   --hdr:54px;
+  --blue-divine:#0a0520;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:column;}
+
+/* ── FUNDO CELESTIAL ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(60,30,120,.55) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(30,10,80,.6) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(10,5,30,.9) 0%, transparent 50%),
+    linear-gradient(180deg, #08041a 0%, #050310 40%, #030208 100%);
+  pointer-events:none;
+}
+/* Estrelas animadas */
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(200,160,74,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 8%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 20%, rgba(200,160,74,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 5%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 18%, rgba(200,160,74,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 12%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 25%, rgba(200,160,74,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 30%, rgba(200,160,74,.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 78% 40%, rgba(255,255,255,.2) 0%, transparent 100%);
+  pointer-events:none;
+  animation:twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle{
+  0%{opacity:.6;}
+  100%{opacity:1;}
+}
 
 /* ── HEADER ── */
 .hdr{
   height:var(--hdr);flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 14px;
-  background:rgba(9,7,13,.97);
-  border-bottom:1px solid var(--bord);
-  z-index:20;
+  background:rgba(5,3,15,.97);
+  border-bottom:1px solid rgba(200,160,74,.2);
+  z-index:20;position:relative;
+  box-shadow:0 2px 20px rgba(0,0,0,.5);
 }
-.hdr-logo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);}
+.hdr-logo{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);
+  display:flex;align-items:center;gap:6px;
+}
+.hdr-logo::before{
+  content:'✝';font-size:13px;
+  filter:drop-shadow(0 0 6px rgba(200,160,74,.7));
+  animation:glow-cross 3s ease-in-out infinite alternate;
+}
+@keyframes glow-cross{
+  0%{filter:drop-shadow(0 0 4px rgba(200,160,74,.5));}
+  100%{filter:drop-shadow(0 0 10px rgba(200,160,74,.9));}
+}
 .hdr-btns{display:flex;gap:8px;}
 .hdr-btn{
   width:34px;height:34px;border-radius:50%;
   background:transparent;border:1px solid var(--bord2);
   color:var(--gold);font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
 }
-.hdr-btn:hover{background:rgba(200,160,74,.1);}
-.hdr-menu{width:34px;height:34px;border-radius:8px;background:transparent;border:1px solid var(--bord2);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.hdr-btn:hover{background:rgba(200,160,74,.12);box-shadow:0 0 8px rgba(200,160,74,.2);}
+.hdr-menu{width:34px;height:34px;border-radius:8px;background:transparent;border:1px solid var(--bord2);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.hdr-menu:hover{background:rgba(200,160,74,.1);}
 
 /* ── MAIN ── */
-.main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;z-index:1;}
 
 /* ── HOME VIEW ── */
 #homeView{
@@ -57,18 +107,25 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
 
 /* Hero */
 .hero{
-  position:relative;height:220px;flex-shrink:0;overflow:hidden;
-  background:linear-gradient(160deg,#1a1028 0%,#0d0a18 100%);
+  position:relative;height:240px;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(160deg,#120a2a 0%,#07041a 100%);
 }
 .hero-img{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center top;
-  opacity:0;transition:opacity .8s ease;
+  opacity:0;transition:opacity 1.2s ease;
 }
-.hero-img.on{opacity:.45;}
+.hero-img.on{opacity:.5;}
 .hero-grad{
   position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(9,7,13,.1) 0%,rgba(9,7,13,.95) 100%);
+  background:linear-gradient(to bottom,rgba(5,3,15,.1) 0%,rgba(5,3,15,.98) 100%);
+}
+/* Raios de luz no hero */
+.hero-rays{
+  position:absolute;inset:0;
+  background:
+    conic-gradient(from 270deg at 50% -10%, rgba(200,160,74,.08) 0deg, transparent 40deg, rgba(200,160,74,.05) 80deg, transparent 120deg);
+  pointer-events:none;
 }
 .hero-content{
   position:absolute;bottom:0;left:0;right:0;
@@ -76,11 +133,12 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
   display:flex;align-items:flex-end;gap:12px;
 }
 .hero-av{
-  width:50px;height:50px;border-radius:50%;flex-shrink:0;
-  border:2px solid rgba(200,160,74,.5);
+  width:54px;height:54px;border-radius:50%;flex-shrink:0;
+  border:2px solid rgba(200,160,74,.6);
   background:rgba(200,160,74,.12);
   overflow:hidden;display:flex;align-items:center;justify-content:center;
   font-size:20px;cursor:pointer;position:relative;
+  box-shadow:0 0 14px rgba(200,160,74,.25);
 }
 .hero-av img{width:100%;height:100%;object-fit:cover;}
 .hero-av-edit{
@@ -93,64 +151,129 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
 .hero-info{flex:1;min-width:0;}
 .hero-tag{
   display:inline-flex;align-items:center;gap:4px;
-  background:rgba(0,0,0,.5);border:1px solid rgba(200,160,74,.35);
+  background:rgba(0,0,0,.6);border:1px solid rgba(200,160,74,.4);
   border-radius:20px;padding:2px 10px;
   font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:1px;
   color:var(--gold);margin-bottom:4px;
 }
-.hero-nome{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1px;color:var(--gold2);margin-bottom:2px;}
+.hero-nome{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1px;color:var(--gold2);margin-bottom:2px;text-shadow:0 0 20px rgba(200,160,74,.3);}
 .hero-sub{font-size:12px;font-style:italic;color:var(--text2);}
 .hero-sant-btn{
   flex-shrink:0;
-  background:rgba(0,0,0,.5);border:1px solid rgba(200,160,74,.3);
+  background:rgba(0,0,0,.6);border:1px solid rgba(200,160,74,.35);
   border-radius:8px;padding:8px 10px;
   color:var(--gold);font-family:'Cinzel',serif;font-size:8px;
   letter-spacing:.5px;text-align:center;line-height:1.5;
-  cursor:pointer;min-width:44px;
+  cursor:pointer;min-width:44px;transition:all .2s;
 }
-.hero-sant-btn:hover{border-color:var(--gold);}
+.hero-sant-btn:hover{border-color:var(--gold);background:rgba(200,160,74,.1);}
 
 /* Ações rápidas */
 .quick-wrap{padding:16px 14px 0;display:flex;gap:8px;overflow-x:auto;}
 .quick-wrap::-webkit-scrollbar{display:none;}
 .quick-btn{
   flex-shrink:0;display:flex;align-items:center;gap:7px;
-  background:var(--card);border:1px solid var(--bord2);
+  background:rgba(15,12,26,.8);border:1px solid var(--bord2);
   border-radius:22px;padding:9px 14px;
   font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;
   color:var(--gold2);cursor:pointer;transition:all .2s;white-space:nowrap;
+  backdrop-filter:blur(8px);
 }
-.quick-btn:hover{background:rgba(200,160,74,.12);border-color:var(--gold);}
+.quick-btn:hover{background:rgba(200,160,74,.12);border-color:var(--gold);box-shadow:0 0 10px rgba(200,160,74,.1);}
 .quick-btn span{font-size:14px;}
 
 /* Grid recursos */
 .section-label{
   padding:18px 14px 8px;
   font-family:'Cinzel',serif;font-size:8px;
-  letter-spacing:3px;color:rgba(200,160,74,.45);
+  letter-spacing:3px;color:rgba(200,160,74,.5);
 }
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 14px;}
 .gi{
-  background:var(--card);border:1px solid var(--bord);
+  background:rgba(15,12,26,.7);border:1px solid var(--bord);
   border-radius:12px;padding:12px 4px 10px;
   text-align:center;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:5px;
-  transition:all .2s;
+  transition:all .2s;backdrop-filter:blur(8px);
 }
-.gi:hover,.gi:active{background:rgba(200,160,74,.1);border-color:var(--bord2);}
+.gi:hover,.gi:active{background:rgba(200,160,74,.1);border-color:var(--bord2);box-shadow:0 0 12px rgba(200,160,74,.1);}
 .gi-ico{font-size:20px;line-height:1;}
 .gi-txt{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.6px;color:var(--text2);line-height:1.3;}
 
 /* Versículo */
 .vers-wrap{
   margin:16px 14px;
-  background:var(--card);border:1px solid var(--bord);
+  background:rgba(15,12,26,.7);border:1px solid rgba(200,160,74,.18);
   border-radius:14px;padding:18px 16px;text-align:center;
+  backdrop-filter:blur(10px);
+  box-shadow:0 4px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(200,160,74,.08);
 }
-.vers-ref{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2.5px;color:rgba(200,160,74,.55);margin-bottom:10px;}
-.vers-txt{font-size:16px;font-style:italic;color:rgba(240,236,228,.85);line-height:1.8;margin-bottom:12px;}
-.vers-share{background:transparent;border:none;color:rgba(200,160,74,.4);font-size:18px;cursor:pointer;}
+.vers-ref{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2.5px;color:rgba(200,160,74,.6);margin-bottom:10px;}
+.vers-txt{font-size:16px;font-style:italic;color:rgba(240,236,228,.88);line-height:1.8;margin-bottom:12px;}
+.vers-share{background:transparent;border:none;color:rgba(200,160,74,.45);font-size:18px;cursor:pointer;transition:color .2s;}
 .vers-share:hover{color:var(--gold);}
+
+/* ── INFO IA WIDGET ── */
+.info-widget{
+  margin:0 14px 16px;
+  background:rgba(10,7,22,.8);
+  border:1px solid rgba(200,160,74,.25);
+  border-radius:14px;overflow:hidden;
+  backdrop-filter:blur(12px);
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+}
+.info-widget-hd{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  background:linear-gradient(135deg,rgba(200,160,74,.12),rgba(120,80,20,.08));
+  border-bottom:1px solid rgba(200,160,74,.15);
+  cursor:pointer;
+}
+.info-widget-ico{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(200,160,74,.25),rgba(120,80,20,.2));
+  border:1px solid rgba(200,160,74,.4);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  flex-shrink:0;
+  box-shadow:0 0 8px rgba(200,160,74,.2);
+}
+.info-widget-title{
+  flex:1;
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);
+}
+.info-widget-pulse{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 6px rgba(200,160,74,.8);
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{opacity:.5;transform:scale(.8);}
+  50%{opacity:1;transform:scale(1.2);}
+}
+.info-widget-body{padding:12px 14px;display:none;}
+.info-widget-body.open{display:block;}
+.info-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 0;border-bottom:1px solid rgba(200,160,74,.08);
+}
+.info-item:last-child{border-bottom:none;}
+.info-item-ico{font-size:16px;flex-shrink:0;margin-top:1px;}
+.info-item-content{flex:1;}
+.info-item-label{
+  font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:1.5px;
+  color:rgba(200,160,74,.5);margin-bottom:3px;
+}
+.info-item-val{font-size:13px;color:var(--text);line-height:1.5;}
+.info-item-val.loading{color:var(--text2);font-style:italic;}
+.info-perguntar{
+  display:flex;align-items:center;gap:8px;
+  margin-top:10px;padding:10px;
+  background:rgba(200,160,74,.08);border:1px solid rgba(200,160,74,.2);
+  border-radius:8px;color:var(--gold2);font-size:13px;cursor:pointer;
+  transition:all .2s;
+}
+.info-perguntar:hover{background:rgba(200,160,74,.15);}
 
 /* ── CHAT VIEW ── */
 #chatView{
@@ -169,25 +292,43 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
 .msg-row{display:flex;gap:8px;align-items:flex-end;}
 .msg-row.user{flex-direction:row-reverse;}
 .msg-av{
-  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
   background:rgba(200,160,74,.15);border:1px solid var(--bord2);
   display:flex;align-items:center;justify-content:center;font-size:13px;
-  overflow:hidden;
+  overflow:hidden;box-shadow:0 0 8px rgba(200,160,74,.15);
 }
 .msg-av img{width:100%;height:100%;object-fit:cover;}
+/* Avatar da IA no chat — imagem de Nossa Senhora */
+.msg-av.bot-av{
+  background:linear-gradient(135deg,rgba(60,20,100,.5),rgba(200,160,74,.15));
+  font-size:0;
+  position:relative;
+}
+.msg-av.bot-av::after{
+  content:'✝';
+  font-size:13px;
+  color:var(--gold);
+  position:absolute;
+  display:flex;align-items:center;justify-content:center;
+  inset:0;
+  filter:drop-shadow(0 0 4px rgba(200,160,74,.6));
+}
 .msg-bubble{
   max-width:78%;padding:11px 14px;
   font-size:15px;line-height:1.75;border-radius:16px;
   position:relative;
 }
 .msg-row.bot .msg-bubble{
-  background:var(--card);border:1px solid var(--bord);
+  background:rgba(15,12,26,.85);border:1px solid rgba(200,160,74,.15);
   color:var(--text);border-bottom-left-radius:4px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
 }
 .msg-row.user .msg-bubble{
-  background:linear-gradient(135deg,rgba(200,160,74,.22),rgba(140,100,30,.18));
+  background:linear-gradient(135deg,rgba(200,160,74,.2),rgba(140,100,30,.15));
   border:1px solid rgba(200,160,74,.28);
   color:var(--text);border-bottom-right-radius:4px;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
 }
 .msg-autor{
   font-family:'Cinzel',serif;font-size:8px;letter-spacing:1.5px;
@@ -203,24 +344,59 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
 .typing i:nth-child(3){animation-delay:.4s;}
 @keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.75;transform:translateY(-4px)}}
 
-/* Chat vazio */
+/* Chat vazio — tela de boas-vindas IA */
 .chat-empty{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;gap:12px;padding:30px 24px;
   min-height:50vh;
 }
-.chat-empty-ico{font-size:36px;color:var(--gold);filter:drop-shadow(0 0 16px rgba(200,160,74,.4));}
+.chat-empty-orb{
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(200,160,74,.35),rgba(60,20,100,.4),rgba(5,3,15,.7));
+  border:1.5px solid rgba(200,160,74,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+  box-shadow:0 0 30px rgba(200,160,74,.2),0 0 60px rgba(100,50,200,.15),inset 0 0 20px rgba(200,160,74,.05);
+  animation:orb-float 4s ease-in-out infinite;
+  position:relative;
+  overflow:hidden;
+}
+.chat-empty-orb::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 60%,rgba(200,160,74,.08) 80%,transparent 100%);
+  animation:orb-spin 6s linear infinite;
+}
+.chat-empty-orb::after{
+  content:'✝';
+  position:absolute;font-size:28px;
+  color:var(--gold2);
+  filter:drop-shadow(0 0 8px rgba(200,160,74,.6));
+}
+@keyframes orb-float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes orb-spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.chat-empty-rays{
+  width:80px;height:80px;position:absolute;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(200,160,74,.04) 10deg,transparent 20deg,rgba(200,160,74,.03) 30deg,transparent 40deg);
+  border-radius:50%;
+  animation:orb-spin 8s linear infinite reverse;
+}
 .chat-empty-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold2);}
 .chat-empty-sub{font-size:14px;font-style:italic;color:var(--text2);max-width:240px;line-height:1.7;}
 
-/* Sugestões rápidas no chat vazio */
+/* Sugestões */
 .sugest-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px;}
 .sugest-btn{
-  background:var(--card);border:1px solid var(--bord2);
+  background:rgba(15,12,26,.8);border:1px solid var(--bord2);
   border-radius:20px;padding:8px 14px;
   font-size:13px;color:var(--gold2);cursor:pointer;
-  transition:all .2s;font-style:italic;
+  transition:all .2s;font-style:italic;backdrop-filter:blur(8px);
 }
 .sugest-btn:hover{background:rgba(200,160,74,.12);}
 
@@ -228,9 +404,10 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
 .inp-wrap{
   position:fixed;bottom:var(--nb);left:0;right:0;
   padding:8px 12px 10px;
-  background:rgba(9,7,13,.96);
-  border-top:1px solid var(--bord);
+  background:rgba(5,3,15,.97);
+  border-top:1px solid rgba(200,160,74,.15);
   z-index:20;display:none;
+  backdrop-filter:blur(10px);
 }
 .inp-wrap.on{display:block;}
 .inp-anexo{
@@ -246,6 +423,7 @@ body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:colu
   background:transparent;border:1px solid var(--bord2);
   border-radius:8px;color:var(--gold);font-size:16px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
 }
 .inp-attach:hover{background:rgba(200,160,74,.08);}
 textarea#msgInput{
@@ -255,22 +433,25 @@ textarea#msgInput{
   padding:9px 12px;resize:none;outline:none;
   min-height:38px;max-height:110px;line-height:1.5;
 }
-textarea#msgInput::placeholder{color:rgba(200,160,74,.22);}
-textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
+textarea#msgInput::placeholder{color:rgba(200,160,74,.25);}
+textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rgba(200,160,74,.05);}
 .inp-send{
   width:38px;height:38px;flex-shrink:0;
   background:linear-gradient(135deg,var(--gold3),var(--gold));
   border:none;border-radius:10px;
   color:#09070d;font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(200,160,74,.3);transition:all .2s;
 }
-.inp-send:disabled{opacity:.35;cursor:not-allowed;}
+.inp-send:hover{box-shadow:0 2px 16px rgba(200,160,74,.5);}
+.inp-send:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;}
 
 /* ── NAVBAR ── */
 .nb{
   position:fixed;bottom:0;left:0;right:0;height:var(--nb);
-  background:rgba(9,7,13,.98);border-top:1px solid var(--bord);
+  background:rgba(5,3,15,.99);border-top:1px solid rgba(200,160,74,.18);
   display:flex;z-index:30;
+  box-shadow:0 -4px 20px rgba(0,0,0,.4);
 }
 .nb-item{
   flex:1;display:flex;flex-direction:column;
@@ -284,12 +465,13 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 .nb-lbl{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.5px;}
 
 /* ── SIDEBAR ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:90;}
 .overlay.on{display:block;}
 .sb{
   position:fixed;left:0;top:0;bottom:0;
   width:min(82vw,290px);
-  background:#0e0b17;border-right:1px solid rgba(200,160,74,.22);
+  background:linear-gradient(180deg,#0a0618 0%,#06040e 100%);
+  border-right:1px solid rgba(200,160,74,.2);
   z-index:100;transform:translateX(-100%);
   transition:transform .24s ease;
   display:flex;flex-direction:column;overflow:hidden;
@@ -298,6 +480,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 .sb-head{
   padding:18px 16px;border-bottom:1px solid rgba(200,160,74,.15);
   text-align:center;flex-shrink:0;
+  background:linear-gradient(to bottom,rgba(200,160,74,.06),transparent);
 }
 .sb-logo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);}
 .sb-sub{font-size:9px;color:rgba(200,160,74,.4);letter-spacing:2px;margin-top:3px;}
@@ -310,12 +493,12 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 }
 .sb-btn-novo{
   margin:12px 12px 6px;padding:10px;
-  background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.25);
+  background:rgba(200,160,74,.08);border:1px solid rgba(200,160,74,.22);
   border-radius:8px;color:var(--gold2);
   font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;
-  cursor:pointer;text-align:center;
+  cursor:pointer;text-align:center;transition:all .2s;
 }
-.sb-btn-novo:hover{background:rgba(200,160,74,.18);}
+.sb-btn-novo:hover{background:rgba(200,160,74,.15);}
 .ci{
   padding:10px 14px;font-size:14px;color:rgba(240,236,228,.8);
   cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -360,7 +543,8 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 /* ── PAINEL ── */
 .pan{
   position:fixed;inset:0;
-  background:var(--bg);z-index:110;
+  background:linear-gradient(180deg,#08041a 0%,#05030a 100%);
+  z-index:110;
   transform:translateX(100%);transition:transform .22s ease;
   display:flex;flex-direction:column;
 }
@@ -368,6 +552,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 .pan-hd{
   padding:13px 15px;border-bottom:1px solid var(--bord);
   display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  background:rgba(5,3,15,.9);
 }
 .pan-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
 .pan-x{background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;}
@@ -385,6 +570,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 .pi{
   padding:11px 12px;border:1px solid var(--bord);border-radius:6px;
   cursor:pointer;font-size:14px;color:var(--text2);margin-bottom:7px;line-height:1.5;
+  transition:all .2s;
 }
 .pi:hover{border-color:var(--bord2);color:var(--gold2);background:rgba(200,160,74,.04);}
 .pt{font-size:16px;line-height:1.95;color:rgba(240,236,228,.9);white-space:pre-wrap;padding:4px 0;}
@@ -393,17 +579,19 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
   padding:14px;margin-top:10px;
   background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.3);
   border-radius:10px;color:var(--gold2);font-size:15px;cursor:pointer;
+  transition:all .2s;
 }
 .btn-ia:hover{background:rgba(200,160,74,.18);}
 
 /* ── MODAIS ── */
 .modal-bg{
   display:none;position:fixed;inset:0;z-index:150;
-  background:rgba(0,0,0,.8);align-items:flex-end;justify-content:center;
+  background:rgba(0,0,0,.85);align-items:flex-end;justify-content:center;
 }
 .modal-bg.on{display:flex;}
 .modal-box{
-  background:#13101c;border:1px solid rgba(200,160,74,.25);
+  background:linear-gradient(180deg,#12101e,#0a0818);
+  border:1px solid rgba(200,160,74,.28);
   border-radius:18px 18px 0 0;padding:22px 18px 34px;
   width:100%;max-width:480px;
 }
@@ -430,16 +618,24 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 .btn-ms{flex:2;padding:11px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:6px;color:#09070d;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;}
 
 /* Biblioteca de santos */
-.bib-modal{display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.95);flex-direction:column;}
+.bib-modal{display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.97);flex-direction:column;}
 .bib-modal.on{display:flex;}
 .bib-hd{padding:14px 16px;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .bib-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
 .bib-x{background:transparent;border:none;color:var(--text2);font-size:22px;cursor:pointer;}
 .bib-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
 .bib-item{border-radius:10px;overflow:hidden;border:2px solid rgba(200,160,74,.15);cursor:pointer;transition:border-color .2s;}
-.bib-item:hover,.bib-item.sel{border-color:var(--gold);}
+.bib-item:hover,.bib-item.sel{border-color:var(--gold);box-shadow:0 0 12px rgba(200,160,74,.2);}
 .bib-item img{width:100%;height:130px;object-fit:cover;display:block;}
-.bib-nome{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.8px;color:var(--gold2);padding:7px 8px;background:rgba(9,7,13,.92);text-align:center;}
+.bib-nome{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.8px;color:var(--gold2);padding:7px 8px;background:rgba(5,3,15,.94);text-align:center;}
+
+/* PIX QR */
+.pix-qr-wrap{
+  background:white;border-radius:10px;padding:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin:12px 0;
+}
+.pix-qr-wrap canvas{display:block;}
 </style>
 </head>
 <body>
@@ -449,7 +645,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
 <!-- Header -->
 <div class="hdr">
   <button class="hdr-menu" onclick="abrirSB()">☰</button>
-  <div class="hdr-logo">✝ VIRTUAL CATHOLICS</div>
+  <div class="hdr-logo">VIRTUAL CATHOLICS</div>
   <div class="hdr-btns">
     <button class="hdr-btn" onclick="irChat()">💬</button>
   </div>
@@ -464,6 +660,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
     <!-- Hero -->
     <div class="hero">
       <img class="hero-img" id="heroImg" src="" alt="">
+      <div class="hero-rays"></div>
       <div class="hero-grad"></div>
       <div class="hero-content">
         <div class="hero-av" onclick="abrirModalPerfil()" id="heroAv">
@@ -485,6 +682,49 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
       <button class="quick-btn" onclick="acaoRapida('conselho')"><span>✝</span> Conselho</button>
       <button class="quick-btn" onclick="acaoRapida('santo')"><span>⭐</span> Santo do dia</button>
       <button class="quick-btn" onclick="acaoRapida('liturgia')"><span>📖</span> Liturgia</button>
+    </div>
+
+    <!-- Widget de informações IA -->
+    <div class="section-label">INFORMAÇÕES DO DIA</div>
+    <div class="info-widget">
+      <div class="info-widget-hd" onclick="toggleInfoWidget()">
+        <div class="info-widget-ico">✝</div>
+        <div class="info-widget-title">DADOS LITÚRGICOS AO VIVO</div>
+        <div class="info-widget-pulse"></div>
+      </div>
+      <div class="info-widget-body open" id="infoWidgetBody">
+        <div class="info-item">
+          <div class="info-item-ico">⭐</div>
+          <div class="info-item-content">
+            <div class="info-item-label">SANTO DO DIA</div>
+            <div class="info-item-val loading" id="wSanto">Carregando...</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-ico">🕯️</div>
+          <div class="info-item-content">
+            <div class="info-item-label">TEMPO LITÚRGICO</div>
+            <div class="info-item-val loading" id="wTempo">Carregando...</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-ico">📖</div>
+          <div class="info-item-content">
+            <div class="info-item-label">EVANGELHO DO DIA</div>
+            <div class="info-item-val loading" id="wEvangelho">Carregando...</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-ico">📅</div>
+          <div class="info-item-content">
+            <div class="info-item-label">DATA</div>
+            <div class="info-item-val loading" id="wData">Carregando...</div>
+          </div>
+        </div>
+        <div class="info-perguntar" onclick="perguntarIA('Me fale sobre o santo do dia, o tempo litúrgico e uma reflexão sobre o evangelho de hoje.')">
+          ✨ Perguntar à IA sobre o dia de hoje
+        </div>
+      </div>
     </div>
 
     <!-- Grid recursos -->
@@ -551,7 +791,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
     <div class="nb-ico">☰</div><div class="nb-lbl">Recursos</div>
   </button>
   <button class="nb-item" id="nb-eu" onclick="abrirModalPerfil()">
-    <div class="nb-ico">{% if usuario.foto %}<img src="{{ usuario.foto }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover">{% else %}🙏{% endif %}</div>
+    <div class="nb-ico" id="nbEuIco">{% if usuario.foto %}<img src="{{ usuario.foto }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover">{% else %}🙏{% endif %}</div>
     <div class="nb-lbl">Eu</div>
   </button>
 </div>
@@ -644,10 +884,16 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
   <div class="bib-grid" id="bibGrid"></div>
 </div>
 
+<!-- QR Code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 // ── ESTADO ──
 let chatAtual=null, mensagens=[], carregando=false;
 let novDias=[], novDia=0, arquivoAnexo=null;
+// Foto e nome do usuário em memória para o chat
+let _userFotoUrl = '{{ usuario.foto }}';
+let _userNome = '{{ usuario.nome }}';
 
 const SANTOS_LIB=[
   {nome:"Nossa Senhora Aparecida",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/600px-Nossa_Senhora_Aparecida.jpg"},
@@ -667,20 +913,66 @@ let heroUrl=localStorage.getItem('heroSanto')||null;
 
 // ── INIT ──
 (async function init(){
-  // Hero imagem
+  // Hero imagem — usa santo salvo ou imagem do dia
   const img=document.getElementById('heroImg');
   const url=heroUrl||SANTOS_LIB[new Date().getDate()%SANTOS_LIB.length].url;
   img.onload=()=>img.classList.add('on');
-  img.onerror=()=>img.style.display='none';
+  img.onerror=()=>{
+    // tenta próximo da lista se falhar
+    const idx=(new Date().getDate()+1)%SANTOS_LIB.length;
+    img.src=SANTOS_LIB[idx].url;
+  };
   img.src=url;
-  // Santo
-  try{const r=await fetch('/api/santo-dia'),d=await r.json();
-    const el=document.getElementById('heroSanto');
-    if(el&&d.santo)el.textContent='⭐ '+d.santo;}catch(e){}
-  // Tempo litúrgico
-  try{const r=await fetch('/api/calendario'),d=await r.json();
-    const el=document.getElementById('heroTempo');
-    if(el)el.textContent=d.tempo_liturgico+' · '+d.dia_semana+', '+d.hoje;}catch(e){}
+
+  // Widget: Santo do dia
+  try{
+    const r=await fetch('/api/santo-dia'),d=await r.json();
+    const wSanto=document.getElementById('wSanto');
+    const heroSanto=document.getElementById('heroSanto');
+    if(d.santo){
+      wSanto.textContent=d.santo;
+      wSanto.classList.remove('loading');
+      if(heroSanto)heroSanto.textContent='⭐ '+d.santo;
+    }else{
+      wSanto.textContent='Não disponível hoje';
+      wSanto.classList.remove('loading');
+    }
+  }catch(e){
+    document.getElementById('wSanto').textContent='Erro ao carregar';
+    document.getElementById('wSanto').classList.remove('loading');
+  }
+
+  // Widget: Tempo litúrgico + data
+  try{
+    const r=await fetch('/api/calendario'),d=await r.json();
+    const heroTempo=document.getElementById('heroTempo');
+    const wTempo=document.getElementById('wTempo');
+    const wData=document.getElementById('wData');
+    if(heroTempo)heroTempo.textContent=d.tempo_liturgico+' · '+d.dia_semana+', '+d.hoje;
+    if(wTempo){wTempo.textContent=d.tempo_liturgico+(d.descricao?' — '+d.descricao:'');wTempo.classList.remove('loading');}
+    if(wData){wData.textContent=d.dia_semana+', '+d.hoje;wData.classList.remove('loading');}
+  }catch(e){
+    ['wTempo','wData'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.textContent='Erro ao carregar';el.classList.remove('loading');}
+    });
+  }
+
+  // Widget: Evangelho do dia
+  try{
+    const r=await fetch('/api/liturgia-dia'),d=await r.json();
+    const wEv=document.getElementById('wEvangelho');
+    if(wEv){
+      // pega a primeira linha do texto como resumo
+      const linhas=(d.texto||'').split('\n').filter(l=>l.trim());
+      wEv.textContent=linhas[0]||d.data||'Ver Liturgia do Dia';
+      wEv.classList.remove('loading');
+    }
+  }catch(e){
+    const el=document.getElementById('wEvangelho');
+    if(el){el.textContent='Acesse em Liturgia do Dia';el.classList.remove('loading');}
+  }
+
   // Versículo
   const VS=[
     {ref:"Jo 3,16",txt:"Porque Deus amou o mundo de tal maneira que deu o seu Filho Unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."},
@@ -695,6 +987,11 @@ let heroUrl=localStorage.getItem('heroSanto')||null;
   document.getElementById('versRef').textContent=v.ref;
   document.getElementById('versTxt').textContent='"'+v.txt+'"';
 })();
+
+function toggleInfoWidget(){
+  const b=document.getElementById('infoWidgetBody');
+  b.classList.toggle('open');
+}
 
 // ── NAVEGAÇÃO ──
 function setNb(id){document.querySelectorAll('.nb-item').forEach(b=>b.classList.remove('on'));const el=document.getElementById(id);if(el)el.classList.add('on');}
@@ -753,7 +1050,7 @@ async function abrirPainel(tipo){
         const n=d.santo;
         body.innerHTML=`<div style="text-align:center;padding:20px 10px">
           <div style="font-size:36px;margin-bottom:8px">⭐</div>
-          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.65;margin-bottom:6px">${d.data}</div>
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.65;margin-bottom:6px">${d.data||''}</div>
           <div style="font-family:'Cinzel',serif;font-size:17px;color:var(--gold2);margin-bottom:14px;line-height:1.4">${n}</div>
           <div style="font-size:14px;font-style:italic;color:var(--text2);line-height:1.75;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que precisamos neste dia. 🙏</div>
         </div>
@@ -828,32 +1125,78 @@ async function abrirPainel(tipo){
   }
   if(tipo==='creditos'){
     document.getElementById('panTit').textContent='CRÉDITOS';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\nPedro Pimentel\n<small>Desenvolvedor e idealizador do Virtual Catholics</small>\n\n<b style="color:var(--gold)">🤖 IA</b>\nGroq — LLaMA 3.3 70B\n<small>Motor de inteligência artificial do assistente espiritual</small>\n\n<b style="color:var(--gold)">🗄️ Banco de dados</b>\nSupabase\n<small>Armazenamento de usuários, chats e memórias</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>À Virgem Maria, Mãe e Rainha de todos nós.</small>\n\n<small style="opacity:.45">Virtual Catholics v1.0 ✝️</small></div>`;
+    body.innerHTML=`<div class="pt" style="text-align:center;padding:10px 0">
+<div style="font-size:28px;margin-bottom:8px">✝</div>
+<div style="font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;color:var(--gold2);margin-bottom:20px">VIRTUAL CATHOLICS</div>
+</div>
+<div style="background:rgba(200,160,74,.06);border:1px solid rgba(200,160,74,.18);border-radius:10px;padding:16px;margin-bottom:10px">
+<div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">CRIADOR</div>
+<div style="font-size:15px;color:var(--text)">Pedro Henrique</div>
+</div>
+<div style="background:rgba(200,160,74,.06);border:1px solid rgba(200,160,74,.18);border-radius:10px;padding:16px;margin-bottom:10px">
+<div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">SUPORTE E IDEIAS</div>
+<div style="font-size:15px;color:var(--text)">João Lucas</div>
+</div>
+<div style="background:rgba(200,160,74,.06);border:1px solid rgba(200,160,74,.18);border-radius:10px;padding:16px;margin-bottom:10px">
+<div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">🤖 INTELIGÊNCIA ARTIFICIAL</div>
+<div style="font-size:14px;color:var(--text2)">Groq — LLaMA 3.3 70B</div>
+</div>
+<div style="background:rgba(200,160,74,.06);border:1px solid rgba(200,160,74,.18);border-radius:10px;padding:16px;margin-bottom:10px">
+<div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">🗄️ BANCO DE DADOS</div>
+<div style="font-size:14px;color:var(--text2)">Supabase</div>
+</div>
+<div style="background:linear-gradient(135deg,rgba(200,160,74,.08),rgba(100,50,200,.06));border:1px solid rgba(200,160,74,.22);border-radius:10px;padding:16px;margin-bottom:10px;text-align:center">
+<div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:8px">✝ PROPÓSITO</div>
+<div style="font-size:14px;font-style:italic;color:var(--text);line-height:1.7">Criado com o propósito de evangelização mundial e a entrega de amor por Cristo.</div>
+<div style="font-size:13px;font-style:italic;color:rgba(200,160,74,.7);margin-top:8px;line-height:1.6">Feito para Nossa Senhora e Deus. 🙏</div>
+</div>
+<div style="text-align:center;padding:10px 0"><small style="opacity:.4;font-size:11px">Virtual Catholics v1.0 ✝️</small></div>`;
     return;
   }
   if(tipo==='feedback'){
     document.getElementById('panTit').textContent='SUPORTE';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:15px">pimenteldanubia2014@gmail.com</span>\n\n<small>Envie sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>`;
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:15px">virtualcatholics@gmail.com</span>\n\n<small>Envie sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>
+    <a href="mailto:virtualcatholics@gmail.com" style="display:block;background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.28);border-radius:8px;padding:12px;text-align:center;color:var(--gold);text-decoration:none;margin-top:10px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px">✉ ENVIAR EMAIL</a>`;
     return;
   }
   if(tipo==='doacoes'){
     document.getElementById('panTit').textContent='APOIE O PROJETO';
     body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua contribuição mantém este ministério digital vivo.</small></div>
     <div style="background:rgba(200,160,74,.07);border:1px solid rgba(200,160,74,.22);border-radius:10px;padding:18px;margin:12px 0;text-align:center">
-      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:10px">📱 CHAVE PIX</div>
-      <div style="font-size:15px;color:var(--text);word-break:break-all;margin-bottom:12px">pimenteldanubia2014@gmail.com</div>
-      <button onclick="navigator.clipboard.writeText('pimenteldanubia2014@gmail.com').then(()=>alert('Chave Pix copiada! 🙏'))" style="background:linear-gradient(135deg,#7a5c1e,#c8a04a);border:none;border-radius:6px;color:#09070d;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:10px 20px;cursor:pointer">COPIAR CHAVE</button>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:14px">📱 PIX — QR CODE</div>
+      <div class="pix-qr-wrap" id="pixQrWrap"></div>
+      <div style="font-size:11px;color:var(--text2);margin-top:10px;margin-bottom:12px">Escaneie com o app do seu banco</div>
+      <button onclick="copiarPix()" style="background:linear-gradient(135deg,#7a5c1e,#c8a04a);border:none;border-radius:6px;color:#09070d;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:10px 20px;cursor:pointer">COPIAR CÓDIGO PIX</button>
     </div>
     <div class="pt" style="text-align:center;opacity:.5"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
+    // Gera QR Code
+    setTimeout(()=>{
+      const wrap=document.getElementById('pixQrWrap');
+      if(wrap&&typeof QRCode!=='undefined'){
+        new QRCode(wrap,{
+          text:'00020126360014BR.GOV.BCB.PIX0114+55619851019085204000053039865802BR5922Danubia Pimentel Gomes6009SAO PAULO62140510rxGCP8VQVW63043EF7',
+          width:180,height:180,
+          colorDark:'#000000',colorLight:'#ffffff',
+          correctLevel:QRCode.CorrectLevel.M
+        });
+      }else if(wrap){
+        wrap.innerHTML='<div style="color:#333;font-size:12px;padding:10px">QR Code indisponível</div>';
+      }
+    },100);
     return;
   }
 
-  // Genérico (orações, terços, canticos, novenas, liturgia_horas)
+  // Genérico
   document.getElementById('panTit').textContent=tipo.replace('_',' ').toUpperCase();
   body.innerHTML='<div class="pt">Carregando...</div>';
   const r=await fetch(`/api/dados/${tipo}`),lista=await r.json();
   body.innerHTML='';
   lista.forEach(nome=>{const el=document.createElement('div');el.className='pi';el.textContent=nome;el.onclick=()=>abrirItem(tipo,nome);body.appendChild(el);});
+}
+
+function copiarPix(){
+  const codigo='00020126360014BR.GOV.BCB.PIX0114+55619851019085204000053039865802BR5922Danubia Pimentel Gomes6009SAO PAULO62140510rxGCP8VQVW63043EF7';
+  navigator.clipboard.writeText(codigo).then(()=>alert('Código Pix copiado! 🙏'));
 }
 
 async function abrirItem(tipo,nome){
@@ -923,7 +1266,9 @@ async function novoChat(){
   fecharSB();chatAtual=null;mensagens=[];
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   document.getElementById('chatArea').innerHTML=`<div class="chat-empty">
-    <div class="chat-empty-ico">✝</div>
+    <div style="position:relative;display:flex;align-items:center;justify-content:center;width:80px;height:80px">
+      <div class="chat-empty-orb"></div>
+    </div>
     <div class="chat-empty-title">COMO POSSO AJUDAR?</div>
     <div class="chat-empty-sub">Pergunte sobre a fé, peça uma oração ou uma reflexão espiritual.</div>
     <div class="sugest-wrap">
@@ -949,15 +1294,20 @@ async function abrirChat(id,el){
 
 function addMsg(role,txt){
   const area=document.getElementById('chatArea');
-  // Remove chat-empty se existir
   const empty=area.querySelector('.chat-empty');if(empty)empty.remove();
   const row=document.createElement('div');row.className=`msg-row ${role==='user'?'user':'bot'}`;
-  // Avatar
-  const av=document.createElement('div');av.className='msg-av';
+  // Avatar — usa foto/nome atual em memória, não o template estático
+  const av=document.createElement('div');
   if(role==='user'){
-    const foto='{{ usuario.foto }}';
-    if(foto){av.innerHTML=`<img src="${foto}" alt="">`;}else{av.textContent='🙏';}
-  }else{av.textContent='✝';}
+    av.className='msg-av';
+    if(_userFotoUrl&&_userFotoUrl!=''){
+      av.innerHTML=`<img src="${_userFotoUrl}" alt="">`;
+    }else{
+      av.textContent='🙏';
+    }
+  }else{
+    av.className='msg-av bot-av';
+  }
   // Bubble
   const bubble=document.createElement('div');bubble.className='msg-bubble';
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
@@ -982,10 +1332,9 @@ async function enviar(){
   }
   mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.file.name}]`:'')});
   addMsg('user',txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:''));
-  // Typing
   const area=document.getElementById('chatArea');
   const typRow=document.createElement('div');typRow.className='msg-row bot';
-  const typAv=document.createElement('div');typAv.className='msg-av';typAv.textContent='✝';
+  const typAv=document.createElement('div');typAv.className='msg-av bot-av';
   const typBub=document.createElement('div');typBub.className='msg-bubble';
   typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
   typRow.appendChild(typAv);typRow.appendChild(typBub);
@@ -1029,7 +1378,15 @@ function abrirBiblioteca(){
   SANTOS_LIB.forEach(s=>{
     const d=document.createElement('div');d.className='bib-item'+(s.url===heroUrl?' sel':'');
     d.innerHTML=`<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
-    d.onclick=()=>{heroUrl=s.url;localStorage.setItem('heroSanto',s.url);const img=document.getElementById('heroImg');img.classList.remove('on');img.onload=()=>img.classList.add('on');img.src=s.url;fecharBib();};
+    d.onclick=()=>{
+      heroUrl=s.url;localStorage.setItem('heroSanto',s.url);
+      const img=document.getElementById('heroImg');
+      img.classList.remove('on');
+      img.onload=()=>img.classList.add('on');
+      img.onerror=()=>{img.style.opacity='0';};
+      img.src=s.url;
+      fecharBib();
+    };
     g.appendChild(d);
   });
   document.getElementById('bibModal').classList.add('on');
@@ -1042,14 +1399,20 @@ function prevFoto(input){
   const r=new FileReader();
   r.onload=e=>{
     const url=e.target.result;
+    _userFotoUrl=url; // atualiza em memória — usado no chat
     document.getElementById('modalAv').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
     document.getElementById('heroAv').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover"><div class="hero-av-edit">✏</div>`;
+    // Atualiza avatar na navbar
+    document.getElementById('nbEuIco').innerHTML=`<img src="${url}" style="width:22px;height:22px;border-radius:50%;object-fit:cover">`;
+    // Atualiza no sidebar
+    document.querySelectorAll('.user-av').forEach(av=>{av.innerHTML=`<img src="${url}" alt="" style="width:100%;height:100%;object-fit:cover">`;});
   };
   r.readAsDataURL(input.files[0]);
 }
 function salvarPerfil(){
   const nome=document.getElementById('nomeInput').value.trim();
   if(!nome)return;
+  _userNome=nome; // atualiza em memória
   document.querySelector('.hero-nome').textContent=document.querySelector('.hero-nome').textContent.replace(/,.*$/,', '+nome.split(' ')[0]);
   document.querySelectorAll('.user-nome').forEach(e=>e.textContent=nome);
   fecharModalPerfil();
@@ -1065,7 +1428,7 @@ if(window.visualViewport){
   });
 }
 
-// Init home
+// Init
 irHome();
 novoChat();
 </script>
