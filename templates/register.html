@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual Catholics — Entrar</title>
+<title>Virtual Catholics — Criar Conta</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -37,7 +37,7 @@ body{
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-.top{text-align:center;margin-bottom:44px}
+.top{text-align:center;margin-bottom:40px}
 .cross{
   display:block;font-size:38px;color:var(--gold);margin-bottom:14px;
   text-shadow:0 0 30px rgba(200,160,80,.55),0 0 70px rgba(200,160,80,.2);
@@ -45,7 +45,7 @@ body{
 }
 @keyframes glow{to{text-shadow:0 0 50px rgba(200,160,80,.75),0 0 100px rgba(200,160,80,.3)}}
 .title{
-  font-family:'Cinzel',serif;font-size:26px;font-weight:600;
+  font-family:'Cinzel',serif;font-size:24px;font-weight:600;
   letter-spacing:2px;color:var(--text);margin-bottom:8px;
 }
 .subtitle{font-size:15px;color:var(--text-muted);font-style:italic}
@@ -57,7 +57,14 @@ body{
 }
 .erro.show{display:block}
 
-.fields{display:flex;flex-direction:column;gap:14px;margin-bottom:8px}
+.sucesso{
+  background:rgba(10,60,20,.55);border:1px solid rgba(60,180,80,.25);
+  border-radius:12px;color:#aaeeaa;font-size:14px;
+  padding:12px 16px;margin-bottom:16px;display:none;text-align:center;
+}
+.sucesso.show{display:block}
+
+.fields{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
 .field{position:relative}
 .field input{
   width:100%;padding:17px 20px;
@@ -80,13 +87,6 @@ body{
   transition:color .2s;user-select:none;
 }
 .eye:hover{color:var(--gold)}
-
-.forgot{
-  display:block;text-align:right;margin-bottom:26px;margin-top:4px;
-  font-style:italic;font-size:14px;color:var(--gold);opacity:.7;
-  text-decoration:none;transition:opacity .2s;
-}
-.forgot:hover{opacity:1}
 
 .btn-main{
   width:100%;padding:17px;
@@ -140,25 +140,34 @@ body{
 <div class="wrap">
   <div class="top">
     <span class="cross">✝</span>
-    <div class="title">Bem-vindo de volta</div>
-    <div class="subtitle">Entre na sua conta</div>
+    <div class="title">Criar Conta</div>
+    <div class="subtitle">Junte-se à comunidade</div>
   </div>
 
   <div id="erro" class="erro"></div>
+  <div id="sucesso" class="sucesso"></div>
 
   <div class="fields">
+    <div class="field">
+      <input type="text" id="nome" placeholder="Nome completo" autocomplete="name">
+    </div>
+    <div class="field">
+      <input type="text" id="usuario" placeholder="Nome de usuário">
+    </div>
     <div class="field">
       <input type="email" id="email" placeholder="E-mail" autocomplete="email">
     </div>
     <div class="field">
-      <input type="password" id="senha" placeholder="Senha" autocomplete="current-password">
+      <input type="password" id="senha" placeholder="Senha (mín. 8 caracteres)">
       <span class="eye" onclick="toggleSenha('senha',this)">👁</span>
+    </div>
+    <div class="field">
+      <input type="password" id="senha2" placeholder="Confirmar senha">
+      <span class="eye" onclick="toggleSenha('senha2',this)">👁</span>
     </div>
   </div>
 
-  <a href="/reset" class="forgot">Esqueci minha senha</a>
-
-  <button class="btn-main" id="btn-entrar" onclick="fazerLogin()">✝ &nbsp; Entrar</button>
+  <button class="btn-main" id="btn-criar" onclick="criarConta()">✝ &nbsp; Criar Conta</button>
 
   <div class="divider">ou</div>
 
@@ -168,7 +177,7 @@ body{
   </button>
 
   <div class="footer-link">
-    Não tem conta? <a href="/register">Criar conta</a>
+    Já tem conta? <a href="/login">Entrar</a>
   </div>
   <div class="blessing">Que Deus te abençoe ✦ Paz e Bem</div>
 </div>
@@ -189,8 +198,20 @@ for(let i=0;i<55;i++){
   sc.appendChild(s);
 }
 
-function mostrarErro(m){const e=document.getElementById('erro');e.textContent=m;e.classList.add('show')}
-function limparErro(){document.getElementById('erro').classList.remove('show')}
+function mostrarErro(m){
+  const e=document.getElementById('erro');
+  e.textContent=m;e.classList.add('show');
+  document.getElementById('sucesso').classList.remove('show');
+}
+function mostrarSucesso(m){
+  const s=document.getElementById('sucesso');
+  s.textContent=m;s.classList.add('show');
+  document.getElementById('erro').classList.remove('show');
+}
+function limpar(){
+  document.getElementById('erro').classList.remove('show');
+  document.getElementById('sucesso').classList.remove('show');
+}
 
 function toggleSenha(id,el){
   const inp=document.getElementById(id);
@@ -198,17 +219,36 @@ function toggleSenha(id,el){
   el.textContent=inp.type==='password'?'👁':'🙈';
 }
 
-async function fazerLogin(){
-  limparErro();
+async function criarConta(){
+  limpar();
+  const nome=document.getElementById('nome').value.trim();
+  const usuario=document.getElementById('usuario').value.trim();
   const email=document.getElementById('email').value.trim();
   const senha=document.getElementById('senha').value;
-  if(!email||!senha){mostrarErro('Preencha todos os campos.');return}
-  const btn=document.getElementById('btn-entrar');
+  const senha2=document.getElementById('senha2').value;
+
+  if(!nome||!usuario||!email||!senha||!senha2){mostrarErro('Preencha todos os campos.');return}
+  if(senha.length<8){mostrarErro('A senha deve ter no mínimo 8 caracteres.');return}
+  if(senha!==senha2){mostrarErro('As senhas não coincidem.');return}
+
+  const btn=document.getElementById('btn-criar');
   btn.textContent='...';btn.classList.add('loading');
-  const {error}=await sb.auth.signInWithPassword({email,password:senha});
-  if(error)mostrarErro(traduzirErro(error.message));
-  else window.location.href='/';
-  btn.innerHTML='✝ &nbsp; Entrar';btn.classList.remove('loading');
+
+  const {error}=await sb.auth.signUp({
+    email,
+    password:senha,
+    options:{
+      data:{nome_completo:nome,username:usuario}
+    }
+  });
+
+  if(error){
+    mostrarErro(traduzirErro(error.message));
+  } else {
+    mostrarSucesso('✦ Conta criada! Verifique seu e-mail para confirmar o cadastro.');
+  }
+
+  btn.innerHTML='✝ &nbsp; Criar Conta';btn.classList.remove('loading');
 }
 
 async function loginGoogle(){
@@ -219,13 +259,14 @@ async function loginGoogle(){
 }
 
 function traduzirErro(msg){
-  if(msg.includes('Invalid login'))return 'E-mail ou senha incorretos.';
-  if(msg.includes('Email not confirmed'))return 'Confirme seu e-mail antes de entrar.';
+  if(msg.includes('already registered'))return 'Este e-mail já está cadastrado.';
+  if(msg.includes('Password should'))return 'A senha deve ter no mínimo 8 caracteres.';
+  if(msg.includes('valid email'))return 'Digite um e-mail válido.';
   if(msg.includes('Too many'))return 'Muitas tentativas. Aguarde um momento.';
-  return 'Erro ao entrar. Tente novamente.';
+  return 'Erro ao criar conta. Tente novamente.';
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin()});
+document.addEventListener('keydown',e=>{if(e.key==='Enter')criarConta()});
 </script>
 </body>
 </html>
