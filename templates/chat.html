@@ -11,11 +11,17 @@
   --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;
   --bg:#0a0600;--text:#faf6ef;--text2:rgba(250,246,239,.6);
   --bord:rgba(200,160,80,.15);--bord2:rgba(200,160,80,.3);
+  --nb-h:62px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;}
 
-/* HEADER */
+/* FUNDO */
+.fundo{position:fixed;inset:0;z-index:0;background-size:cover;
+  background-position:center;background-repeat:no-repeat;
+  opacity:.65;pointer-events:none;transition:opacity .4s;}
+
+/* ── HEADER ── */
 .hdr{display:flex;align-items:center;
   padding:10px 14px;background:rgba(10,6,0,.97);
   border-bottom:1px solid var(--bord);flex-shrink:0;z-index:10;gap:8px;}
@@ -27,46 +33,88 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 .btn-modo{background:transparent;border:1px solid rgba(200,160,80,.3);border-radius:6px;
   color:rgba(200,160,80,.65);font-size:10px;padding:3px 10px;cursor:pointer;
   font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;flex-shrink:0;}
-.hdr-right{width:38px;flex-shrink:0;}
+.hdr-right{display:flex;gap:6px;flex-shrink:0;}
+.btn-hdr-ico{background:transparent;border:1px solid var(--bord2);border-radius:50%;
+  color:var(--gold);width:36px;height:36px;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;}
 
-/* FUNDO — sem overlay, imagem direta */
-.fundo{position:fixed;inset:0;z-index:0;background-size:cover;
-  background-position:center;background-repeat:no-repeat;
-  opacity:.65;pointer-events:none;transition:opacity .4s;}
+/* ── MAIN SCROLL AREA ── */
+.main{flex:1;overflow-y:auto;position:relative;z-index:2;
+  display:flex;flex-direction:column;padding-bottom:var(--nb-h);}
+.main::-webkit-scrollbar{width:3px;}
+.main::-webkit-scrollbar-thumb{background:var(--bord2);}
 
-/* CHAT */
-.chat{flex:1;overflow-y:auto;padding:14px;
-  display:flex;flex-direction:column;gap:10px;
-  position:relative;z-index:2;}
-.chat::-webkit-scrollbar{width:3px;}
-.chat::-webkit-scrollbar-thumb{background:var(--bord2);}
+/* ── HOME VIEW ── */
+#homeView{display:flex;flex-direction:column;}
 
-/* WELCOME */
-.welcome{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;gap:14px;padding:30px 20px;min-height:55vh;}
-.wc-cross{font-size:30px;color:var(--gold);opacity:.9;text-shadow:0 0 20px rgba(200,160,80,.5);}
-.wc-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);letter-spacing:2px;
-  text-shadow:0 2px 12px rgba(0,0,0,.8);}
-.wc-sub{font-size:17px;color:rgba(240,230,208,.95);font-style:italic;max-width:280px;line-height:1.7;
-  text-shadow:0 1px 8px rgba(0,0,0,.9);}
+/* Banner */
+.banner{position:relative;min-height:52vw;max-height:260px;overflow:hidden;flex-shrink:0;}
+.banner-bg{position:absolute;inset:0;background-size:cover;background-position:center top;
+  opacity:.75;transition:opacity .4s;}
+.banner-grad{position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,6,0,.1) 0%,rgba(10,6,0,.7) 75%,var(--bg) 100%);}
+.banner-info{position:absolute;bottom:14px;left:14px;right:14px;}
+.banner-bem{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1.5px;color:var(--gold2);
+  text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:3px;}
+.banner-sub{font-size:13px;font-style:italic;color:rgba(240,230,208,.8);
+  text-shadow:0 1px 6px rgba(0,0,0,.9);}
+.banner-tag{display:inline-block;background:rgba(0,0,0,.45);border:1px solid rgba(200,160,80,.4);
+  border-radius:20px;padding:3px 10px;font-size:10px;font-family:'Cinzel',serif;
+  letter-spacing:1px;color:var(--gold);margin-bottom:6px;}
 
-/* CARD SANTO DO DIA — bonito e decorado */
-.wc-santo{
-  max-width:300px;
-  background:linear-gradient(135deg,rgba(15,7,1,.85),rgba(25,12,2,.82));
-  border:1px solid rgba(200,160,80,.45);
-  border-radius:14px;padding:16px 18px;
-  text-align:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(200,160,80,.2);
-}
-.wc-santo-ico{font-size:26px;margin-bottom:6px;}
-.wc-santo-data{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;
-  color:rgba(200,160,80,.6);margin-bottom:4px;}
-.wc-santo-nome{font-family:'Cinzel',serif;font-size:15px;color:var(--gold2);
-  font-weight:600;margin-bottom:10px;}
-.wc-santo-msg{font-size:14px;color:rgba(240,230,208,.8);font-style:italic;line-height:1.6;}
+/* Botão IA rápido */
+.btn-ia-rapido{margin:14px 14px 0;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(200,160,80,.18),rgba(160,110,30,.12));
+  border:1px solid rgba(200,160,80,.4);border-radius:14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
+.btn-ia-rapido:hover{background:rgba(200,160,80,.25);border-color:var(--gold);}
+.ia-ico{font-size:24px;flex-shrink:0;}
+.ia-txt{flex:1;}
+.ia-titulo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold2);margin-bottom:2px;}
+.ia-sub{font-size:13px;font-style:italic;color:rgba(240,230,208,.6);}
+.ia-seta{font-size:20px;color:var(--gold);opacity:.6;}
 
-/* MSGS */
+/* Grid atalhos */
+.grid-titulo{padding:16px 14px 8px;font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:3px;color:rgba(200,160,80,.5);}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 4px;}
+.grid-item{background:rgba(255,255,255,.04);border:1px solid var(--bord);
+  border-radius:12px;padding:12px 6px 10px;text-align:center;cursor:pointer;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.grid-item:hover,.grid-item:active{background:rgba(200,160,80,.12);border-color:var(--bord2);}
+.grid-ico{font-size:22px;}
+.grid-nome{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.8px;
+  color:rgba(240,230,208,.7);line-height:1.3;}
+
+/* Versículo do dia */
+.versiculo-wrap{margin:16px 14px;background:rgba(255,255,255,.03);
+  border:1px solid var(--bord);border-radius:14px;padding:16px;text-align:center;}
+.vers-ref{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
+  color:rgba(200,160,80,.6);margin-bottom:8px;}
+.vers-txt{font-size:17px;font-style:italic;color:rgba(240,230,208,.88);
+  line-height:1.75;margin-bottom:12px;}
+.vers-share{background:transparent;border:none;color:rgba(200,160,80,.45);
+  font-size:20px;cursor:pointer;transition:color .2s;}
+.vers-share:hover{color:var(--gold);}
+
+/* Santo do dia card (home) */
+.santo-card{margin:0 14px 16px;background:rgba(255,255,255,.03);
+  border:1px solid var(--bord);border-radius:14px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
+.santo-card:hover{border-color:var(--bord2);background:rgba(200,160,80,.07);}
+.santo-ico{font-size:28px;flex-shrink:0;}
+.santo-info{flex:1;min-width:0;}
+.santo-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;
+  color:rgba(200,160,80,.55);margin-bottom:3px;}
+.santo-nome{font-size:15px;color:var(--gold2);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.santo-seta{font-size:18px;color:var(--gold);opacity:.5;flex-shrink:0;}
+
+/* ── CHAT VIEW ── */
+#chatView{display:none;flex:1;flex-direction:column;}
+.chat-area{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-area::-webkit-scrollbar{width:3px;}
+.chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
 .msg{max-width:82%;padding:11px 13px;font-size:15px;line-height:1.7;border-radius:3px;}
 .mu{align-self:flex-end;background:rgba(200,160,80,.13);border:1px solid rgba(200,160,80,.22);color:var(--text);}
 .mb{align-self:flex-start;background:rgba(255,255,255,.04);border:1px solid var(--bord);color:rgba(250,246,239,.9);}
@@ -77,10 +125,11 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 .typing span:nth-child(3){animation-delay:.4s;}
 @keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
 
-/* INPUT */
+/* ── INPUT ── */
 .inp-wrap{padding:10px 14px;border-top:1px solid var(--bord);
   display:flex;flex-direction:column;gap:5px;
-  position:relative;z-index:2;background:rgba(10,6,0,.85);flex-shrink:0;}
+  position:fixed;bottom:var(--nb-h);left:0;right:0;
+  z-index:20;background:rgba(10,6,0,.92);flex-shrink:0;}
 .inp-row{display:flex;gap:8px;align-items:flex-end;}
 textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--bord2);
   border-radius:3px;padding:10px 12px;color:var(--text);
@@ -103,14 +152,22 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 .preview-anexo.show{display:flex;}
 .preview-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .btn-remover{background:transparent;border:none;color:rgba(200,160,80,.5);font-size:16px;cursor:pointer;padding:0 4px;}
-body.claro .btn-anexo{color:#4a2400;border-color:rgba(150,100,10,.38);}
-body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,100,10,.25);color:#4a2400;}
 
-/* OVERLAY */
+/* ── NAVBAR BOTTOM ── */
+.navbar{position:fixed;bottom:0;left:0;right:0;height:var(--nb-h);
+  background:rgba(8,4,0,.98);border-top:1px solid var(--bord);
+  display:flex;align-items:stretch;z-index:30;}
+.nb-item{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;cursor:pointer;transition:all .2s;
+  border:none;background:transparent;color:rgba(200,160,80,.45);}
+.nb-item.ativo{color:var(--gold);}
+.nb-item:hover{color:var(--gold2);}
+.nb-ico{font-size:20px;line-height:1;}
+.nb-txt{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;}
+
+/* ── OVERLAY / SIDEBAR / PAINEL ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;}
 .overlay.aberto{display:block;}
-
-/* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:82vw;max-width:300px;
   background:rgba(12,5,0,.99);border-right:1px solid rgba(200,160,80,.28);
   z-index:100;transform:translateX(-100%);transition:transform .25s ease;
@@ -173,10 +230,14 @@ body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,
   color:var(--gold2);font-size:16px;cursor:pointer;transition:all .2s;text-align:center;}
 .btn-ia:hover{background:rgba(200,160,80,.22);border-color:var(--gold);}
 
-/* MODO CLARO — creme quente, textos bem pretos, legível */
+/* ── MODO CLARO ── */
 body.claro{background:#ede0c4;color:#180a00;}
 body.claro .hdr{background:rgba(235,220,175,.99);border-bottom-color:rgba(150,100,10,.3);}
 body.claro .fundo{opacity:.22;}
+body.claro .navbar{background:rgba(240,228,185,.99);border-top-color:rgba(150,100,10,.28);}
+body.claro .nb-item{color:rgba(80,40,0,.4);}
+body.claro .nb-item.ativo{color:#4a2400;}
+body.claro .inp-wrap{background:rgba(235,220,175,.98);}
 body.claro .sidebar{background:rgba(242,228,185,.99);border-right-color:rgba(150,100,10,.28);}
 body.claro .painel{background:rgba(242,228,185,.99);}
 body.claro .sb-logo{color:#4a2400;}
@@ -199,7 +260,6 @@ body.claro .mb{background:rgba(252,242,215,.97);color:#180a00;border-color:rgba(
 body.claro .mb-autor{color:#6a3800;}
 body.claro textarea{background:rgba(252,242,215,.92);color:#180a00;border-color:rgba(150,100,10,.38);}
 body.claro textarea::placeholder{color:rgba(80,40,0,.42);}
-body.claro .inp-wrap{background:rgba(235,220,175,.99);}
 body.claro .pi{background:rgba(252,242,215,.92);border-color:rgba(150,100,10,.2);color:#180a00;}
 body.claro .pi:hover{background:rgba(150,100,10,.14);color:#3a1400;}
 body.claro .pt{color:#180a00;}
@@ -207,13 +267,19 @@ body.claro .pan-titulo{color:#4a2400;}
 body.claro .pan-head{border-bottom-color:rgba(150,100,10,.2);}
 body.claro .btn-xpan{color:rgba(60,25,0,.65);}
 body.claro .btn-nav{background:rgba(150,100,10,.14);border-color:rgba(150,100,10,.28);color:#4a2400;}
-body.claro .wc-title{color:#4a2400;text-shadow:0 2px 10px rgba(255,240,200,.7);}
-body.claro .wc-sub{color:#180a00;text-shadow:0 1px 8px rgba(255,240,200,.6);}
-body.claro .wc-santo{background:rgba(245,232,192,.9);border-color:rgba(150,100,10,.32);color:#4a2400;}
-body.claro .wc-santo-nome{color:#4a2400;}
-body.claro .wc-santo-data{color:rgba(80,40,0,.6);}
-body.claro .wc-santo-msg{color:rgba(30,12,0,.75);}
 body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
+body.claro .grid-item{background:rgba(150,100,10,.08);border-color:rgba(150,100,10,.2);}
+body.claro .grid-item:hover{background:rgba(150,100,10,.16);}
+body.claro .grid-nome{color:rgba(60,25,0,.75);}
+body.claro .versiculo-wrap{background:rgba(150,100,10,.06);border-color:rgba(150,100,10,.2);}
+body.claro .vers-txt{color:#180a00;}
+body.claro .santo-card{background:rgba(150,100,10,.06);border-color:rgba(150,100,10,.2);}
+body.claro .santo-nome{color:#4a2400;}
+body.claro .banner-bem{color:#4a2400;}
+body.claro .btn-ia-rapido{background:rgba(150,100,10,.12);border-color:rgba(150,100,10,.3);}
+body.claro .ia-titulo{color:#4a2400;}
+body.claro .btn-anexo{color:#4a2400;border-color:rgba(150,100,10,.38);}
+body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,100,10,.25);color:#4a2400;}
 </style>
 </head>
 <body id="body">
@@ -228,20 +294,109 @@ body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
     <div class="hdr-title">✝ VIRTUAL CATHOLICS</div>
     <button class="btn-modo" id="btnModo" onclick="toggleModo()">🌙 {{ T.modo_escuro }}</button>
   </div>
-  <div class="hdr-right"></div>
-</div>
-
-<!-- Chat -->
-<div class="chat" id="chatArea">
-  <div class="welcome" id="welcome">
-    <div class="wc-cross">✝</div>
-    <div class="wc-title">{{ T.bem_vindo }}, {{ usuario.nome }}</div>
-    <div class="wc-sub">Que posso fazer por você hoje? Estou aqui para guiar, orar e caminhar junto contigo na fé.</div>
+  <div class="hdr-right">
+    <button class="btn-hdr-ico" onclick="irParaChat()">💬</button>
   </div>
 </div>
 
-<!-- Input -->
-<div class="inp-wrap">
+<!-- Main scroll -->
+<div class="main" id="main">
+
+  <!-- HOME VIEW -->
+  <div id="homeView">
+
+    <!-- Banner boas-vindas -->
+    <div class="banner">
+      <div class="banner-bg" id="bannerBg"></div>
+      <div class="banner-grad"></div>
+      <div class="banner-info">
+        <div class="banner-tag" id="bannerSanto">⭐ Santo do Dia</div>
+        <div class="banner-bem">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
+        <div class="banner-sub" id="bannerTempoLiturgico">Carregando tempo litúrgico...</div>
+      </div>
+    </div>
+
+    <!-- Botão IA rápido -->
+    <div class="btn-ia-rapido" onclick="irParaChat()">
+      <div class="ia-ico">✝</div>
+      <div class="ia-txt">
+        <div class="ia-titulo">FALAR COM A IA</div>
+        <div class="ia-sub">Perguntar, orar, refletir...</div>
+      </div>
+      <div class="ia-seta">›</div>
+    </div>
+
+    <!-- Grid recursos -->
+    <div class="grid-titulo">RECURSOS</div>
+    <div class="grid">
+      <div class="grid-item" onclick="abrirPainel('oracoes')">
+        <div class="grid-ico">🙏</div>
+        <div class="grid-nome">Orações</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('biblia')">
+        <div class="grid-ico">📜</div>
+        <div class="grid-nome">Bíblia</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('tercos')">
+        <div class="grid-ico">📿</div>
+        <div class="grid-nome">Terço</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('liturgia_dia')">
+        <div class="grid-ico">📖</div>
+        <div class="grid-nome">Liturgia</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('liturgia_horas')">
+        <div class="grid-ico">⛪</div>
+        <div class="grid-nome">Lit. Horas</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('canticos')">
+        <div class="grid-ico">🎵</div>
+        <div class="grid-nome">Cânticos</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('novenas')">
+        <div class="grid-ico">🕯️</div>
+        <div class="grid-nome">Novenas</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('calendario')">
+        <div class="grid-ico">🗓️</div>
+        <div class="grid-nome">Calendário</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('catecismo')">
+        <div class="grid-ico">📗</div>
+        <div class="grid-nome">Catecismo</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('exame')">
+        <div class="grid-ico">🔍</div>
+        <div class="grid-nome">Exame</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('apoio')">
+        <div class="grid-ico">🆘</div>
+        <div class="grid-nome">Apoio</div>
+      </div>
+      <div class="grid-item" onclick="abrirPainel('santo')">
+        <div class="grid-ico">⭐</div>
+        <div class="grid-nome">Santo Dia</div>
+      </div>
+    </div>
+
+    <!-- Versículo do dia -->
+    <div class="versiculo-wrap" id="versiculoWrap">
+      <div class="vers-ref" id="versRef">Carregando...</div>
+      <div class="vers-txt" id="versTxt"></div>
+      <button class="vers-share" onclick="compartilharVersiculo()" title="Compartilhar">⬆</button>
+    </div>
+
+  </div><!-- /homeView -->
+
+  <!-- CHAT VIEW -->
+  <div id="chatView">
+    <div class="chat-area" id="chatArea"></div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- Input (fixo) -->
+<div class="inp-wrap" id="inpWrap" style="display:none">
   <div class="preview-anexo" id="previewAnexo">
     <span id="previewIco">📎</span>
     <span class="preview-nome" id="previewNome"></span>
@@ -254,6 +409,32 @@ body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
       onkeydown="teclaEnter(event)" oninput="autoResize(this)"></textarea>
     <button class="btn-env" id="btnEnv" onclick="enviarMsg()">✝</button>
   </div>
+</div>
+
+<!-- Navbar bottom -->
+<div class="navbar">
+  <button class="nb-item ativo" id="nb-inicio" onclick="irParaInicio()">
+    <div class="nb-ico">🏠</div>
+    <div class="nb-txt">Início</div>
+  </button>
+  <button class="nb-item" id="nb-biblia" onclick="abrirPainel('biblia')">
+    <div class="nb-ico">📜</div>
+    <div class="nb-txt">Bíblia</div>
+  </button>
+  <button class="nb-item" id="nb-chat" onclick="irParaChat()">
+    <div class="nb-ico">✝</div>
+    <div class="nb-txt">IA</div>
+  </button>
+  <button class="nb-item" id="nb-recursos" onclick="abrirSB()">
+    <div class="nb-ico">☰</div>
+    <div class="nb-txt">Recursos</div>
+  </button>
+  <button class="nb-item" id="nb-eu">
+    <div class="nb-ico">
+      {% if usuario.foto %}<img src="{{ usuario.foto }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover" alt="">{% else %}🙏{% endif %}
+    </div>
+    <div class="nb-txt">Eu</div>
+  </button>
 </div>
 
 <!-- Sidebar -->
@@ -326,28 +507,112 @@ let claro = localStorage.getItem('modo') === 'claro';
 let chatAtual = null, mensagens = [], carregando = false;
 let novDias = [], novDia = 0;
 let arquivoAnexo = null;
+let emChat = false;
 
 // Init
 aplicarModo();
 [IMG_ESC, IMG_CLA].forEach(s=>{const i=new Image();i.src=s;});
-const primeiroChat = document.querySelector('.ci');
-if(primeiroChat) abrirChat(primeiroChat.id.replace('ci-',''), primeiroChat);
+carregarHome();
 
-function aplicarModo() {
-  const body=document.getElementById('body'), f=document.getElementById('fundo'), b=document.getElementById('btnModo');
+// ── MODO ──
+function aplicarModo(){
+  const body=document.getElementById('body'),f=document.getElementById('fundo'),b=document.getElementById('btnModo');
   if(claro){body.classList.add('claro');f.style.backgroundImage=`url('${IMG_CLA}')`;if(b)b.textContent='🌙 {{ T.modo_escuro }}';}
   else{body.classList.remove('claro');f.style.backgroundImage=`url('${IMG_ESC}')`;if(b)b.textContent='☀️ {{ T.modo_claro }}';}
+  // banner usa mesma imagem
+  const bb=document.getElementById('bannerBg');
+  if(bb)bb.style.backgroundImage=claro?`url('${IMG_CLA}')`:`url('${IMG_ESC}')`;
 }
 function toggleModo(){claro=!claro;localStorage.setItem('modo',claro?'claro':'escuro');aplicarModo();}
 
+// ── NAVEGAÇÃO ──
+function irParaInicio(){
+  emChat=false;
+  document.getElementById('homeView').style.display='flex';
+  document.getElementById('chatView').style.display='none';
+  document.getElementById('inpWrap').style.display='none';
+  setNbAtivo('nb-inicio');
+}
+function irParaChat(){
+  emChat=true;
+  document.getElementById('homeView').style.display='none';
+  const cv=document.getElementById('chatView');
+  cv.style.display='flex';cv.style.flexDirection='column';cv.style.flex='1';
+  document.getElementById('inpWrap').style.display='block';
+  setNbAtivo('nb-chat');
+  // se não tem chat aberto, abre o primeiro ou cria novo
+  if(!chatAtual){
+    const primeiro=document.querySelector('.ci');
+    if(primeiro) abrirChat(primeiro.id.replace('ci-',''),primeiro);
+    else novoChat();
+  }
+  setTimeout(()=>{
+    const area=document.getElementById('chatArea');
+    area.scrollTop=area.scrollHeight;
+    document.getElementById('inputMsg').focus();
+  },100);
+}
+function setNbAtivo(id){
+  document.querySelectorAll('.nb-item').forEach(b=>b.classList.remove('ativo'));
+  const el=document.getElementById(id);
+  if(el)el.classList.add('ativo');
+}
+
+// ── HOME: carrega dados ──
+async function carregarHome(){
+  // Banner imagem
+  const bb=document.getElementById('bannerBg');
+  if(bb)bb.style.backgroundImage=claro?`url('${IMG_CLA}')`:`url('${IMG_ESC}')`;
+  // Santo do dia
+  try{
+    const r=await fetch('/api/santo-dia'),d=await r.json();
+    const el=document.getElementById('bannerSanto');
+    if(el&&d.santo)el.textContent='⭐ '+d.santo;
+  }catch(e){}
+  // Tempo litúrgico
+  try{
+    const r=await fetch('/api/calendario'),d=await r.json();
+    const el=document.getElementById('bannerTempoLiturgico');
+    if(el)el.textContent=d.tempo_liturgico+' · '+d.dia_semana+', '+d.hoje;
+  }catch(e){}
+  // Versículo do dia
+  carregarVersiculo();
+}
+
+const VERSICULOS=[
+  {ref:"Jo 3,16",txt:"Porque Deus amou o mundo de tal maneira que deu o seu Filho Unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."},
+  {ref:"Sl 23,1",txt:"O Senhor é o meu pastor, nada me faltará."},
+  {ref:"Fp 4,13",txt:"Posso tudo naquele que me fortalece."},
+  {ref:"Mt 11,28",txt:"Vinde a mim todos os que estais cansados e oprimidos, e eu vos aliviarei."},
+  {ref:"Rm 8,28",txt:"Sabemos que tudo concorre para o bem daqueles que amam a Deus."},
+  {ref:"1Jo 4,7",txt:"Caríssimos, amemo-nos uns aos outros, porque o amor vem de Deus."},
+  {ref:"Is 41,10",txt:"Não temas, porque eu estou contigo; não te assombres, porque eu sou o teu Deus."},
+  {ref:"Sl 46,2",txt:"Deus é o nosso refúgio e fortaleza, socorro bem presente nas tribulações."},
+];
+function carregarVersiculo(){
+  const idx=new Date().getDate()%VERSICULOS.length;
+  const v=VERSICULOS[idx];
+  const ref=document.getElementById('versRef'),txt=document.getElementById('versTxt');
+  if(ref)ref.textContent=v.ref;
+  if(txt)txt.textContent='"'+v.txt+'"';
+}
+function compartilharVersiculo(){
+  const idx=new Date().getDate()%VERSICULOS.length;
+  const v=VERSICULOS[idx];
+  if(navigator.share)navigator.share({text:`"${v.txt}" — ${v.ref}\n\nVirtual Catholics`});
+  else if(navigator.clipboard)navigator.clipboard.writeText(`"${v.txt}" — ${v.ref}`);
+}
+
+// ── SIDEBAR ──
 function abrirSB(){document.getElementById('sidebar').classList.add('aberto');document.getElementById('overlay').classList.add('aberto');}
 function fecharSB(){document.getElementById('sidebar').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
 function fecharPainel(){document.getElementById('painel').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
 function fecharTudo(){fecharSB();fecharPainel();}
 
-async function abrirPainel(tipo) {
+// ── PAINEL ──
+async function abrirPainel(tipo){
   fecharSB();
-  const pan=document.getElementById('painel'), body=document.getElementById('panBody'), nav=document.getElementById('panNav');
+  const pan=document.getElementById('painel'),body=document.getElementById('panBody'),nav=document.getElementById('panNav');
   nav.classList.remove('show');
   pan.classList.add('aberto');
   document.getElementById('overlay').classList.add('aberto');
@@ -357,21 +622,8 @@ async function abrirPainel(tipo) {
     const r=await fetch('/api/santo-dia'),d=await r.json();
     if(d.santo){
       const nome=d.santo;
-      body.innerHTML=`
-        <div style="text-align:center;padding:20px 10px 16px">
-          <div style="font-size:42px;margin-bottom:8px">⭐</div>
-          <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div>
-          <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold2);margin-bottom:14px;line-height:1.3">${nome}</div>
-          <div style="font-size:15px;font-style:italic;color:rgba(240,230,208,.75);line-height:1.7;padding:0 8px">
-            Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏
-          </div>
-        </div>
-        <div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\\'")}')">
-          ✨ Perguntar à IA sobre ${nome}
-        </div>`;
-    } else {
-      body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0">Nenhum santo registrado para hoje.</div>';
-    }
+      body.innerHTML=`<div style="text-align:center;padding:20px 10px 16px"><div style="font-size:42px;margin-bottom:8px">⭐</div><div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div><div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold2);margin-bottom:14px;line-height:1.3">${nome}</div><div style="font-size:15px;font-style:italic;color:rgba(240,230,208,.75);line-height:1.7;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏</div></div><div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\\'")}')">✨ Perguntar à IA sobre ${nome}</div>`;
+    }else{body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0">Nenhum santo registrado para hoje.</div>';}
     return;
   }
   if(tipo==='calendario'){
@@ -447,7 +699,6 @@ async function abrirPainel(tipo) {
     body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua doação mantém este ministério digital.</small>\n\n<b style="color:var(--gold)">📱 Pix — escaneie o QR Code:</b></div><div style="text-align:center;padding:10px"><img src="${d.pix_qr}" style="border-radius:10px;border:2px solid var(--gold);width:160px" alt="Pix QR"></div><div class="pt" style="text-align:center;opacity:.6"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
     return;
   }
-  // Genérico
   document.getElementById('panTitulo').textContent=tipo.replace('_',' ').toUpperCase();
   body.innerHTML='<div class="pt">Carregando...</div>';
   const r=await fetch(`/api/dados/${tipo}`),lista=await r.json();
@@ -459,18 +710,15 @@ async function abrirItem(tipo,nome){
   const body=document.getElementById('panBody'),nav=document.getElementById('panNav');
   document.getElementById('panTitulo').textContent=nome.substring(0,30).toUpperCase();
   const r=await fetch(`/api/dados/${tipo}?nome=${encodeURIComponent(nome)}`),d=await r.json();
-  const c=d.conteudo; nav.classList.remove('show');
+  const c=d.conteudo;nav.classList.remove('show');
   if(tipo==='novenas'&&Array.isArray(c)){novDias=c;novDia=0;mostrarDia();nav.classList.add('show');return;}
   body.innerHTML='';
   const back=document.createElement('div');back.className='pi';back.textContent='← Voltar';back.onclick=()=>abrirPainel(tipo);body.appendChild(back);
-  if(Array.isArray(c)){
-    c.forEach(item=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:10px';
-      if(Array.isArray(item))el.innerHTML=`<b>${item[0]}</b>\n\n${item[1]}`;else el.textContent=item;body.appendChild(el);});
-  } else {const el=document.createElement('div');el.className='pt';el.textContent=String(c);body.appendChild(el);}
+  if(Array.isArray(c)){c.forEach(item=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:10px';if(Array.isArray(item))el.innerHTML=`<b>${item[0]}</b>\n\n${item[1]}`;else el.textContent=item;body.appendChild(el);});}
+  else{const el=document.createElement('div');el.className='pt';el.textContent=String(c);body.appendChild(el);}
 }
 function mostrarDia(){const b=document.getElementById('panBody');document.getElementById('navInfo').textContent=`Dia ${novDia+1}/${novDias.length}`;b.innerHTML=`<div class="pt"><b style="color:var(--gold)">Dia ${novDia+1}</b>\n\n${novDias[novDia]}</div>`;}
 function navNov(d){novDia=Math.max(0,Math.min(novDias.length-1,novDia+d));mostrarDia();}
-
 async function abrirLivro(l){
   const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=l.abrev.toUpperCase();
   const r=await fetch(`/api/biblia/capitulos/${l.id}`),d=await r.json();
@@ -517,39 +765,37 @@ async function abrirPilar(pilar){
   if(Array.isArray(d.conteudo))d.conteudo.forEach(([num,txt])=>{const el=document.createElement('div');el.className='pt';el.innerHTML=`<b style="color:var(--gold)">📜 ${num}</b>\n${txt}`;el.style.cssText='border-left:2px solid rgba(200,160,80,.35);padding-left:10px;margin-bottom:12px';body.appendChild(el);});
 }
 async function comentarioLiturgia(){
-  fecharPainel();await novoChat();
-  const hoje=new Date().toLocaleDateString('pt-BR');
+  fecharPainel();irParaChat();await novoChat();
   const inp=document.getElementById('inputMsg');
-  inp.value=`Comente a liturgia do dia de hoje (${hoje}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
+  inp.value=`Comente a liturgia do dia de hoje (${new Date().toLocaleDateString('pt-BR')}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
   autoResize(inp);inp.focus();
 }
 async function perguntarSanto(nome){
-  fecharPainel();await novoChat();
+  fecharPainel();irParaChat();await novoChat();
   const inp=document.getElementById('inputMsg');
   inp.value=`Me fale sobre ${nome} — quem foi, sua vida, sua espiritualidade e o que podemos aprender com este(a) santo(a).`;
   autoResize(inp);inp.focus();
 }
 
-// CHAT
+// ── CHAT ──
 async function novoChat(){
   fecharSB();chatAtual=null;mensagens=[];
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
-  document.getElementById('chatArea').innerHTML=`<div class="welcome"><div class="wc-cross">✝</div><div class="wc-title">Nova conversa 🙏</div><div class="wc-sub">Como posso te ajudar?</div></div>`;
+  document.getElementById('chatArea').innerHTML=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:30px 20px;min-height:55vh"><div style="font-size:30px;color:var(--gold);filter:drop-shadow(0 0 12px rgba(200,160,80,.5))">✝</div><div style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);letter-spacing:2px">Nova conversa 🙏</div><div style="font-size:17px;color:rgba(240,230,208,.9);font-style:italic;max-width:280px;line-height:1.7">Como posso te ajudar?</div></div>`;
 }
 async function abrirChat(id,el){
-  fecharSB();chatAtual=id;
+  fecharSB();irParaChat();chatAtual=id;
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
   if(el)el.classList.add('ativo');
   const r=await fetch(`/api/chat/${id}`),d=await r.json();
   mensagens=d.historico||[];
   const area=document.getElementById('chatArea');area.innerHTML='';
-  if(!mensagens.length)area.innerHTML='<div class="welcome"><div class="wc-cross">✝</div><div class="wc-title">Nova conversa 🙏</div></div>';
+  if(!mensagens.length)area.innerHTML='<div style="padding:20px;text-align:center;font-style:italic;color:var(--text2)">Nova conversa</div>';
   else mensagens.forEach(m=>addMsg(m.role,m.content));
   area.scrollTop=area.scrollHeight;
 }
 function addMsg(role,txt){
   const area=document.getElementById('chatArea');
-  const w=document.getElementById('welcome');if(w)w.remove();
   const div=document.createElement('div');div.className=`msg ${role==='user'?'mu':'mb'}`;
   if(role!=='user'){const a=document.createElement('div');a.className='mb-autor';a.textContent='✝ VIRTUAL CATHOLICS';div.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;div.appendChild(t);
@@ -559,7 +805,7 @@ function addMsg(role,txt){
 async function enviarMsg(){
   if(carregando)return;
   const inp=document.getElementById('inputMsg'),txt=inp.value.trim();
-  if(!txt && !arquivoAnexo)return;
+  if(!txt&&!arquivoAnexo)return;
   inp.value='';autoResize(inp);
   if(!chatAtual){
     const r=await fetch('/api/novo-chat',{method:'POST'}),d=await r.json();
@@ -577,14 +823,9 @@ async function enviarMsg(){
   try{
     let r;
     if(arquivoAnexo){
-      // Multipart — arquivo vai como stream, sem base64
-      const fd=new FormData();
-      fd.append('mensagens',JSON.stringify(mensagens));
-      fd.append('chat_id',chatAtual);
-      fd.append('arquivo',arquivoAnexo.file);
-      fd.append('tipo_arquivo',arquivoAnexo.tipo);
+      const fd=new FormData();fd.append('mensagens',JSON.stringify(mensagens));fd.append('chat_id',chatAtual);fd.append('arquivo',arquivoAnexo.file);fd.append('tipo_arquivo',arquivoAnexo.tipo);
       r=await fetch('/api/chat',{method:'POST',body:fd});
-    } else {
+    }else{
       r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
     }
     const d=await r.json();typ.remove();
@@ -595,10 +836,8 @@ async function enviarMsg(){
 }
 function selecionarArquivo(input){
   const file=input.files[0];if(!file)return;
-  const isPDF=file.type==='application/pdf';
-  const isImg=file.type.startsWith('image/');
+  const isPDF=file.type==='application/pdf',isImg=file.type.startsWith('image/');
   if(!isPDF&&!isImg){alert('Apenas imagens e PDFs são permitidos.');return;}
-  // Limita tamanho: imagem 4MB, PDF 8MB
   const maxMB=isPDF?8:4;
   if(file.size>maxMB*1024*1024){alert(`Arquivo muito grande. Máximo ${maxMB}MB.`);return;}
   arquivoAnexo={tipo:isPDF?'pdf':'imagem',file};
@@ -609,19 +848,19 @@ function selecionarArquivo(input){
 }
 function removerAnexo(){
   arquivoAnexo=null;
-  const p=document.getElementById('previewAnexo');
-  if(p)p.classList.remove('show');
+  const p=document.getElementById('previewAnexo');if(p)p.classList.remove('show');
 }
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
-// Teclado mobile — sobe o input quando teclado abre
+// Teclado mobile
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.querySelector('.inp-wrap');
+    if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.paddingBottom=diff>50?`${diff+8}px`:'12px';
+    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb-h'))}px`:'var(--nb-h)';
   });
 }
 </script>
