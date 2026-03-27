@@ -2,488 +2,601 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Virtual Catholics</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
-  --gold:#c8a050;--gold2:#f5d78e;--gold3:#8b6820;
-  --bg:#0a0600;--text:#faf6ef;--text2:rgba(250,246,239,.6);
-  --bord:rgba(200,160,80,.15);--bord2:rgba(200,160,80,.3);
-  --nb-h:62px;
+  --bg:#09070d;
+  --bg2:#111018;
+  --card:#16131f;
+  --gold:#c8a04a;
+  --gold2:#e8cc88;
+  --gold3:#7a5c1e;
+  --text:#f0ece4;
+  --text2:rgba(240,236,228,.55);
+  --bord:rgba(200,160,74,.14);
+  --bord2:rgba(200,160,74,.32);
+  --nb:58px;
+  --hdr:54px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-direction:column;}
-
-/* FUNDO */
-.fundo{position:fixed;inset:0;z-index:0;background-size:cover;
-  background-position:center;background-repeat:no-repeat;
+body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:column;}
 
 /* ── HEADER ── */
-.hdr{display:flex;align-items:center;
-  padding:10px 14px;background:rgba(10,6,0,.97);
-  border-bottom:1px solid var(--bord);flex-shrink:0;z-index:10;gap:8px;}
-.btn-hbg{background:transparent;border:1px solid var(--bord2);border-radius:6px;
-  color:var(--gold);width:38px;height:38px;font-size:20px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hdr-center{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;min-width:0;}
-.hdr-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);white-space:nowrap;}
-.hdr-right{display:flex;gap:6px;flex-shrink:0;}
-.btn-hdr-ico{background:transparent;border:1px solid var(--bord2);border-radius:50%;
-  color:var(--gold);width:36px;height:36px;font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;}
+.hdr{
+  height:var(--hdr);flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;
+  background:rgba(9,7,13,.97);
+  border-bottom:1px solid var(--bord);
+  z-index:20;
+}
+.hdr-logo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);}
+.hdr-btns{display:flex;gap:8px;}
+.hdr-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid var(--bord2);
+  color:var(--gold);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.hdr-btn:hover{background:rgba(200,160,74,.1);}
+.hdr-menu{width:34px;height:34px;border-radius:8px;background:transparent;border:1px solid var(--bord2);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-/* ── MAIN SCROLL AREA ── */
-.main{flex:1;overflow-y:auto;position:relative;z-index:2;
-  display:flex;flex-direction:column;padding-bottom:var(--nb-h);}
-.main::-webkit-scrollbar{width:3px;}
-.main::-webkit-scrollbar-thumb{background:var(--bord2);}
+/* ── MAIN ── */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
 
 /* ── HOME VIEW ── */
-#homeView{display:flex;flex-direction:column;}
+#homeView{
+  flex:1;overflow-y:auto;display:flex;flex-direction:column;
+  padding-bottom:var(--nb);
+}
+#homeView::-webkit-scrollbar{width:2px;}
+#homeView::-webkit-scrollbar-thumb{background:var(--bord2);}
 
-.hero{position:relative;overflow:hidden;flex-shrink:0;min-height:190px;background:linear-gradient(135deg,#0e0800 0%,#1a0f00 100%);}
-.hero-img{width:100%;height:190px;object-fit:cover;object-position:center top;display:block;opacity:0;transition:opacity .6s;position:absolute;inset:0;}
-.hero-img.loaded{opacity:.55;}
-.hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,6,0,.2) 0%,rgba(10,6,0,.88) 100%);}
-.hero-body{position:absolute;bottom:0;left:0;right:0;padding:12px 14px 16px;display:flex;align-items:flex-end;gap:12px;}
-.hero-av{width:52px;height:52px;border-radius:50%;border:2px solid rgba(200,160,80,.55);background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;cursor:pointer;flex-shrink:0;position:relative;}
+/* Hero */
+.hero{
+  position:relative;height:220px;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(160deg,#1a1028 0%,#0d0a18 100%);
+}
+.hero-img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  opacity:0;transition:opacity .8s ease;
+}
+.hero-img.on{opacity:.45;}
+.hero-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(9,7,13,.1) 0%,rgba(9,7,13,.95) 100%);
+}
+.hero-content{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:14px 16px 18px;
+  display:flex;align-items:flex-end;gap:12px;
+}
+.hero-av{
+  width:50px;height:50px;border-radius:50%;flex-shrink:0;
+  border:2px solid rgba(200,160,74,.5);
+  background:rgba(200,160,74,.12);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer;position:relative;
+}
 .hero-av img{width:100%;height:100%;object-fit:cover;}
-.hero-edit{position:absolute;bottom:0;right:0;width:17px;height:17px;border-radius:50%;background:var(--gold);color:#0a0600;font-size:8px;display:flex;align-items:center;justify-content:center;border:1.5px solid #0a0600;}
+.hero-av-edit{
+  position:absolute;bottom:0;right:0;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--gold);color:#09070d;
+  font-size:7px;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid var(--bg);
+}
 .hero-info{flex:1;min-width:0;}
-.hero-tag{display:inline-block;background:rgba(0,0,0,.55);border:1px solid rgba(200,160,80,.4);border-radius:20px;padding:2px 9px;font-size:9px;font-family:'Cinzel',serif;letter-spacing:1px;color:var(--gold);margin-bottom:4px;}
-.hero-bem{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.2px;color:var(--gold2);text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:2px;}
-.hero-sub{font-size:12px;font-style:italic;color:rgba(240,230,208,.6);text-shadow:0 1px 6px rgba(0,0,0,.9);}
-.hero-bib-btn{flex-shrink:0;background:rgba(0,0,0,.5);border:1px solid rgba(200,160,80,.35);border-radius:8px;padding:7px 9px;color:var(--gold);font-size:10px;cursor:pointer;text-align:center;line-height:1.4;min-width:46px;font-family:'Cinzel',serif;}
-.hero-bib-btn:hover{border-color:var(--gold);}
-/* Modal perfil */
-.modal-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);align-items:flex-end;justify-content:center;}
-.modal-bg.aberto{display:flex;}
-.modal-box{background:#0e0a04;border:1px solid rgba(200,160,80,.28);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:480px;}
-.modal-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:16px;text-align:center;}
-.modal-av{width:68px;height:68px;border-radius:50%;border:2px solid rgba(200,160,80,.5);background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;margin:0 auto 8px;cursor:pointer;}
-.modal-av img{width:100%;height:100%;object-fit:cover;}
-.modal-hint{font-size:11px;font-style:italic;color:rgba(200,160,80,.5);text-align:center;margin-bottom:14px;}
-.modal-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(200,160,80,.6);margin-bottom:5px;display:block;}
-.modal-inp{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.22);border-radius:4px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 12px;outline:none;margin-bottom:14px;}
-.modal-inp:focus{border-color:rgba(200,160,80,.5);}
-.modal-row{display:flex;gap:8px;}
-.btn-mc{flex:1;padding:11px;background:transparent;border:1px solid rgba(200,160,80,.22);border-radius:4px;color:rgba(200,160,80,.6);font-size:13px;cursor:pointer;}
-.btn-ms{flex:2;padding:11px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;}
-/* Biblioteca de santos */
-.bib-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);flex-direction:column;}
-.bib-modal.aberto{display:flex;}
-.bib-hd{padding:14px 16px;border-bottom:1px solid rgba(200,160,80,.2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.bib-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
-.bib-close{background:transparent;border:none;color:rgba(240,230,208,.6);font-size:22px;cursor:pointer;}
-.bib-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
-.bib-item{border-radius:10px;overflow:hidden;border:2px solid rgba(200,160,80,.15);cursor:pointer;transition:all .2s;}
-.bib-item:hover,.bib-item.sel{border-color:var(--gold);}
-.bib-item img{width:100%;height:120px;object-fit:cover;display:block;}
-.bib-nome{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.8px;color:var(--gold2);padding:6px 8px;background:rgba(10,6,0,.92);text-align:center;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(200,160,74,.35);
+  border-radius:20px;padding:2px 10px;
+  font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:1px;
+  color:var(--gold);margin-bottom:4px;
+}
+.hero-nome{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1px;color:var(--gold2);margin-bottom:2px;}
+.hero-sub{font-size:12px;font-style:italic;color:var(--text2);}
+.hero-sant-btn{
+  flex-shrink:0;
+  background:rgba(0,0,0,.5);border:1px solid rgba(200,160,74,.3);
+  border-radius:8px;padding:8px 10px;
+  color:var(--gold);font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:.5px;text-align:center;line-height:1.5;
+  cursor:pointer;min-width:44px;
+}
+.hero-sant-btn:hover{border-color:var(--gold);}
 
-/* Botão IA rápido */
-.btn-ia-rapido{margin:14px 14px 0;padding:14px 16px;
-  background:linear-gradient(135deg,rgba(200,160,80,.18),rgba(160,110,30,.12));
-  border:1px solid rgba(200,160,80,.4);border-radius:14px;
-  display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
-.btn-ia-rapido:hover{background:rgba(200,160,80,.25);border-color:var(--gold);}
-.ia-ico{font-size:24px;flex-shrink:0;}
-.ia-txt{flex:1;}
-.ia-titulo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold2);margin-bottom:2px;}
-.ia-sub{font-size:13px;font-style:italic;color:rgba(240,230,208,.6);}
-.ia-seta{font-size:20px;color:var(--gold);opacity:.6;}
+/* Ações rápidas */
+.quick-wrap{padding:16px 14px 0;display:flex;gap:8px;overflow-x:auto;}
+.quick-wrap::-webkit-scrollbar{display:none;}
+.quick-btn{
+  flex-shrink:0;display:flex;align-items:center;gap:7px;
+  background:var(--card);border:1px solid var(--bord2);
+  border-radius:22px;padding:9px 14px;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;
+  color:var(--gold2);cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.quick-btn:hover{background:rgba(200,160,74,.12);border-color:var(--gold);}
+.quick-btn span{font-size:14px;}
 
-/* Grid atalhos */
-.grid-titulo{padding:16px 14px 8px;font-family:'Cinzel',serif;font-size:9px;
-  letter-spacing:3px;color:rgba(200,160,80,.5);}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 4px;}
-.grid-item{background:rgba(255,255,255,.04);border:1px solid var(--bord);
-  border-radius:12px;padding:12px 6px 10px;text-align:center;cursor:pointer;
-  transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px;}
-.grid-item:hover,.grid-item:active{background:rgba(200,160,80,.12);border-color:var(--bord2);}
-.grid-ico{font-size:22px;}
-.grid-nome{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.8px;
-  color:rgba(240,230,208,.7);line-height:1.3;}
+/* Grid recursos */
+.section-label{
+  padding:18px 14px 8px;
+  font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:3px;color:rgba(200,160,74,.45);
+}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 14px;}
+.gi{
+  background:var(--card);border:1px solid var(--bord);
+  border-radius:12px;padding:12px 4px 10px;
+  text-align:center;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  transition:all .2s;
+}
+.gi:hover,.gi:active{background:rgba(200,160,74,.1);border-color:var(--bord2);}
+.gi-ico{font-size:20px;line-height:1;}
+.gi-txt{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.6px;color:var(--text2);line-height:1.3;}
 
-/* Versículo do dia */
-.versiculo-wrap{margin:16px 14px;background:rgba(255,255,255,.03);
-  border:1px solid var(--bord);border-radius:14px;padding:16px;text-align:center;}
-.vers-ref{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
-  color:rgba(200,160,80,.6);margin-bottom:8px;}
-.vers-txt{font-size:17px;font-style:italic;color:rgba(240,230,208,.88);
-  line-height:1.75;margin-bottom:12px;}
-.vers-share{background:transparent;border:none;color:rgba(200,160,80,.45);
-  font-size:20px;cursor:pointer;transition:color .2s;}
+/* Versículo */
+.vers-wrap{
+  margin:16px 14px;
+  background:var(--card);border:1px solid var(--bord);
+  border-radius:14px;padding:18px 16px;text-align:center;
+}
+.vers-ref{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2.5px;color:rgba(200,160,74,.55);margin-bottom:10px;}
+.vers-txt{font-size:16px;font-style:italic;color:rgba(240,236,228,.85);line-height:1.8;margin-bottom:12px;}
+.vers-share{background:transparent;border:none;color:rgba(200,160,74,.4);font-size:18px;cursor:pointer;}
 .vers-share:hover{color:var(--gold);}
 
-/* Santo do dia card (home) */
-.santo-card{margin:0 14px 16px;background:rgba(255,255,255,.03);
-  border:1px solid var(--bord);border-radius:14px;padding:14px 16px;
-  display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
-.santo-card:hover{border-color:var(--bord2);background:rgba(200,160,80,.07);}
-.santo-ico{font-size:28px;flex-shrink:0;}
-.santo-info{flex:1;min-width:0;}
-.santo-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;
-  color:rgba(200,160,80,.55);margin-bottom:3px;}
-.santo-nome{font-size:15px;color:var(--gold2);white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis;}
-.santo-seta{font-size:18px;color:var(--gold);opacity:.5;flex-shrink:0;}
-
 /* ── CHAT VIEW ── */
-#chatView{display:none;flex:1;flex-direction:column;}
-.chat-area{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
-.chat-area::-webkit-scrollbar{width:3px;}
+#chatView{
+  flex:1;display:none;flex-direction:column;
+  padding-bottom:calc(var(--nb) + 64px);
+}
+#chatView.on{display:flex;}
+.chat-area{
+  flex:1;overflow-y:auto;padding:14px 14px 6px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
-.msg{max-width:82%;padding:11px 13px;font-size:15px;line-height:1.7;border-radius:3px;}
-.mu{align-self:flex-end;background:rgba(200,160,80,.13);border:1px solid rgba(200,160,80,.22);color:var(--text);}
-.mb{align-self:flex-start;background:rgba(255,255,255,.04);border:1px solid var(--bord);color:rgba(250,246,239,.9);}
-.mb-autor{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:5px;}
-.typing{display:flex;gap:4px;padding:4px 0;}
-.typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:.4;animation:tp 1.2s ease-in-out infinite;}
-.typing span:nth-child(2){animation-delay:.2s;}
-.typing span:nth-child(3){animation-delay:.4s;}
-@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.8;transform:translateY(-4px)}}
 
-/* ── INPUT ── */
-.inp-wrap{padding:10px 14px;border-top:1px solid var(--bord);
-  display:flex;flex-direction:column;gap:5px;
-  position:fixed;bottom:var(--nb-h);left:0;right:0;
-  z-index:20;background:rgba(10,6,0,.92);flex-shrink:0;}
+/* Mensagens */
+.msg-row{display:flex;gap:8px;align-items:flex-end;}
+.msg-row.user{flex-direction:row-reverse;}
+.msg-av{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:rgba(200,160,74,.15);border:1px solid var(--bord2);
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  overflow:hidden;
+}
+.msg-av img{width:100%;height:100%;object-fit:cover;}
+.msg-bubble{
+  max-width:78%;padding:11px 14px;
+  font-size:15px;line-height:1.75;border-radius:16px;
+  position:relative;
+}
+.msg-row.bot .msg-bubble{
+  background:var(--card);border:1px solid var(--bord);
+  color:var(--text);border-bottom-left-radius:4px;
+}
+.msg-row.user .msg-bubble{
+  background:linear-gradient(135deg,rgba(200,160,74,.22),rgba(140,100,30,.18));
+  border:1px solid rgba(200,160,74,.28);
+  color:var(--text);border-bottom-right-radius:4px;
+}
+.msg-autor{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:1.5px;
+  color:var(--gold);margin-bottom:5px;opacity:.8;
+}
+.typing{display:flex;gap:4px;padding:2px 0;}
+.typing i{
+  width:6px;height:6px;background:var(--gold);
+  border-radius:50%;opacity:.35;
+  animation:tp 1.2s ease-in-out infinite;
+}
+.typing i:nth-child(2){animation-delay:.2s;}
+.typing i:nth-child(3){animation-delay:.4s;}
+@keyframes tp{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.75;transform:translateY(-4px)}}
+
+/* Chat vazio */
+.chat-empty{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:12px;padding:30px 24px;
+  min-height:50vh;
+}
+.chat-empty-ico{font-size:36px;color:var(--gold);filter:drop-shadow(0 0 16px rgba(200,160,74,.4));}
+.chat-empty-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold2);}
+.chat-empty-sub{font-size:14px;font-style:italic;color:var(--text2);max-width:240px;line-height:1.7;}
+
+/* Sugestões rápidas no chat vazio */
+.sugest-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px;}
+.sugest-btn{
+  background:var(--card);border:1px solid var(--bord2);
+  border-radius:20px;padding:8px 14px;
+  font-size:13px;color:var(--gold2);cursor:pointer;
+  transition:all .2s;font-style:italic;
+}
+.sugest-btn:hover{background:rgba(200,160,74,.12);}
+
+/* Input */
+.inp-wrap{
+  position:fixed;bottom:var(--nb);left:0;right:0;
+  padding:8px 12px 10px;
+  background:rgba(9,7,13,.96);
+  border-top:1px solid var(--bord);
+  z-index:20;display:none;
+}
+.inp-wrap.on{display:block;}
+.inp-anexo{
+  display:none;align-items:center;gap:8px;
+  padding:5px 10px;margin-bottom:6px;
+  background:rgba(200,160,74,.07);border:1px solid var(--bord);
+  border-radius:6px;font-size:12px;color:var(--gold2);
+}
+.inp-anexo.on{display:flex;}
 .inp-row{display:flex;gap:8px;align-items:flex-end;}
-textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--bord2);
-  border-radius:3px;padding:10px 12px;color:var(--text);
-  font-family:'Cormorant Garamond',serif;font-size:15px;
-  resize:none;outline:none;min-height:44px;max-height:110px;line-height:1.5;}
-textarea::placeholder{color:rgba(200,160,80,.25);}
-textarea:focus{border-color:rgba(200,160,80,.5);}
-.btn-env{width:44px;height:44px;flex-shrink:0;
+.inp-attach{
+  width:36px;height:36px;flex-shrink:0;
+  background:transparent;border:1px solid var(--bord2);
+  border-radius:8px;color:var(--gold);font-size:16px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.inp-attach:hover{background:rgba(200,160,74,.08);}
+textarea#msgInput{
+  flex:1;background:rgba(255,255,255,.04);
+  border:1px solid var(--bord2);border-radius:10px;
+  color:var(--text);font-family:'Lora',serif;font-size:15px;
+  padding:9px 12px;resize:none;outline:none;
+  min-height:38px;max-height:110px;line-height:1.5;
+}
+textarea#msgInput::placeholder{color:rgba(200,160,74,.22);}
+textarea#msgInput:focus{border-color:rgba(200,160,74,.5);}
+.inp-send{
+  width:38px;height:38px;flex-shrink:0;
   background:linear-gradient(135deg,var(--gold3),var(--gold));
-  border:none;border-radius:3px;color:var(--bg);font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;}
-.btn-env:disabled{opacity:.4;cursor:not-allowed;}
-.btn-anexo{width:38px;height:38px;flex-shrink:0;background:transparent;
-  border:1px solid var(--bord2);border-radius:3px;color:var(--gold);
-  font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.btn-anexo:hover{background:rgba(200,160,80,.08);}
-.preview-anexo{display:none;align-items:center;gap:8px;padding:5px 10px;
-  background:rgba(200,160,80,.08);border:1px solid var(--bord);border-radius:6px;
-  font-size:13px;color:var(--gold2);}
-.preview-anexo.show{display:flex;}
-.preview-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-remover{background:transparent;border:none;color:rgba(200,160,80,.5);font-size:16px;cursor:pointer;padding:0 4px;}
+  border:none;border-radius:10px;
+  color:#09070d;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.inp-send:disabled{opacity:.35;cursor:not-allowed;}
 
-/* ── NAVBAR BOTTOM ── */
-.navbar{position:fixed;bottom:0;left:0;right:0;height:var(--nb-h);
-  background:rgba(8,4,0,.98);border-top:1px solid var(--bord);
-  display:flex;align-items:stretch;z-index:30;}
-.nb-item{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:3px;cursor:pointer;transition:all .2s;
-  border:none;background:transparent;color:rgba(200,160,80,.45);}
-.nb-item.ativo{color:var(--gold);}
+/* ── NAVBAR ── */
+.nb{
+  position:fixed;bottom:0;left:0;right:0;height:var(--nb);
+  background:rgba(9,7,13,.98);border-top:1px solid var(--bord);
+  display:flex;z-index:30;
+}
+.nb-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  cursor:pointer;background:transparent;border:none;
+  color:rgba(200,160,74,.38);transition:color .2s;
+}
+.nb-item.on{color:var(--gold);}
 .nb-item:hover{color:var(--gold2);}
-.nb-ico{font-size:20px;line-height:1;}
-.nb-txt{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;}
+.nb-ico{font-size:19px;line-height:1;}
+.nb-lbl{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.5px;}
 
-/* ── OVERLAY / SIDEBAR / PAINEL ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;}
-.overlay.aberto{display:block;}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:82vw;max-width:300px;
-  background:rgba(12,5,0,.99);border-right:1px solid rgba(200,160,80,.28);
-  z-index:100;transform:translateX(-100%);transition:transform .25s ease;
-  display:flex;flex-direction:column;overflow:hidden;}
-.sidebar.aberto{transform:translateX(0);}
-.sb-head{padding:16px;border-bottom:1px solid rgba(200,160,80,.18);text-align:center;flex-shrink:0;}
-.sb-logo{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);}
-.sb-sub{font-size:9px;color:rgba(200,160,80,.45);letter-spacing:3px;margin-top:3px;}
-.sb-body{flex:1;overflow-y:auto;padding-bottom:10px;}
-.sb-sec{padding:10px 14px 4px;font-family:'Cinzel',serif;font-size:9px;
-  letter-spacing:2px;color:rgba(200,160,80,.5);margin-top:6px;}
-.btn-novo{margin:12px 12px 6px;padding:10px;
-  background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.28);
-  border-radius:8px;color:var(--gold2);font-family:'Cinzel',serif;
-  font-size:11px;letter-spacing:2px;cursor:pointer;text-align:center;}
-.ci{padding:10px 14px;font-size:15px;color:rgba(240,230,208,.88);cursor:pointer;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  margin:2px 10px;border-radius:8px;border:1px solid transparent;transition:all .15s;}
-.ci:hover{background:rgba(200,160,80,.1);color:var(--gold2);border-color:rgba(200,160,80,.22);}
-.ci.ativo{background:rgba(200,160,80,.14);color:var(--gold2);border-color:rgba(200,160,80,.32);}
-.mi{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:15px;
-  color:rgba(250,246,239,.95);cursor:pointer;margin:1px 8px;border-radius:8px;}
-.mi:hover{background:rgba(200,160,80,.08);color:var(--gold2);}
-.sb-foot{padding:11px;border-top:1px solid var(--bord);flex-shrink:0;}
+/* ── SIDEBAR ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;}
+.overlay.on{display:block;}
+.sb{
+  position:fixed;left:0;top:0;bottom:0;
+  width:min(82vw,290px);
+  background:#0e0b17;border-right:1px solid rgba(200,160,74,.22);
+  z-index:100;transform:translateX(-100%);
+  transition:transform .24s ease;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sb.on{transform:translateX(0);}
+.sb-head{
+  padding:18px 16px;border-bottom:1px solid rgba(200,160,74,.15);
+  text-align:center;flex-shrink:0;
+}
+.sb-logo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);}
+.sb-sub{font-size:9px;color:rgba(200,160,74,.4);letter-spacing:2px;margin-top:3px;}
+.sb-body{flex:1;overflow-y:auto;padding-bottom:8px;}
+.sb-body::-webkit-scrollbar{width:2px;}
+.sb-sec{
+  padding:12px 14px 4px;
+  font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:2.5px;color:rgba(200,160,74,.4);margin-top:4px;
+}
+.sb-btn-novo{
+  margin:12px 12px 6px;padding:10px;
+  background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.25);
+  border-radius:8px;color:var(--gold2);
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;
+  cursor:pointer;text-align:center;
+}
+.sb-btn-novo:hover{background:rgba(200,160,74,.18);}
+.ci{
+  padding:10px 14px;font-size:14px;color:rgba(240,236,228,.8);
+  cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin:2px 8px;border-radius:8px;border:1px solid transparent;
+  transition:all .15s;
+}
+.ci:hover{background:rgba(200,160,74,.08);color:var(--gold2);}
+.ci.on{background:rgba(200,160,74,.12);color:var(--gold2);border-color:rgba(200,160,74,.25);}
+.sb-mi{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 12px;font-size:14px;
+  color:rgba(240,236,228,.85);cursor:pointer;
+  margin:1px 8px;border-radius:8px;
+}
+.sb-mi:hover{background:rgba(200,160,74,.07);color:var(--gold2);}
+.sb-foot{padding:10px 12px;border-top:1px solid var(--bord);flex-shrink:0;}
 .lang-row{display:flex;gap:3px;margin-bottom:8px;}
-.lang-btn{flex:1;padding:4px;background:transparent;border:1px solid var(--bord);
-  border-radius:2px;color:rgba(200,160,80,.4);font-size:10px;cursor:pointer;text-align:center;}
-.lang-btn.ativo,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+.lang-btn{
+  flex:1;padding:5px;background:transparent;
+  border:1px solid var(--bord);border-radius:3px;
+  color:rgba(200,160,74,.38);font-size:10px;cursor:pointer;text-align:center;
+}
+.lang-btn.on,.lang-btn:hover{border-color:var(--gold);color:var(--gold);}
 .user-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.user-foto{width:28px;height:28px;border-radius:50%;border:1px solid var(--bord2);
-  background:rgba(200,160,80,.1);display:flex;align-items:center;justify-content:center;
-  font-size:12px;flex-shrink:0;overflow:hidden;}
-.user-foto img{width:100%;height:100%;object-fit:cover;}
+.user-av{
+  width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--bord2);
+  background:rgba(200,160,74,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;overflow:hidden;flex-shrink:0;
+}
+.user-av img{width:100%;height:100%;object-fit:cover;}
 .user-nome{font-size:13px;color:var(--gold2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.btn-sair{width:100%;padding:7px;background:transparent;border:1px solid var(--bord);
-  border-radius:2px;color:rgba(200,160,80,.4);font-size:12px;cursor:pointer;letter-spacing:1px;}
+.btn-sair{
+  width:100%;padding:8px;
+  background:transparent;border:1px solid var(--bord);
+  border-radius:3px;color:rgba(200,160,74,.38);
+  font-size:11px;cursor:pointer;letter-spacing:1px;
+}
+.btn-sair:hover{color:var(--gold);border-color:var(--gold);}
 
-/* PAINEL */
-.painel{position:fixed;inset:0;background:rgba(10,6,0,.99);z-index:110;
-  transform:translateX(100%);transition:transform .24s ease;
-  display:flex;flex-direction:column;}
-.painel.aberto{transform:translateX(0);}
-.pan-head{padding:13px 15px;border-bottom:1px solid var(--bord);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.pan-titulo{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);}
-.btn-xpan{background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;}
-.pan-body{flex:1;overflow-y:auto;padding:12px;}
+/* ── PAINEL ── */
+.pan{
+  position:fixed;inset:0;
+  background:var(--bg);z-index:110;
+  transform:translateX(100%);transition:transform .22s ease;
+  display:flex;flex-direction:column;
+}
+.pan.on{transform:translateX(0);}
+.pan-hd{
+  padding:13px 15px;border-bottom:1px solid var(--bord);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.pan-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
+.pan-x{background:transparent;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;}
+.pan-body{flex:1;overflow-y:auto;padding:14px;}
+.pan-body::-webkit-scrollbar{width:2px;}
+.pan-body::-webkit-scrollbar-thumb{background:var(--bord2);}
 .pan-nav{display:none;flex-shrink:0;padding:10px 12px;border-top:1px solid var(--bord);gap:8px;}
-.pan-nav.show{display:flex;}
-.btn-nav{flex:1;padding:8px;background:rgba(200,160,80,.1);border:1px solid var(--bord2);
-  border-radius:2px;color:var(--gold2);font-size:12px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;}
-.pi{padding:11px 12px;border:1px solid var(--bord);border-radius:2px;
-  cursor:pointer;font-size:14px;color:var(--text2);margin-bottom:6px;line-height:1.5;}
-.pi:hover{border-color:var(--bord2);color:var(--gold2);background:rgba(200,160,80,.05);}
-.pt{font-size:17px;line-height:1.95;color:rgba(240,230,208,.93);white-space:pre-wrap;padding:6px 0;}
-.btn-ia{display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px;margin-top:8px;
-  background:linear-gradient(135deg,rgba(200,160,80,.16),rgba(160,110,30,.1));
-  border:1px solid rgba(200,160,80,.36);border-radius:10px;
-  color:var(--gold2);font-size:16px;cursor:pointer;transition:all .2s;text-align:center;}
-.btn-ia:hover{background:rgba(200,160,80,.22);border-color:var(--gold);}
+.pan-nav.on{display:flex;}
+.pan-nav-btn{
+  flex:1;padding:9px;
+  background:rgba(200,160,74,.08);border:1px solid var(--bord2);
+  border-radius:3px;color:var(--gold2);font-size:12px;
+  cursor:pointer;font-family:'Cinzel',serif;letter-spacing:1px;
+}
+.pi{
+  padding:11px 12px;border:1px solid var(--bord);border-radius:6px;
+  cursor:pointer;font-size:14px;color:var(--text2);margin-bottom:7px;line-height:1.5;
+}
+.pi:hover{border-color:var(--bord2);color:var(--gold2);background:rgba(200,160,74,.04);}
+.pt{font-size:16px;line-height:1.95;color:rgba(240,236,228,.9);white-space:pre-wrap;padding:4px 0;}
+.btn-ia{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;margin-top:10px;
+  background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.3);
+  border-radius:10px;color:var(--gold2);font-size:15px;cursor:pointer;
+}
+.btn-ia:hover{background:rgba(200,160,74,.18);}
 
+/* ── MODAIS ── */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:150;
+  background:rgba(0,0,0,.8);align-items:flex-end;justify-content:center;
+}
+.modal-bg.on{display:flex;}
+.modal-box{
+  background:#13101c;border:1px solid rgba(200,160,74,.25);
+  border-radius:18px 18px 0 0;padding:22px 18px 34px;
+  width:100%;max-width:480px;
+}
+.modal-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:18px;}
+.modal-av{
+  width:70px;height:70px;border-radius:50%;
+  border:2px solid rgba(200,160,74,.4);
+  background:rgba(200,160,74,.1);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 8px;cursor:pointer;
+}
+.modal-av img{width:100%;height:100%;object-fit:cover;}
+.modal-hint{font-size:11px;font-style:italic;color:rgba(200,160,74,.45);text-align:center;margin-bottom:16px;}
+.modal-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(200,160,74,.55);display:block;margin-bottom:5px;}
+.modal-inp{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,160,74,.2);border-radius:6px;
+  color:var(--text);font-family:'Lora',serif;font-size:15px;
+  padding:10px 12px;outline:none;margin-bottom:14px;
+}
+.modal-inp:focus{border-color:rgba(200,160,74,.5);}
+.modal-btns{display:flex;gap:8px;}
+.btn-mc{flex:1;padding:11px;background:transparent;border:1px solid rgba(200,160,74,.2);border-radius:6px;color:rgba(200,160,74,.55);font-size:13px;cursor:pointer;}
+.btn-ms{flex:2;padding:11px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:6px;color:#09070d;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;}
 
+/* Biblioteca de santos */
+.bib-modal{display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.95);flex-direction:column;}
+.bib-modal.on{display:flex;}
+.bib-hd{padding:14px 16px;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.bib-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
+.bib-x{background:transparent;border:none;color:var(--text2);font-size:22px;cursor:pointer;}
+.bib-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
+.bib-item{border-radius:10px;overflow:hidden;border:2px solid rgba(200,160,74,.15);cursor:pointer;transition:border-color .2s;}
+.bib-item:hover,.bib-item.sel{border-color:var(--gold);}
+.bib-item img{width:100%;height:130px;object-fit:cover;display:block;}
+.bib-nome{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.8px;color:var(--gold2);padding:7px 8px;background:rgba(9,7,13,.92);text-align:center;}
 </style>
 </head>
-<body id="body">
+<body>
 
 <div class="overlay" id="overlay" onclick="fecharTudo()"></div>
 
 <!-- Header -->
 <div class="hdr">
-  <button class="btn-hbg" onclick="abrirSB()">☰</button>
-  <div class="hdr-center">
-    <div class="hdr-title">✝ VIRTUAL CATHOLICS</div>
-  </div>
-  <div class="hdr-right">
-    <button class="btn-hdr-ico" onclick="irParaChat()">💬</button>
+  <button class="hdr-menu" onclick="abrirSB()">☰</button>
+  <div class="hdr-logo">✝ VIRTUAL CATHOLICS</div>
+  <div class="hdr-btns">
+    <button class="hdr-btn" onclick="irChat()">💬</button>
   </div>
 </div>
 
-<!-- Main scroll -->
-<div class="main" id="main">
+<!-- Main -->
+<div class="main">
 
-  <!-- HOME VIEW -->
+  <!-- HOME -->
   <div id="homeView">
 
     <!-- Hero -->
     <div class="hero">
       <img class="hero-img" id="heroImg" src="" alt="">
       <div class="hero-grad"></div>
-      <div class="hero-body">
+      <div class="hero-content">
         <div class="hero-av" onclick="abrirModalPerfil()" id="heroAv">
           {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
-          <div class="hero-edit">✏</div>
+          <div class="hero-av-edit">✏</div>
         </div>
         <div class="hero-info">
-          <div class="hero-tag" id="bannerSanto">⭐ Santo do Dia</div>
-          <div class="hero-bem">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
-          <div class="hero-sub" id="bannerTempoLiturgico">Carregando...</div>
+          <div class="hero-tag" id="heroSanto">⭐ Santo do Dia</div>
+          <div class="hero-nome">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
+          <div class="hero-sub" id="heroTempo">Carregando...</div>
         </div>
-        <button class="hero-bib-btn" onclick="abrirBiblioteca()">🖼<br>Santos</button>
+        <button class="hero-sant-btn" onclick="abrirBiblioteca()">🖼<br>Santos</button>
       </div>
     </div>
 
-    <!-- Modal perfil -->
-    <div class="modal-bg" id="modalPerfil">
-      <div class="modal-box">
-        <div class="modal-tit">✝ EDITAR PERFIL</div>
-        <div class="modal-av" onclick="document.getElementById('fotoInput').click()" id="modalAv">
-          {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
-        </div>
-        <div class="modal-hint">Toque para trocar a foto</div>
-        <input type="file" id="fotoInput" accept="image/*" style="display:none" onchange="prevFoto(this)">
-        <label class="modal-lbl">Nome exibido</label>
-        <input class="modal-inp" type="text" id="nomeInput" value="{{ usuario.nome }}">
-        <div class="modal-row">
-          <button class="btn-mc" onclick="fecharModalPerfil()">Cancelar</button>
-          <button class="btn-ms" onclick="salvarPerfil()">SALVAR</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Biblioteca de santos -->
-    <div class="bib-modal" id="bibModal">
-      <div class="bib-hd">
-        <div class="bib-tit">📸 BIBLIOTECA DE SANTOS</div>
-        <button class="bib-close" onclick="fecharBiblioteca()">✕</button>
-      </div>
-      <div class="bib-grid" id="bibGrid"></div>
-    </div>
-
-    <!-- Botão IA rápido -->
-    <div class="btn-ia-rapido" onclick="irParaChat()">
-      <div class="ia-ico">✝</div>
-      <div class="ia-txt">
-        <div class="ia-titulo">FALAR COM A IA</div>
-        <div class="ia-sub">Perguntar, orar, refletir...</div>
-      </div>
-      <div class="ia-seta">›</div>
+    <!-- Ações rápidas -->
+    <div class="quick-wrap">
+      <button class="quick-btn" onclick="acaoRapida('oracao')"><span>🙏</span> Oração</button>
+      <button class="quick-btn" onclick="acaoRapida('conselho')"><span>✝</span> Conselho</button>
+      <button class="quick-btn" onclick="acaoRapida('santo')"><span>⭐</span> Santo do dia</button>
+      <button class="quick-btn" onclick="acaoRapida('liturgia')"><span>📖</span> Liturgia</button>
     </div>
 
     <!-- Grid recursos -->
-    <div class="grid-titulo">RECURSOS</div>
+    <div class="section-label">RECURSOS</div>
     <div class="grid">
-      <div class="grid-item" onclick="abrirPainel('oracoes')">
-        <div class="grid-ico">🙏</div>
-        <div class="grid-nome">Orações</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('biblia')">
-        <div class="grid-ico">📜</div>
-        <div class="grid-nome">Bíblia</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('tercos')">
-        <div class="grid-ico">📿</div>
-        <div class="grid-nome">Terço</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('liturgia_dia')">
-        <div class="grid-ico">📖</div>
-        <div class="grid-nome">Liturgia</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('liturgia_horas')">
-        <div class="grid-ico">⛪</div>
-        <div class="grid-nome">Lit. Horas</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('canticos')">
-        <div class="grid-ico">🎵</div>
-        <div class="grid-nome">Cânticos</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('novenas')">
-        <div class="grid-ico">🕯️</div>
-        <div class="grid-nome">Novenas</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('calendario')">
-        <div class="grid-ico">🗓️</div>
-        <div class="grid-nome">Calendário</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('catecismo')">
-        <div class="grid-ico">📗</div>
-        <div class="grid-nome">Catecismo</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('exame')">
-        <div class="grid-ico">🔍</div>
-        <div class="grid-nome">Exame</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('apoio')">
-        <div class="grid-ico">🆘</div>
-        <div class="grid-nome">Apoio</div>
-      </div>
-      <div class="grid-item" onclick="abrirPainel('santo')">
-        <div class="grid-ico">⭐</div>
-        <div class="grid-nome">Santo Dia</div>
-      </div>
+      <div class="gi" onclick="abrirPainel('oracoes')"><div class="gi-ico">🙏</div><div class="gi-txt">Orações</div></div>
+      <div class="gi" onclick="abrirPainel('biblia')"><div class="gi-ico">📜</div><div class="gi-txt">Bíblia</div></div>
+      <div class="gi" onclick="abrirPainel('tercos')"><div class="gi-ico">📿</div><div class="gi-txt">Terço</div></div>
+      <div class="gi" onclick="abrirPainel('liturgia_dia')"><div class="gi-ico">📖</div><div class="gi-txt">Liturgia</div></div>
+      <div class="gi" onclick="abrirPainel('liturgia_horas')"><div class="gi-ico">⛪</div><div class="gi-txt">Lit. Horas</div></div>
+      <div class="gi" onclick="abrirPainel('canticos')"><div class="gi-ico">🎵</div><div class="gi-txt">Cânticos</div></div>
+      <div class="gi" onclick="abrirPainel('novenas')"><div class="gi-ico">🕯️</div><div class="gi-txt">Novenas</div></div>
+      <div class="gi" onclick="abrirPainel('calendario')"><div class="gi-ico">🗓️</div><div class="gi-txt">Calendário</div></div>
+      <div class="gi" onclick="abrirPainel('catecismo')"><div class="gi-ico">📗</div><div class="gi-txt">Catecismo</div></div>
+      <div class="gi" onclick="abrirPainel('exame')"><div class="gi-ico">🔍</div><div class="gi-txt">Exame</div></div>
+      <div class="gi" onclick="abrirPainel('apoio')"><div class="gi-ico">🆘</div><div class="gi-txt">Apoio</div></div>
+      <div class="gi" onclick="abrirPainel('santo_dia')"><div class="gi-ico">⭐</div><div class="gi-txt">Santo Dia</div></div>
     </div>
 
-    <!-- Versículo do dia -->
-    <div class="versiculo-wrap" id="versiculoWrap">
+    <!-- Versículo -->
+    <div class="vers-wrap">
       <div class="vers-ref" id="versRef">Carregando...</div>
       <div class="vers-txt" id="versTxt"></div>
-      <button class="vers-share" onclick="compartilharVersiculo()" title="Compartilhar">⬆</button>
+      <button class="vers-share" onclick="compartilhar()">⬆</button>
     </div>
 
   </div><!-- /homeView -->
 
-  <!-- CHAT VIEW -->
+  <!-- CHAT -->
   <div id="chatView">
     <div class="chat-area" id="chatArea"></div>
   </div>
 
 </div><!-- /main -->
 
-<!-- Input (fixo) -->
-<div class="inp-wrap" id="inpWrap" style="display:none">
-  <div class="preview-anexo" id="previewAnexo">
-    <span id="previewIco">📎</span>
-    <span class="preview-nome" id="previewNome"></span>
-    <button class="btn-remover" onclick="removerAnexo()">✕</button>
+<!-- Input -->
+<div class="inp-wrap" id="inpWrap">
+  <div class="inp-anexo" id="inpAnexo">
+    <span id="anexoIco">📎</span>
+    <span id="anexoNome" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px"></span>
+    <button onclick="remAnexo()" style="background:transparent;border:none;color:var(--text2);font-size:16px;cursor:pointer">✕</button>
   </div>
   <div class="inp-row">
-    <button class="btn-anexo" onclick="document.getElementById('inputFile').click()" title="Anexar imagem ou PDF">📎</button>
-    <input type="file" id="inputFile" accept="image/*,.pdf" style="display:none" onchange="selecionarArquivo(this)">
-    <textarea id="inputMsg" placeholder="{{ T.placeholder_mensagem }}" rows="1"
+    <button class="inp-attach" onclick="document.getElementById('fileInput').click()" title="Anexar">📎</button>
+    <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="selArquivo(this)">
+    <textarea id="msgInput" placeholder="Manda uma mensagem..." rows="1"
       onkeydown="teclaEnter(event)" oninput="autoResize(this)"></textarea>
-    <button class="btn-env" id="btnEnv" onclick="enviarMsg()">✝</button>
+    <button class="inp-send" id="btnEnv" onclick="enviar()">✝</button>
   </div>
 </div>
 
-<!-- Navbar bottom -->
-<div class="navbar">
-  <button class="nb-item ativo" id="nb-inicio" onclick="irParaInicio()">
-    <div class="nb-ico">🏠</div>
-    <div class="nb-txt">Início</div>
+<!-- Navbar -->
+<div class="nb">
+  <button class="nb-item on" id="nb-home" onclick="irHome()">
+    <div class="nb-ico">🏠</div><div class="nb-lbl">Início</div>
   </button>
   <button class="nb-item" id="nb-biblia" onclick="abrirPainel('biblia')">
-    <div class="nb-ico">📜</div>
-    <div class="nb-txt">Bíblia</div>
+    <div class="nb-ico">📜</div><div class="nb-lbl">Bíblia</div>
   </button>
-  <button class="nb-item" id="nb-chat" onclick="irParaChat()">
-    <div class="nb-ico">✝</div>
-    <div class="nb-txt">IA</div>
+  <button class="nb-item" id="nb-chat" onclick="irChat()">
+    <div class="nb-ico">✝</div><div class="nb-lbl">IA</div>
   </button>
-  <button class="nb-item" id="nb-recursos" onclick="abrirSB()">
-    <div class="nb-ico">☰</div>
-    <div class="nb-txt">Recursos</div>
+  <button class="nb-item" id="nb-rec" onclick="abrirSB()">
+    <div class="nb-ico">☰</div><div class="nb-lbl">Recursos</div>
   </button>
-  <button class="nb-item" id="nb-eu">
-    <div class="nb-ico">
-      {% if usuario.foto %}<img src="{{ usuario.foto }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover" alt="">{% else %}🙏{% endif %}
-    </div>
-    <div class="nb-txt">Eu</div>
+  <button class="nb-item" id="nb-eu" onclick="abrirModalPerfil()">
+    <div class="nb-ico">{% if usuario.foto %}<img src="{{ usuario.foto }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover">{% else %}🙏{% endif %}</div>
+    <div class="nb-lbl">Eu</div>
   </button>
 </div>
 
 <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
+<div class="sb" id="sb">
   <div class="sb-head">
     <div class="sb-logo">✝ VIRTUAL CATHOLICS</div>
     <div class="sb-sub">{{ T.subtitulo }}</div>
   </div>
   <div class="sb-body">
-    <div class="btn-novo" onclick="novoChat()">{{ T.novo_chat }}</div>
-    <div class="sb-sec">CHATS</div>
+    <div class="sb-btn-novo" onclick="novoChat()">+ Nova conversa</div>
+    <div class="sb-sec">CONVERSAS</div>
     <div id="listaChats">
       {% for cid, cdata in chats.items() %}
       <div class="ci" id="ci-{{cid}}" onclick="abrirChat('{{cid}}',this)">{{ cdata.titulo }}</div>
       {% endfor %}
     </div>
     <div class="sb-sec">RECURSOS</div>
-    <div class="mi" onclick="abrirPainel('oracoes')">🙏 {{ T.oracoes }}</div>
-    <div class="mi" onclick="abrirPainel('biblia')">📜 Bíblia Sagrada</div>
-    <div class="mi" onclick="abrirPainel('tercos')">📿 {{ T.terco }}</div>
-    <div class="mi" onclick="abrirPainel('liturgia_horas')">⛪ {{ T.liturgia_horas }}</div>
-    <div class="mi" onclick="abrirPainel('liturgia_dia')">📖 Liturgia do Dia</div>
-    <div class="mi" onclick="abrirPainel('canticos')">🎵 {{ T.canticos }}</div>
-    <div class="mi" onclick="abrirPainel('catecismo')">📖 Catecismo</div>
-    <div class="mi" onclick="abrirPainel('calendario')">🗓️ Calendário Litúrgico</div>
-    <div class="mi" onclick="abrirPainel('santo')">⭐ {{ T.santo }}</div>
-    <div class="mi" onclick="abrirPainel('novenas')">🕯️ {{ T.novenas }}</div>
-    <div class="mi" onclick="abrirPainel('exame')">🔍 Exame de Consciência</div>
-    <div class="mi" onclick="abrirPainel('apoio')">🆘 Apoio Espiritual</div>
+    <div class="sb-mi" onclick="abrirPainel('oracoes')">🙏 Orações</div>
+    <div class="sb-mi" onclick="abrirPainel('biblia')">📜 Bíblia Sagrada</div>
+    <div class="sb-mi" onclick="abrirPainel('tercos')">📿 Terço</div>
+    <div class="sb-mi" onclick="abrirPainel('liturgia_horas')">⛪ Liturgia das Horas</div>
+    <div class="sb-mi" onclick="abrirPainel('liturgia_dia')">📖 Liturgia do Dia</div>
+    <div class="sb-mi" onclick="abrirPainel('canticos')">🎵 Cânticos</div>
+    <div class="sb-mi" onclick="abrirPainel('catecismo')">📗 Catecismo</div>
+    <div class="sb-mi" onclick="abrirPainel('calendario')">🗓️ Calendário</div>
+    <div class="sb-mi" onclick="abrirPainel('santo_dia')">⭐ Santo do Dia</div>
+    <div class="sb-mi" onclick="abrirPainel('novenas')">🕯️ Novenas</div>
+    <div class="sb-mi" onclick="abrirPainel('exame')">🔍 Exame de Consciência</div>
+    <div class="sb-mi" onclick="abrirPainel('apoio')">🆘 Apoio Espiritual</div>
     <div class="sb-sec">SOBRE</div>
-    <div class="mi" onclick="abrirPainel('creditos')">👨‍💻 Créditos</div>
-    <div class="mi" onclick="abrirPainel('feedback')">📧 Feedback & Suporte</div>
-    <div class="mi" onclick="abrirPainel('doacoes')">💚 Apoie o Projeto</div>
+    <div class="sb-mi" onclick="abrirPainel('creditos')">👨‍💻 Créditos</div>
+    <div class="sb-mi" onclick="abrirPainel('feedback')">📧 Suporte</div>
+    <div class="sb-mi" onclick="abrirPainel('doacoes')">💚 Apoie o Projeto</div>
   </div>
   <div class="sb-foot">
     <div class="lang-row">
-      <button class="lang-btn {% if idioma=='pt' %}ativo{% endif %}" onclick="setIdioma('pt')">PT</button>
-      <button class="lang-btn {% if idioma=='en' %}ativo{% endif %}" onclick="setIdioma('en')">EN</button>
-      <button class="lang-btn {% if idioma=='es' %}ativo{% endif %}" onclick="setIdioma('es')">ES</button>
-      <button class="lang-btn {% if idioma=='it' %}ativo{% endif %}" onclick="setIdioma('it')">IT</button>
+      <button class="lang-btn {% if idioma=='pt' %}on{% endif %}" onclick="setIdioma('pt')">PT</button>
+      <button class="lang-btn {% if idioma=='en' %}on{% endif %}" onclick="setIdioma('en')">EN</button>
+      <button class="lang-btn {% if idioma=='es' %}on{% endif %}" onclick="setIdioma('es')">ES</button>
+      <button class="lang-btn {% if idioma=='it' %}on{% endif %}" onclick="setIdioma('it')">IT</button>
     </div>
     <div class="user-row">
-      <div class="user-foto">
-        {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
-      </div>
+      <div class="user-av">{% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}</div>
       <div class="user-nome">{{ usuario.nome }}</div>
     </div>
     <button class="btn-sair" onclick="location.href='/logout'">{{ T.sair }}</button>
@@ -491,219 +604,183 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
 </div>
 
 <!-- Painel -->
-<div class="painel" id="painel">
-  <div class="pan-head">
-    <div class="pan-titulo" id="panTitulo">RECURSOS</div>
-    <button class="btn-xpan" onclick="fecharPainel()">✕</button>
+<div class="pan" id="pan">
+  <div class="pan-hd">
+    <div class="pan-tit" id="panTit">RECURSOS</div>
+    <button class="pan-x" onclick="fecharPan()">✕</button>
   </div>
   <div class="pan-body" id="panBody"></div>
   <div class="pan-nav" id="panNav">
-    <button class="btn-nav" onclick="navNov(-1)">← {{ T.nov_anterior }}</button>
+    <button class="pan-nav-btn" onclick="navNov(-1)">← Anterior</button>
     <span id="navInfo" style="display:flex;align-items:center;font-size:12px;color:var(--gold);padding:0 8px;white-space:nowrap"></span>
-    <button class="btn-nav" onclick="navNov(1)">{{ T.nov_proximo }} →</button>
+    <button class="pan-nav-btn" onclick="navNov(1)">Próximo →</button>
   </div>
 </div>
 
+<!-- Modal perfil -->
+<div class="modal-bg" id="modalPerfil">
+  <div class="modal-box">
+    <div class="modal-tit">✝ EDITAR PERFIL</div>
+    <div class="modal-av" onclick="document.getElementById('fotoInput').click()" id="modalAv">
+      {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
+    </div>
+    <div class="modal-hint">Toque para trocar a foto</div>
+    <input type="file" id="fotoInput" accept="image/*" style="display:none" onchange="prevFoto(this)">
+    <label class="modal-lbl">Nome exibido</label>
+    <input class="modal-inp" type="text" id="nomeInput" value="{{ usuario.nome }}">
+    <div class="modal-btns">
+      <button class="btn-mc" onclick="fecharModalPerfil()">Cancelar</button>
+      <button class="btn-ms" onclick="salvarPerfil()">SALVAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Biblioteca santos -->
+<div class="bib-modal" id="bibModal">
+  <div class="bib-hd">
+    <div class="bib-tit">📸 BIBLIOTECA DE SANTOS</div>
+    <button class="bib-x" onclick="fecharBib()">✕</button>
+  </div>
+  <div class="bib-grid" id="bibGrid"></div>
+</div>
+
 <script>
-let chatAtual = null, mensagens = [], carregando = false;
-let novDias = [], novDia = 0;
-let arquivoAnexo = null;
-let emChat = false;
+// ── ESTADO ──
+let chatAtual=null, mensagens=[], carregando=false;
+let novDias=[], novDia=0, arquivoAnexo=null;
 
-// ── BIBLIOTECA DE SANTOS ──
-const SANTOS_LIB = [
-  {nome:"Nossa Senhora Aparecida", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/600px-Nossa_Senhora_Aparecida.jpg"},
-  {nome:"Nossa Senhora de Fátima", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/600px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
-  {nome:"São Francisco de Assis", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/600px-Francisco_de_Zurbaran_006.jpg"},
-  {nome:"Santo Antônio de Lisboa", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/600px-Anthony_of_Padua_with_Christ_Child.jpg"},
-  {nome:"Santa Teresinha", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/600px-ThereseLisieuxPhoto.jpg"},
-  {nome:"São José", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/600px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
-  {nome:"São Pedro Apóstolo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/600px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
-  {nome:"Santa Maria Madalena", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/600px-Mariam_magdalene.jpg"},
-  {nome:"São João Batista", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/600px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
-  {nome:"Nossa Senhora do Carmo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg/600px-Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg"},
-  {nome:"Santo Agostinho", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/600px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
-  {nome:"Santa Rita de Cássia", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/600px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
-  {nome:"São João Paulo II", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/John_Paul_II_portrait_%28square%29.jpg/600px-John_Paul_II_portrait_%28square%29.jpg"},
-  {nome:"Padre Pio", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Padre_Pio_portrait.jpg/600px-Padre_Pio_portrait.jpg"},
+const SANTOS_LIB=[
+  {nome:"Nossa Senhora Aparecida",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/600px-Nossa_Senhora_Aparecida.jpg"},
+  {nome:"Nossa Senhora de Fátima",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/600px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
+  {nome:"São Francisco de Assis",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/600px-Francisco_de_Zurbaran_006.jpg"},
+  {nome:"Santo Antônio de Lisboa",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/600px-Anthony_of_Padua_with_Christ_Child.jpg"},
+  {nome:"Santa Teresinha",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/600px-ThereseLisieuxPhoto.jpg"},
+  {nome:"São José",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/600px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
+  {nome:"São Pedro Apóstolo",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/600px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
+  {nome:"Santa Maria Madalena",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/600px-Mariam_magdalene.jpg"},
+  {nome:"São João Batista",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/600px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
+  {nome:"Padre Pio",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Padre_Pio_portrait.jpg/600px-Padre_Pio_portrait.jpg"},
+  {nome:"Santo Agostinho",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/600px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
+  {nome:"Santa Rita de Cássia",url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/600px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
 ];
-let heroSantoUrl = localStorage.getItem('heroSanto') || null;
+let heroUrl=localStorage.getItem('heroSanto')||null;
 
-function carregarHeroImg(){
-  const img = document.getElementById('heroImg');
-  if(!img) return;
-  let url = heroSantoUrl;
-  if(!url) url = SANTOS_LIB[new Date().getDate() % SANTOS_LIB.length].url;
-  img.onload = () => img.classList.add('loaded');
-  img.onerror = () => img.style.display = 'none';
-  img.src = url;
-}
-
-function abrirBiblioteca(){
-  const grid = document.getElementById('bibGrid');
-  grid.innerHTML = '';
-  SANTOS_LIB.forEach(s => {
-    const d = document.createElement('div');
-    d.className = 'bib-item' + (s.url === heroSantoUrl ? ' sel' : '');
-    d.innerHTML = `<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
-    d.onclick = () => { heroSantoUrl = s.url; localStorage.setItem('heroSanto', s.url); carregarHeroImg(); fecharBiblioteca(); };
-    grid.appendChild(d);
-  });
-  document.getElementById('bibModal').classList.add('aberto');
-}
-function fecharBiblioteca(){ document.getElementById('bibModal').classList.remove('aberto'); }
-
-// ── MODAL PERFIL ──
-function abrirModalPerfil(){ document.getElementById('modalPerfil').classList.add('aberto'); }
-function fecharModalPerfil(){ document.getElementById('modalPerfil').classList.remove('aberto'); }
-function prevFoto(input){
-  if(!input.files||!input.files[0]) return;
-  const r = new FileReader();
-  r.onload = e => {
-    document.getElementById('modalAv').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-    document.getElementById('heroAv').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"><div class="hero-edit">✏</div>`;
-  };
-  r.readAsDataURL(input.files[0]);
-}
-function salvarPerfil(){
-  const nome = document.getElementById('nomeInput').value.trim();
-  if(!nome) return;
-  document.querySelectorAll('.hero-bem').forEach(e => { const t = e.textContent; e.textContent = t.replace(/,.*/, ', '+nome.split(' ')[0]); });
-  document.querySelectorAll('.user-nome').forEach(e => e.textContent = nome);
-  fecharModalPerfil();
-  // TODO: persistir via /api/atualizar-perfil
-}
-
-// Init
-carregarHeroImg();
-carregarHome();
+// ── INIT ──
+(async function init(){
+  // Hero imagem
+  const img=document.getElementById('heroImg');
+  const url=heroUrl||SANTOS_LIB[new Date().getDate()%SANTOS_LIB.length].url;
+  img.onload=()=>img.classList.add('on');
+  img.onerror=()=>img.style.display='none';
+  img.src=url;
+  // Santo
+  try{const r=await fetch('/api/santo-dia'),d=await r.json();
+    const el=document.getElementById('heroSanto');
+    if(el&&d.santo)el.textContent='⭐ '+d.santo;}catch(e){}
+  // Tempo litúrgico
+  try{const r=await fetch('/api/calendario'),d=await r.json();
+    const el=document.getElementById('heroTempo');
+    if(el)el.textContent=d.tempo_liturgico+' · '+d.dia_semana+', '+d.hoje;}catch(e){}
+  // Versículo
+  const VS=[
+    {ref:"Jo 3,16",txt:"Porque Deus amou o mundo de tal maneira que deu o seu Filho Unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."},
+    {ref:"Sl 23,1",txt:"O Senhor é o meu pastor, nada me faltará."},
+    {ref:"Fp 4,13",txt:"Posso tudo naquele que me fortalece."},
+    {ref:"Mt 11,28",txt:"Vinde a mim todos os que estais cansados e oprimidos, e eu vos aliviarei."},
+    {ref:"Rm 8,28",txt:"Sabemos que tudo concorre para o bem daqueles que amam a Deus."},
+    {ref:"1Jo 4,7",txt:"Caríssimos, amemo-nos uns aos outros, porque o amor vem de Deus."},
+    {ref:"Is 41,10",txt:"Não temas, porque eu estou contigo; não te assombres, porque eu sou o teu Deus."},
+  ];
+  const v=VS[new Date().getDate()%VS.length];
+  document.getElementById('versRef').textContent=v.ref;
+  document.getElementById('versTxt').textContent='"'+v.txt+'"';
+})();
 
 // ── NAVEGAÇÃO ──
-function irParaInicio(){
-  emChat=false;
+function setNb(id){document.querySelectorAll('.nb-item').forEach(b=>b.classList.remove('on'));const el=document.getElementById(id);if(el)el.classList.add('on');}
+
+function irHome(){
   document.getElementById('homeView').style.display='flex';
-  document.getElementById('chatView').style.display='none';
-  document.getElementById('inpWrap').style.display='none';
-  setNbAtivo('nb-inicio');
+  document.getElementById('chatView').classList.remove('on');
+  document.getElementById('inpWrap').classList.remove('on');
+  setNb('nb-home');
 }
-function irParaChat(){
-  emChat=true;
+
+function irChat(){
   document.getElementById('homeView').style.display='none';
-  const cv=document.getElementById('chatView');
-  cv.style.display='flex';cv.style.flexDirection='column';cv.style.flex='1';
-  document.getElementById('inpWrap').style.display='block';
-  setNbAtivo('nb-chat');
-  // se não tem chat aberto, abre o primeiro ou cria novo
-  if(!chatAtual){
-    const primeiro=document.querySelector('.ci');
-    if(primeiro) abrirChat(primeiro.id.replace('ci-',''),primeiro);
-    else novoChat();
-  }
+  document.getElementById('chatView').classList.add('on');
+  document.getElementById('inpWrap').classList.add('on');
+  setNb('nb-chat');
+  if(!chatAtual){const p=document.querySelector('.ci');if(p)abrirChat(p.id.replace('ci-',''),p);else novoChat();}
+  setTimeout(()=>{const a=document.getElementById('chatArea');a.scrollTop=a.scrollHeight;document.getElementById('msgInput').focus();},80);
+}
+
+function acaoRapida(tipo){
+  const msgs={
+    oracao:'Preciso de uma oração para agora. Me ajuda?',
+    conselho:'Preciso de um conselho espiritual católico. O que me diz?',
+    santo:'Quem é o santo do dia e o que posso aprender com ele?',
+    liturgia:'Me fale sobre a liturgia do dia de hoje e uma reflexão espiritual.',
+  };
+  irChat();
   setTimeout(()=>{
-    const area=document.getElementById('chatArea');
-    area.scrollTop=area.scrollHeight;
-    document.getElementById('inputMsg').focus();
-  },100);
-}
-function setNbAtivo(id){
-  document.querySelectorAll('.nb-item').forEach(b=>b.classList.remove('ativo'));
-  const el=document.getElementById(id);
-  if(el)el.classList.add('ativo');
-}
-
-// ── HOME: carrega dados ──
-async function carregarHome(){
-  // Santo do dia
-  try{
-    const r=await fetch('/api/santo-dia'),d=await r.json();
-    const el=document.getElementById('bannerSanto');
-    if(el&&d.santo)el.textContent='⭐ '+d.santo;
-  }catch(e){}
-  // Tempo litúrgico
-  try{
-    const r=await fetch('/api/calendario'),d=await r.json();
-    const el=document.getElementById('bannerTempoLiturgico');
-    if(el)el.textContent=d.tempo_liturgico+' · '+d.dia_semana+', '+d.hoje;
-  }catch(e){}
-  // Versículo do dia
-  carregarVersiculo();
-}
-
-const VERSICULOS=[
-  {ref:"Jo 3,16",txt:"Porque Deus amou o mundo de tal maneira que deu o seu Filho Unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."},
-  {ref:"Sl 23,1",txt:"O Senhor é o meu pastor, nada me faltará."},
-  {ref:"Fp 4,13",txt:"Posso tudo naquele que me fortalece."},
-  {ref:"Mt 11,28",txt:"Vinde a mim todos os que estais cansados e oprimidos, e eu vos aliviarei."},
-  {ref:"Rm 8,28",txt:"Sabemos que tudo concorre para o bem daqueles que amam a Deus."},
-  {ref:"1Jo 4,7",txt:"Caríssimos, amemo-nos uns aos outros, porque o amor vem de Deus."},
-  {ref:"Is 41,10",txt:"Não temas, porque eu estou contigo; não te assombres, porque eu sou o teu Deus."},
-  {ref:"Sl 46,2",txt:"Deus é o nosso refúgio e fortaleza, socorro bem presente nas tribulações."},
-];
-function carregarVersiculo(){
-  const idx=new Date().getDate()%VERSICULOS.length;
-  const v=VERSICULOS[idx];
-  const ref=document.getElementById('versRef'),txt=document.getElementById('versTxt');
-  if(ref)ref.textContent=v.ref;
-  if(txt)txt.textContent='"'+v.txt+'"';
-}
-function compartilharVersiculo(){
-  const idx=new Date().getDate()%VERSICULOS.length;
-  const v=VERSICULOS[idx];
-  if(navigator.share)navigator.share({text:`"${v.txt}" — ${v.ref}\n\nVirtual Catholics`});
-  else if(navigator.clipboard)navigator.clipboard.writeText(`"${v.txt}" — ${v.ref}`);
+    const inp=document.getElementById('msgInput');
+    inp.value=msgs[tipo]||'';
+    autoResize(inp);inp.focus();
+  },120);
 }
 
 // ── SIDEBAR ──
-function abrirSB(){document.getElementById('sidebar').classList.add('aberto');document.getElementById('overlay').classList.add('aberto');}
-function fecharSB(){document.getElementById('sidebar').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
-function fecharPainel(){document.getElementById('painel').classList.remove('aberto');document.getElementById('overlay').classList.remove('aberto');}
-function fecharTudo(){fecharSB();fecharPainel();}
+function abrirSB(){document.getElementById('sb').classList.add('on');document.getElementById('overlay').classList.add('on');}
+function fecharSB(){document.getElementById('sb').classList.remove('on');document.getElementById('overlay').classList.remove('on');}
+function fecharPan(){document.getElementById('pan').classList.remove('on');document.getElementById('overlay').classList.remove('on');}
+function fecharTudo(){fecharSB();fecharPan();}
 
 // ── PAINEL ──
 async function abrirPainel(tipo){
   fecharSB();
-  const pan=document.getElementById('painel'),body=document.getElementById('panBody'),nav=document.getElementById('panNav');
-  nav.classList.remove('show');
-  pan.classList.add('aberto');
-  document.getElementById('overlay').classList.add('aberto');
+  const pan=document.getElementById('pan'),body=document.getElementById('panBody'),nav=document.getElementById('panNav');
+  nav.classList.remove('on');
+  pan.classList.add('on');
+  document.getElementById('overlay').classList.add('on');
 
-  if(tipo==='santo'){
-    document.getElementById('panTitulo').textContent='SANTO DO DIA';
+  if(tipo==='santo_dia'){
+    document.getElementById('panTit').textContent='SANTO DO DIA';
     body.innerHTML='<div class="pt">Carregando... ⭐</div>';
     try{
       const r=await fetch('/api/santo-dia'),d=await r.json();
       if(d.santo){
-        const nome=d.santo;
-        body.innerHTML=`<div style="text-align:center;padding:20px 10px 10px">
-          <div style="font-size:38px;margin-bottom:8px">⭐</div>
-          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div>
-          <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold2);margin-bottom:12px;line-height:1.4">${nome}</div>
-          <div style="font-size:14px;font-style:italic;color:rgba(240,230,208,.7);line-height:1.7;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏</div>
+        const n=d.santo;
+        body.innerHTML=`<div style="text-align:center;padding:20px 10px">
+          <div style="font-size:36px;margin-bottom:8px">⭐</div>
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.65;margin-bottom:6px">${d.data}</div>
+          <div style="font-family:'Cinzel',serif;font-size:17px;color:var(--gold2);margin-bottom:14px;line-height:1.4">${n}</div>
+          <div style="font-size:14px;font-style:italic;color:var(--text2);line-height:1.75;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que precisamos neste dia. 🙏</div>
         </div>
-        <div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\'")}')">✨ Perguntar à IA sobre ${nome}</div>`;
-      } else {
-        body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0;font-style:italic;color:rgba(240,230,208,.5)">Nenhum santo registrado para hoje.<br><br>🙏</div>';
-      }
-    }catch(e){ body.innerHTML='<div class="pt">Erro ao carregar. Tente novamente.</div>'; }
+        <div class="btn-ia" onclick="perguntarSanto('${n.replace(/'/g,"\\'")}')">✨ Perguntar à IA sobre ${n}</div>`;
+      }else{body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0;font-style:italic;color:var(--text2)">Nenhum santo registrado para hoje. 🙏</div>';}
+    }catch(e){body.innerHTML='<div class="pt">Erro ao carregar.</div>';}
     return;
   }
   if(tipo==='calendario'){
-    document.getElementById('panTitulo').textContent='CALENDÁRIO LITÚRGICO';
+    document.getElementById('panTit').textContent='CALENDÁRIO LITÚRGICO';
     body.innerHTML='<div class="pt">Carregando... 🕯️</div>';
     const r=await fetch('/api/calendario'),d=await r.json();
     const cs={verde:'#4a8c4a',roxo:'#7a3d9a',branco:'#8b6914',vermelho:'#8b1a1a'};
-    const c=cs[d.cor_liturgica]||'#c8a050';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${d.dia_semana}, ${d.hoje}</b>\n\n<div style="background:${c}22;border:1px solid ${c}44;border-radius:4px;padding:10px"><b style="color:${c}">${d.tempo_liturgico}</b>\n<small>${d.descricao}</small></div>\n\n${d.santo_dia?`<b style="color:var(--gold)">⭐ Santo do dia</b>\n${d.santo_dia}\n\n`:''}<b style="color:var(--gold)">📅 Próximas datas</b>\n${d.proximas_datas.map(p=>`${p.nome} — ${p.data} (${p.label})`).join('\n')}</div>`;
+    const c=cs[d.cor_liturgica]||'#c8a04a';
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${d.dia_semana}, ${d.hoje}</b>\n\n<div style="background:${c}22;border:1px solid ${c}44;border-radius:6px;padding:10px"><b style="color:${c}">${d.tempo_liturgico}</b>\n<small>${d.descricao}</small></div>\n\n${d.santo_dia?`<b style="color:var(--gold)">⭐ Santo do dia</b>\n${d.santo_dia}\n\n`:''}<b style="color:var(--gold)">📅 Próximas datas</b>\n${d.proximas_datas.map(p=>`${p.nome} — ${p.data} (${p.label})`).join('\n')}</div>`;
     return;
   }
   if(tipo==='liturgia_dia'){
-    document.getElementById('panTitulo').textContent='LITURGIA DO DIA';
-    const r=await fetch('/api/liturgia-dia'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📖 Liturgia do Dia</b>\n<small style="opacity:.7">${d.data}</small>\n\n${d.texto}</div><a href="${d.url_cnbb}" target="_blank" style="display:block;background:rgba(200,160,80,.12);border:1px solid rgba(200,160,80,.3);border-radius:3px;padding:12px;text-align:center;color:var(--gold);text-decoration:none;font-weight:600;margin:8px 0">📖 Ver Liturgia de Hoje (CNBB)</a><div class="pi" onclick="comentarioLiturgia()">✨ Pedir comentário da IA sobre a liturgia de hoje</div>`;
+    document.getElementById('panTit').textContent='LITURGIA DO DIA';
+    body.innerHTML='<div class="pt">Carregando... 📖</div>';
+    try{const r=await fetch('/api/liturgia-dia'),d=await r.json();
+      body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📖 ${d.data}</b>\n\n${d.texto}</div><a href="${d.url_cnbb}" target="_blank" style="display:block;background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.28);border-radius:6px;padding:12px;text-align:center;color:var(--gold);text-decoration:none;margin-top:10px">📖 Ver na CNBB</a><div class="btn-ia" onclick="perguntarIA('Comente a liturgia do dia de hoje — leituras e evangelho.')">✨ Reflexão da IA</div>`;
+    }catch(e){body.innerHTML='<div class="pt">Carregando liturgia...\n\nAcesse: <a href="https://www.cnbb.org.br/liturgia/" target="_blank" style="color:var(--gold)">cnbb.org.br/liturgia</a></div>';}
     return;
   }
   if(tipo==='biblia'){
-    document.getElementById('panTitulo').textContent='BÍBLIA SAGRADA';
+    document.getElementById('panTit').textContent='BÍBLIA SAGRADA';
     body.innerHTML='<div class="pt">Carregando... 📜</div>';
     const r=await fetch('/api/biblia/livros'),livros=await r.json();
     body.innerHTML='<div class="pt"><b style="color:var(--gold)">📜 Antigo Testamento</b></div>';
@@ -717,7 +794,7 @@ async function abrirPainel(tipo){
     return;
   }
   if(tipo==='exame'){
-    document.getElementById('panTitulo').textContent='EXAME DE CONSCIÊNCIA';
+    document.getElementById('panTit').textContent='EXAME DE CONSCIÊNCIA';
     body.innerHTML='<div class="pt">Carregando... 🙏</div>';
     const r=await fetch('/api/exame-consciencia'),d=await r.json();
     body.innerHTML=`<div class="pt"><b style="color:var(--gold)">🙏 Oração inicial</b>\n<i>${d.oracao_inicio}</i>\n\nClique em cada mandamento:</div>`;
@@ -729,50 +806,50 @@ async function abrirPainel(tipo){
     return;
   }
   if(tipo==='apoio'){
-    document.getElementById('panTitulo').textContent='APOIO ESPIRITUAL';
+    document.getElementById('panTit').textContent='APOIO ESPIRITUAL';
     body.innerHTML='<div class="pt"><b style="color:var(--gold)">🆘 Estou passando por...</b>\nEscolha um tema:</div>';
     const r=await fetch('/api/apoio'),lista=await r.json();
     lista.forEach(t=>{const el=document.createElement('div');el.className='pi';el.textContent=t.titulo;el.onclick=()=>abrirApoio(t.id);body.appendChild(el);});
     return;
   }
   if(tipo==='catecismo'){
-    document.getElementById('panTitulo').textContent='CATECISMO';
-    body.innerHTML='<div class="pt">Carregando... 📖</div>';
+    document.getElementById('panTit').textContent='CATECISMO';
+    body.innerHTML='<div class="pt">Carregando... 📗</div>';
     try{
       const r=await fetch('/api/dados/catecismo'),pilares=await r.json();
       if(Array.isArray(pilares)&&pilares.length>0){
-        body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b>\nEscolha um pilar:</div>';
+        body.innerHTML='<div class="pt"><b style="color:var(--gold)">📗 Catecismo da Igreja Católica</b>\nEscolha um pilar:</div>';
         pilares.forEach(p=>{const el=document.createElement('div');el.className='pi';el.textContent=p;el.onclick=()=>abrirPilar(p);body.appendChild(el);});
-      } else {
-        body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo</b>\n\nPara estudar o Catecismo da Igreja Católica, você pode perguntar diretamente à IA!</div><div class="btn-ia" onclick="perguntarIA('Explique um artigo do Catecismo da Igreja Católica')">✨ Perguntar à IA sobre o Catecismo</div>';
-      }
+      }else throw new Error('vazio');
     }catch(e){
-      body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo</b>\n\nPergunte à IA sobre qualquer tema do Catecismo!</div><div class="btn-ia" onclick="perguntarIA('Explique um artigo do Catecismo da Igreja Católica')">✨ Perguntar à IA</div>';
+      body.innerHTML='<div class="pt"><b style="color:var(--gold)">📗 Catecismo</b>\n\nPergunte à IA sobre qualquer tema do Catecismo da Igreja Católica!</div><div class="btn-ia" onclick="perguntarIA(\'Explique um artigo do Catecismo da Igreja Católica\')">✨ Perguntar à IA</div>';
     }
     return;
   }
   if(tipo==='creditos'){
-    document.getElementById('panTitulo').textContent='CRÉDITOS';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\nPedro Pimentel\n<small>Desenvolvedor e idealizador do Virtual Catholics</small>\n\n<b style="color:var(--gold)">🤖 IA</b>\nGroq (LLaMA 3.3 70B)\n<small>Motor de inteligência artificial do assistente espiritual</small>\n\n<b style="color:var(--gold)">🗄️ Banco de dados</b>\nSupabase\n<small>Armazenamento de usuários, chats e memórias</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>À Virgem Maria, mãe e rainha de todos nós.</small>\n\n<small style="opacity:.5">Virtual Catholics v1.0 ✝️</small></div>`;
+    document.getElementById('panTit').textContent='CRÉDITOS';
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\nPedro Pimentel\n<small>Desenvolvedor e idealizador do Virtual Catholics</small>\n\n<b style="color:var(--gold)">🤖 IA</b>\nGroq — LLaMA 3.3 70B\n<small>Motor de inteligência artificial do assistente espiritual</small>\n\n<b style="color:var(--gold)">🗄️ Banco de dados</b>\nSupabase\n<small>Armazenamento de usuários, chats e memórias</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>À Virgem Maria, Mãe e Rainha de todos nós.</small>\n\n<small style="opacity:.45">Virtual Catholics v1.0 ✝️</small></div>`;
     return;
   }
   if(tipo==='feedback'){
-    document.getElementById('panTitulo').textContent='FEEDBACK & SUPORTE';
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:1rem;font-weight:600">pimenteldanubia2014@gmail.com</span>\n\n<small>Envie suas sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>`;
+    document.getElementById('panTit').textContent='SUPORTE';
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:15px">pimenteldanubia2014@gmail.com</span>\n\n<small>Envie sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>`;
     return;
   }
   if(tipo==='doacoes'){
-    document.getElementById('panTitulo').textContent='APOIE O PROJETO';
+    document.getElementById('panTit').textContent='APOIE O PROJETO';
     body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua contribuição mantém este ministério digital vivo.</small></div>
-    <div style="background:rgba(200,160,80,.08);border:1px solid rgba(200,160,80,.25);border-radius:10px;padding:16px;margin:10px 0;text-align:center">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:8px">📱 CHAVE PIX</div>
-      <div style="font-size:16px;color:var(--text);word-break:break-all;margin-bottom:10px">pimenteldanubia2014@gmail.com</div>
-      <button onclick="navigator.clipboard.writeText('pimenteldanubia2014@gmail.com').then(()=>alert('Chave Pix copiada! 🙏'))" style="background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:9px 18px;cursor:pointer">COPIAR CHAVE</button>
+    <div style="background:rgba(200,160,74,.07);border:1px solid rgba(200,160,74,.22);border-radius:10px;padding:18px;margin:12px 0;text-align:center">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:10px">📱 CHAVE PIX</div>
+      <div style="font-size:15px;color:var(--text);word-break:break-all;margin-bottom:12px">pimenteldanubia2014@gmail.com</div>
+      <button onclick="navigator.clipboard.writeText('pimenteldanubia2014@gmail.com').then(()=>alert('Chave Pix copiada! 🙏'))" style="background:linear-gradient(135deg,#7a5c1e,#c8a04a);border:none;border-radius:6px;color:#09070d;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:10px 20px;cursor:pointer">COPIAR CHAVE</button>
     </div>
-    <div class="pt" style="text-align:center;opacity:.6"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
+    <div class="pt" style="text-align:center;opacity:.5"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
     return;
   }
-  document.getElementById('panTitulo').textContent=tipo.replace('_',' ').toUpperCase();
+
+  // Genérico (orações, terços, canticos, novenas, liturgia_horas)
+  document.getElementById('panTit').textContent=tipo.replace('_',' ').toUpperCase();
   body.innerHTML='<div class="pt">Carregando...</div>';
   const r=await fetch(`/api/dados/${tipo}`),lista=await r.json();
   body.innerHTML='';
@@ -781,166 +858,216 @@ async function abrirPainel(tipo){
 
 async function abrirItem(tipo,nome){
   const body=document.getElementById('panBody'),nav=document.getElementById('panNav');
-  document.getElementById('panTitulo').textContent=nome.substring(0,30).toUpperCase();
+  document.getElementById('panTit').textContent=nome.substring(0,28).toUpperCase();
   const r=await fetch(`/api/dados/${tipo}?nome=${encodeURIComponent(nome)}`),d=await r.json();
-  const c=d.conteudo;nav.classList.remove('show');
-  if(tipo==='novenas'&&Array.isArray(c)){novDias=c;novDia=0;mostrarDia();nav.classList.add('show');return;}
+  const c=d.conteudo;nav.classList.remove('on');
+  if(tipo==='novenas'&&Array.isArray(c)){novDias=c;novDia=0;mostrarDia();nav.classList.add('on');return;}
   body.innerHTML='';
   const back=document.createElement('div');back.className='pi';back.textContent='← Voltar';back.onclick=()=>abrirPainel(tipo);body.appendChild(back);
-  if(Array.isArray(c)){c.forEach(item=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:10px';if(Array.isArray(item))el.innerHTML=`<b>${item[0]}</b>\n\n${item[1]}`;else el.textContent=item;body.appendChild(el);});}
+  if(Array.isArray(c)){c.forEach(item=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,74,.3);padding-left:10px;margin-bottom:10px';if(Array.isArray(item))el.innerHTML=`<b>${item[0]}</b>\n\n${item[1]}`;else el.textContent=item;body.appendChild(el);});}
   else{const el=document.createElement('div');el.className='pt';el.textContent=String(c);body.appendChild(el);}
 }
 function mostrarDia(){const b=document.getElementById('panBody');document.getElementById('navInfo').textContent=`Dia ${novDia+1}/${novDias.length}`;b.innerHTML=`<div class="pt"><b style="color:var(--gold)">Dia ${novDia+1}</b>\n\n${novDias[novDia]}</div>`;}
 function navNov(d){novDia=Math.max(0,Math.min(novDias.length-1,novDia+d));mostrarDia();}
+
 async function abrirLivro(l){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=l.abrev.toUpperCase();
+  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=l.abrev.toUpperCase();
   const r=await fetch(`/api/biblia/capitulos/${l.id}`),d=await r.json();
   body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${l.nome}</b>\n${d.total} capítulos</div>`;
   const back=document.createElement('div');back.className='pi';back.textContent='← Voltar à Bíblia';back.onclick=()=>abrirPainel('biblia');body.appendChild(back);
   for(let c=1;c<=d.total;c++){const el=document.createElement('div');el.className='pi';el.textContent=`Capítulo ${c}`;el.onclick=(()=>{const cap=c;return()=>abrirCap(l,cap);})();body.appendChild(el);}
 }
 async function abrirCap(l,cap){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=`${l.abrev} ${cap}`;
+  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=`${l.abrev} ${cap}`;
   body.innerHTML='<div class="pt">Carregando... 📖</div>';
   const r=await fetch(`/api/biblia/versiculo?livro=${l.id}&capitulo=${cap}`),d=await r.json();
   body.innerHTML='';
   const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao livro';back.onclick=()=>abrirLivro(l);body.appendChild(back);
-  if(d.verses)d.verses.forEach(v=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.3);padding-left:10px;margin-bottom:8px';el.innerHTML=`<b style="color:var(--gold);font-size:11px">${v.verse}</b> ${v.text}`;body.appendChild(el);});
-  else body.innerHTML+='<div class="pt">Versículos não disponíveis nesta tradução.</div>';
+  if(d.verses)d.verses.forEach(v=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,74,.3);padding-left:10px;margin-bottom:8px';el.innerHTML=`<b style="color:var(--gold);font-size:11px">${v.verse}</b> ${v.text}`;body.appendChild(el);});
+  else body.innerHTML+='<div class="pt">Versículos não disponíveis.</div>';
 }
 async function abrirMandamento(m,ato,cons){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=`${m.numero}º MANDAMENTO`;
+  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=`${m.numero}º MANDAMENTO`;
   body.innerHTML='';
   const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao exame';back.onclick=()=>abrirPainel('exame');body.appendChild(back);
   const t=document.createElement('div');t.className='pt';t.innerHTML=`<b style="color:var(--gold)">${m.mandamento}</b>`;body.appendChild(t);
-  m.perguntas.forEach(p=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,80,.35);padding-left:10px;margin-bottom:8px';el.innerHTML=`<label style="display:flex;gap:8px;cursor:pointer"><input type="checkbox" style="accent-color:var(--gold);margin-top:3px;flex-shrink:0"> <span>${p}</span></label>`;body.appendChild(el);});
+  m.perguntas.forEach(p=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,74,.3);padding-left:10px;margin-bottom:8px';el.innerHTML=`<label style="display:flex;gap:8px;cursor:pointer"><input type="checkbox" style="accent-color:var(--gold);margin-top:3px;flex-shrink:0"> <span>${p}</span></label>`;body.appendChild(el);});
   const fim=document.createElement('div');fim.className='pt';fim.innerHTML=`\n<b style="color:var(--gold)">🙏 Ato de Contrição</b>\n<i>${ato}</i>\n\n<b style="color:var(--gold)">✝️ Próximo passo</b>\n${cons}`;body.appendChild(fim);
 }
 async function abrirApoio(id){
   const body=document.getElementById('panBody');body.innerHTML='<div class="pt">Carregando... 🙏</div>';
   const r=await fetch(`/api/apoio/${id}`),d=await r.json();
-  document.getElementById('panTitulo').textContent=d.titulo;
-  body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao apoio';back.onclick=()=>abrirPainel('apoio');body.appendChild(back);
-  [{titulo:'',txt:`<b style="color:var(--gold)">${d.titulo}</b>\n\n${d.intro}`},{titulo:'📋 O que fazer',txt:d.passos.map((p,i)=>`${i+1}. ${p}`).join('\n')},{titulo:'🙏 Oração',txt:`<i>${d.oracao}</i>`},{titulo:'📖 Palavra de Deus',txt:`<i>${d.citacao}</i>`}].forEach(item=>{
+  document.getElementById('panTit').textContent=d.titulo;body.innerHTML='';
+  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar';back.onclick=()=>abrirPainel('apoio');body.appendChild(back);
+  [{tit:'',txt:`<b style="color:var(--gold)">${d.titulo}</b>\n\n${d.intro}`},{tit:'📋 O que fazer',txt:d.passos.map((p,i)=>`${i+1}. ${p}`).join('\n')},{tit:'🙏 Oração',txt:`<i>${d.oracao}</i>`},{tit:'📖 Palavra de Deus',txt:`<i>${d.citacao}</i>`}].forEach(item=>{
     const el=document.createElement('div');el.className='pt';
-    el.innerHTML=item.titulo?`<b style="color:var(--gold)">${item.titulo}</b>\n${item.txt}`:item.txt;
+    el.innerHTML=item.tit?`<b style="color:var(--gold)">${item.tit}</b>\n${item.txt}`:item.txt;
     el.style.marginBottom='10px';body.appendChild(el);
   });
-  const prox=document.createElement('div');prox.className='pt';prox.style.cssText='background:rgba(200,160,80,.08);border-radius:4px;padding:10px;border:1px solid rgba(200,160,80,.2)';
-  prox.innerHTML=`<b style="color:var(--gold)">✅ Próximo passo agora</b>\n${d.proximo_passo}`;body.appendChild(prox);
+  const prox=document.createElement('div');prox.className='pt';prox.style.cssText='background:rgba(200,160,74,.07);border-radius:6px;padding:12px;border:1px solid rgba(200,160,74,.2)';
+  prox.innerHTML=`<b style="color:var(--gold)">✅ Próximo passo</b>\n${d.proximo_passo}`;body.appendChild(prox);
 }
 async function abrirPilar(pilar){
-  const body=document.getElementById('panBody');document.getElementById('panTitulo').textContent=pilar.substring(0,25).toUpperCase();
+  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=pilar.substring(0,25).toUpperCase();
   const r=await fetch(`/api/dados/catecismo?nome=${encodeURIComponent(pilar)}`),d=await r.json();
   body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar aos pilares';back.onclick=()=>abrirPainel('catecismo');body.appendChild(back);
-  if(Array.isArray(d.conteudo))d.conteudo.forEach(([num,txt])=>{const el=document.createElement('div');el.className='pt';el.innerHTML=`<b style="color:var(--gold)">📜 ${num}</b>\n${txt}`;el.style.cssText='border-left:2px solid rgba(200,160,80,.35);padding-left:10px;margin-bottom:12px';body.appendChild(el);});
+  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar';back.onclick=()=>abrirPainel('catecismo');body.appendChild(back);
+  if(Array.isArray(d.conteudo))d.conteudo.forEach(([num,txt])=>{const el=document.createElement('div');el.className='pt';el.innerHTML=`<b style="color:var(--gold)">📜 ${num}</b>\n${txt}`;el.style.cssText='border-left:2px solid rgba(200,160,74,.3);padding-left:10px;margin-bottom:12px';body.appendChild(el);});
 }
-async function comentarioLiturgia(){
-  fecharPainel();irParaChat();await novoChat();
-  const inp=document.getElementById('inputMsg');
-  inp.value=`Comente a liturgia do dia de hoje (${new Date().toLocaleDateString('pt-BR')}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
-  autoResize(inp);inp.focus();
-}
-async function perguntarIA(texto){
-  fecharPainel();irParaChat();await novoChat();
-  const inp=document.getElementById('inputMsg');
-  inp.value=texto;autoResize(inp);inp.focus();
-}
-async function perguntarSanto(nome){
-  fecharPainel();irParaChat();await novoChat();
-  const inp=document.getElementById('inputMsg');
-  inp.value=`Me fale sobre ${nome} — quem foi, sua vida, sua espiritualidade e o que podemos aprender com este(a) santo(a).`;
-  autoResize(inp);inp.focus();
-}
+
+async function perguntarIA(txt){fecharPan();irChat();await novoChat();const inp=document.getElementById('msgInput');inp.value=txt;autoResize(inp);inp.focus();}
+async function perguntarSanto(nome){await perguntarIA(`Me fale sobre ${nome} — sua vida, espiritualidade e o que podemos aprender com este(a) santo(a).`);}
 
 // ── CHAT ──
 async function novoChat(){
   fecharSB();chatAtual=null;mensagens=[];
-  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
-  document.getElementById('chatArea').innerHTML=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:30px 20px;min-height:55vh"><div style="font-size:30px;color:var(--gold);filter:drop-shadow(0 0 12px rgba(200,160,80,.5))">✝</div><div style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold2);letter-spacing:2px">Nova conversa 🙏</div><div style="font-size:17px;color:rgba(240,230,208,.9);font-style:italic;max-width:280px;line-height:1.7">Como posso te ajudar?</div></div>`;
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
+  document.getElementById('chatArea').innerHTML=`<div class="chat-empty">
+    <div class="chat-empty-ico">✝</div>
+    <div class="chat-empty-title">COMO POSSO AJUDAR?</div>
+    <div class="chat-empty-sub">Pergunte sobre a fé, peça uma oração ou uma reflexão espiritual.</div>
+    <div class="sugest-wrap">
+      <button class="sugest-btn" onclick="setMsg('Me dá uma oração para hoje')">🙏 Oração do dia</button>
+      <button class="sugest-btn" onclick="setMsg('Preciso de um conselho espiritual')">✝ Conselho</button>
+      <button class="sugest-btn" onclick="setMsg('Quem é o santo do dia?')">⭐ Santo do dia</button>
+    </div>
+  </div>`;
 }
+function setMsg(txt){const inp=document.getElementById('msgInput');inp.value=txt;autoResize(inp);inp.focus();}
+
 async function abrirChat(id,el){
-  fecharSB();irParaChat();chatAtual=id;
-  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('ativo'));
-  if(el)el.classList.add('ativo');
+  fecharSB();irChat();chatAtual=id;
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
+  if(el)el.classList.add('on');
   const r=await fetch(`/api/chat/${id}`),d=await r.json();
   mensagens=d.historico||[];
   const area=document.getElementById('chatArea');area.innerHTML='';
-  if(!mensagens.length)area.innerHTML='<div style="padding:20px;text-align:center;font-style:italic;color:var(--text2)">Nova conversa</div>';
+  if(!mensagens.length)await novoChat();
   else mensagens.forEach(m=>addMsg(m.role,m.content));
   area.scrollTop=area.scrollHeight;
 }
+
 function addMsg(role,txt){
   const area=document.getElementById('chatArea');
-  const div=document.createElement('div');div.className=`msg ${role==='user'?'mu':'mb'}`;
-  if(role!=='user'){const a=document.createElement('div');a.className='mb-autor';a.textContent='✝ VIRTUAL CATHOLICS';div.appendChild(a);}
-  const t=document.createElement('div');t.textContent=txt;div.appendChild(t);
-  area.appendChild(div);area.scrollTop=area.scrollHeight;
-  return div;
+  // Remove chat-empty se existir
+  const empty=area.querySelector('.chat-empty');if(empty)empty.remove();
+  const row=document.createElement('div');row.className=`msg-row ${role==='user'?'user':'bot'}`;
+  // Avatar
+  const av=document.createElement('div');av.className='msg-av';
+  if(role==='user'){
+    const foto='{{ usuario.foto }}';
+    if(foto){av.innerHTML=`<img src="${foto}" alt="">`;}else{av.textContent='🙏';}
+  }else{av.textContent='✝';}
+  // Bubble
+  const bubble=document.createElement('div');bubble.className='msg-bubble';
+  if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
+  const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
+  row.appendChild(av);row.appendChild(bubble);
+  area.appendChild(row);area.scrollTop=area.scrollHeight;
+  return row;
 }
-async function enviarMsg(){
+
+async function enviar(){
   if(carregando)return;
-  const inp=document.getElementById('inputMsg'),txt=inp.value.trim();
+  const inp=document.getElementById('msgInput'),txt=inp.value.trim();
   if(!txt&&!arquivoAnexo)return;
   inp.value='';autoResize(inp);
   if(!chatAtual){
     const r=await fetch('/api/novo-chat',{method:'POST'}),d=await r.json();
     chatAtual=d.chat_id;
-    const el=document.createElement('div');el.className='ci ativo';el.id=`ci-${chatAtual}`;
-    el.textContent=(txt||arquivoAnexo.file.name).substring(0,35);el.onclick=function(){abrirChat(chatAtual,this);};
+    const el=document.createElement('div');el.className='ci on';el.id=`ci-${chatAtual}`;
+    el.textContent=(txt||arquivoAnexo.file.name).substring(0,35);
+    el.onclick=function(){abrirChat(chatAtual,this);};
     document.getElementById('listaChats').prepend(el);
   }
-  const txtExibir=txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:'');
   mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.file.name}]`:'')});
-  addMsg('user',txtExibir);
+  addMsg('user',txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:''));
+  // Typing
   const area=document.getElementById('chatArea');
-  const typ=document.createElement('div');typ.className='msg mb';typ.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';area.appendChild(typ);area.scrollTop=area.scrollHeight;
+  const typRow=document.createElement('div');typRow.className='msg-row bot';
+  const typAv=document.createElement('div');typAv.className='msg-av';typAv.textContent='✝';
+  const typBub=document.createElement('div');typBub.className='msg-bubble';
+  typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
+  typRow.appendChild(typAv);typRow.appendChild(typBub);
+  area.appendChild(typRow);area.scrollTop=area.scrollHeight;
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
-    let r;
+    let resp;
     if(arquivoAnexo){
       const fd=new FormData();fd.append('mensagens',JSON.stringify(mensagens));fd.append('chat_id',chatAtual);fd.append('arquivo',arquivoAnexo.file);fd.append('tipo_arquivo',arquivoAnexo.tipo);
-      r=await fetch('/api/chat',{method:'POST',body:fd});
+      resp=await fetch('/api/chat',{method:'POST',body:fd});
     }else{
-      r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
+      resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
     }
-    const d=await r.json();typ.remove();
+    const d=await resp.json();typRow.remove();
     if(d.resposta){mensagens.push({role:'assistant',content:d.resposta});addMsg('assistant',d.resposta);}
-  }catch(e){typ.remove();addMsg('assistant','Desculpe, ocorreu um erro. Tente novamente. 🙏');}
-  removerAnexo();
-  carregando=false;document.getElementById('btnEnv').disabled=false;document.getElementById('inputMsg').focus();
+  }catch(e){typRow.remove();addMsg('assistant','Desculpe, ocorreu um erro. Tente novamente. 🙏');}
+  remAnexo();carregando=false;document.getElementById('btnEnv').disabled=false;
+  document.getElementById('msgInput').focus();
 }
-function selecionarArquivo(input){
+
+function selArquivo(input){
   const file=input.files[0];if(!file)return;
   const isPDF=file.type==='application/pdf',isImg=file.type.startsWith('image/');
-  if(!isPDF&&!isImg){alert('Apenas imagens e PDFs são permitidos.');return;}
-  const maxMB=isPDF?8:4;
-  if(file.size>maxMB*1024*1024){alert(`Arquivo muito grande. Máximo ${maxMB}MB.`);return;}
+  if(!isPDF&&!isImg){alert('Apenas imagens e PDFs.');return;}
+  if(file.size>(isPDF?8:4)*1024*1024){alert('Arquivo muito grande.');return;}
   arquivoAnexo={tipo:isPDF?'pdf':'imagem',file};
-  document.getElementById('previewIco').textContent=isPDF?'📄':'🖼️';
-  document.getElementById('previewNome').textContent=file.name;
-  document.getElementById('previewAnexo').classList.add('show');
+  document.getElementById('anexoIco').textContent=isPDF?'📄':'🖼️';
+  document.getElementById('anexoNome').textContent=file.name;
+  document.getElementById('inpAnexo').classList.add('on');
   input.value='';
 }
-function removerAnexo(){
-  arquivoAnexo=null;
-  const p=document.getElementById('previewAnexo');if(p)p.classList.remove('show');
-}
-function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMsg();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classList.remove('on');}
+function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
+
+// ── BIBLIOTECA / PERFIL ──
+function abrirBiblioteca(){
+  const g=document.getElementById('bibGrid');g.innerHTML='';
+  SANTOS_LIB.forEach(s=>{
+    const d=document.createElement('div');d.className='bib-item'+(s.url===heroUrl?' sel':'');
+    d.innerHTML=`<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
+    d.onclick=()=>{heroUrl=s.url;localStorage.setItem('heroSanto',s.url);const img=document.getElementById('heroImg');img.classList.remove('on');img.onload=()=>img.classList.add('on');img.src=s.url;fecharBib();};
+    g.appendChild(d);
+  });
+  document.getElementById('bibModal').classList.add('on');
+}
+function fecharBib(){document.getElementById('bibModal').classList.remove('on');}
+function abrirModalPerfil(){document.getElementById('modalPerfil').classList.add('on');}
+function fecharModalPerfil(){document.getElementById('modalPerfil').classList.remove('on');}
+function prevFoto(input){
+  if(!input.files||!input.files[0])return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const url=e.target.result;
+    document.getElementById('modalAv').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    document.getElementById('heroAv').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover"><div class="hero-av-edit">✏</div>`;
+  };
+  r.readAsDataURL(input.files[0]);
+}
+function salvarPerfil(){
+  const nome=document.getElementById('nomeInput').value.trim();
+  if(!nome)return;
+  document.querySelector('.hero-nome').textContent=document.querySelector('.hero-nome').textContent.replace(/,.*$/,', '+nome.split(' ')[0]);
+  document.querySelectorAll('.user-nome').forEach(e=>e.textContent=nome);
+  fecharModalPerfil();
+  // TODO: /api/atualizar-perfil
+}
 
 // Teclado mobile
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
-    const wrap=document.querySelector('.inp-wrap');
-    if(!wrap)return;
+    const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb-h'))}px`:'var(--nb-h)';
+    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb'))}px`:'var(--nb)';
   });
 }
+
+// Init home
+irHome();
+novoChat();
 </script>
 </body>
 </html>
