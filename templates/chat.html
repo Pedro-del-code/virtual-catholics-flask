@@ -19,7 +19,6 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 /* FUNDO */
 .fundo{position:fixed;inset:0;z-index:0;background-size:cover;
   background-position:center;background-repeat:no-repeat;
-  opacity:.65;pointer-events:none;transition:opacity .4s;}
 
 /* ── HEADER ── */
 .hdr{display:flex;align-items:center;
@@ -30,9 +29,6 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
   display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hdr-center{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;min-width:0;}
 .hdr-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);white-space:nowrap;}
-.btn-modo{background:transparent;border:1px solid rgba(200,160,80,.3);border-radius:6px;
-  color:rgba(200,160,80,.65);font-size:10px;padding:3px 10px;cursor:pointer;
-  font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;flex-shrink:0;}
 .hdr-right{display:flex;gap:6px;flex-shrink:0;}
 .btn-hdr-ico{background:transparent;border:1px solid var(--bord2);border-radius:50%;
   color:var(--gold);width:36px;height:36px;font-size:16px;cursor:pointer;
@@ -47,123 +43,45 @@ body{font-family:'Cormorant Garamond',serif;color:var(--text);display:flex;flex-
 /* ── HOME VIEW ── */
 #homeView{display:flex;flex-direction:column;}
 
-/* ── HERO (substitui banner) ── */
-.hero{position:relative;overflow:hidden;flex-shrink:0;background:var(--bg);}
-
-/* Imagem do santo (biblioteca) */
-.hero-saint-img{
-  width:100%;height:200px;object-fit:cover;object-position:center top;
-  display:block;opacity:0;transition:opacity .5s;
-}
-.hero-saint-img.loaded{opacity:1;}
-.hero-saint-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(10,6,0,.15) 0%,rgba(10,6,0,.82) 100%);
-}
-
-/* Perfil do usuário dentro do hero */
-.hero-user{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:14px 16px 16px;
-  display:flex;align-items:flex-end;gap:12px;
-}
-.hero-avatar-wrap{position:relative;flex-shrink:0;}
-.hero-avatar{
-  width:54px;height:54px;border-radius:50%;
-  border:2px solid rgba(200,160,80,.6);
-  background:rgba(200,160,80,.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;overflow:hidden;cursor:pointer;
-  transition:border-color .2s;
-}
-.hero-avatar:hover{border-color:var(--gold);}
-.hero-avatar img{width:100%;height:100%;object-fit:cover;}
-.hero-edit-badge{
-  position:absolute;bottom:0;right:0;
-  width:18px;height:18px;border-radius:50%;
-  background:var(--gold);color:#0a0600;
-  font-size:9px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:1.5px solid var(--bg);
-}
+.hero{position:relative;overflow:hidden;flex-shrink:0;min-height:190px;background:linear-gradient(135deg,#0e0800 0%,#1a0f00 100%);}
+.hero-img{width:100%;height:190px;object-fit:cover;object-position:center top;display:block;opacity:0;transition:opacity .6s;position:absolute;inset:0;}
+.hero-img.loaded{opacity:.55;}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,6,0,.2) 0%,rgba(10,6,0,.88) 100%);}
+.hero-body{position:absolute;bottom:0;left:0;right:0;padding:12px 14px 16px;display:flex;align-items:flex-end;gap:12px;}
+.hero-av{width:52px;height:52px;border-radius:50%;border:2px solid rgba(200,160,80,.55);background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;cursor:pointer;flex-shrink:0;position:relative;}
+.hero-av img{width:100%;height:100%;object-fit:cover;}
+.hero-edit{position:absolute;bottom:0;right:0;width:17px;height:17px;border-radius:50%;background:var(--gold);color:#0a0600;font-size:8px;display:flex;align-items:center;justify-content:center;border:1.5px solid #0a0600;}
 .hero-info{flex:1;min-width:0;}
-.hero-bem{
-  font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.2px;
-  color:var(--gold2);text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:2px;
-}
-.hero-sub{font-size:12px;font-style:italic;color:rgba(240,230,208,.65);
-  text-shadow:0 1px 6px rgba(0,0,0,.9);}
-.hero-tag{
-  display:inline-block;background:rgba(0,0,0,.5);
-  border:1px solid rgba(200,160,80,.4);border-radius:20px;
-  padding:2px 9px;font-size:9px;font-family:'Cinzel',serif;
-  letter-spacing:1px;color:var(--gold);margin-bottom:5px;
-}
-.hero-saint-btn{
-  flex-shrink:0;background:rgba(0,0,0,.45);border:1px solid rgba(200,160,80,.35);
-  border-radius:8px;padding:6px 8px;color:var(--gold);font-size:10px;
-  cursor:pointer;text-align:center;line-height:1.3;min-width:48px;
-  font-family:'Cinzel',serif;letter-spacing:.5px;
-}
-.hero-saint-btn:hover{border-color:var(--gold);background:rgba(200,160,80,.15);}
-
-/* Modo claro hero */
-body.claro .hero-bem{color:#4a2400;text-shadow:none;}
-body.claro .hero-sub{color:rgba(60,25,0,.65);}
-
-/* Modal editar perfil */
-.modal-perfil{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.75);align-items:flex-end;justify-content:center;
-}
-.modal-perfil.aberto{display:flex;}
-.modal-card{
-  background:#0e0a04;border:1px solid rgba(200,160,80,.28);
-  border-radius:18px 18px 0 0;padding:20px 18px 30px;
-  width:100%;max-width:480px;
-}
-.modal-titulo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;
-  color:var(--gold);margin-bottom:16px;text-align:center;}
-.modal-avatar-big{
-  width:72px;height:72px;border-radius:50%;border:2px solid rgba(200,160,80,.5);
-  background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;
-  font-size:28px;overflow:hidden;margin:0 auto 14px;cursor:pointer;
-}
-.modal-avatar-big img{width:100%;height:100%;object-fit:cover;}
-.modal-avatar-hint{font-size:11px;font-style:italic;color:rgba(200,160,80,.5);
-  text-align:center;margin-bottom:16px;}
-.modal-field{margin-bottom:12px;}
-.modal-field label{display:block;font-family:'Cinzel',serif;font-size:9px;
-  letter-spacing:2px;color:rgba(200,160,80,.6);margin-bottom:5px;}
-.modal-field input{width:100%;background:rgba(255,255,255,.04);
-  border:1px solid rgba(200,160,80,.22);border-radius:4px;
-  color:var(--text);font-family:'Cormorant Garamond',serif;font-size:15px;
-  padding:9px 12px;outline:none;}
-.modal-field input:focus{border-color:rgba(200,160,80,.5);}
-.modal-btns{display:flex;gap:8px;margin-top:4px;}
-.btn-modal-cancel{flex:1;padding:11px;background:transparent;
-  border:1px solid rgba(200,160,80,.22);border-radius:4px;
-  color:rgba(200,160,80,.6);font-size:13px;cursor:pointer;}
-.btn-modal-save{flex:2;padding:11px;
-  background:linear-gradient(135deg,var(--gold3),var(--gold));
-  border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;
-  font-size:11px;letter-spacing:1.5px;cursor:pointer;}
-
-/* Modal biblioteca de santos */
-.modal-biblioteca{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.85);flex-direction:column;
-}
-.modal-biblioteca.aberto{display:flex;}
-.bib-head{padding:14px 16px;border-bottom:1px solid rgba(200,160,80,.2);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.bib-titulo{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
+.hero-tag{display:inline-block;background:rgba(0,0,0,.55);border:1px solid rgba(200,160,80,.4);border-radius:20px;padding:2px 9px;font-size:9px;font-family:'Cinzel',serif;letter-spacing:1px;color:var(--gold);margin-bottom:4px;}
+.hero-bem{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.2px;color:var(--gold2);text-shadow:0 1px 8px rgba(0,0,0,.9);margin-bottom:2px;}
+.hero-sub{font-size:12px;font-style:italic;color:rgba(240,230,208,.6);text-shadow:0 1px 6px rgba(0,0,0,.9);}
+.hero-bib-btn{flex-shrink:0;background:rgba(0,0,0,.5);border:1px solid rgba(200,160,80,.35);border-radius:8px;padding:7px 9px;color:var(--gold);font-size:10px;cursor:pointer;text-align:center;line-height:1.4;min-width:46px;font-family:'Cinzel',serif;}
+.hero-bib-btn:hover{border-color:var(--gold);}
+/* Modal perfil */
+.modal-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);align-items:flex-end;justify-content:center;}
+.modal-bg.aberto{display:flex;}
+.modal-box{background:#0e0a04;border:1px solid rgba(200,160,80,.28);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:480px;}
+.modal-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:16px;text-align:center;}
+.modal-av{width:68px;height:68px;border-radius:50%;border:2px solid rgba(200,160,80,.5);background:rgba(200,160,80,.12);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;margin:0 auto 8px;cursor:pointer;}
+.modal-av img{width:100%;height:100%;object-fit:cover;}
+.modal-hint{font-size:11px;font-style:italic;color:rgba(200,160,80,.5);text-align:center;margin-bottom:14px;}
+.modal-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(200,160,80,.6);margin-bottom:5px;display:block;}
+.modal-inp{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,80,.22);border-radius:4px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:15px;padding:9px 12px;outline:none;margin-bottom:14px;}
+.modal-inp:focus{border-color:rgba(200,160,80,.5);}
+.modal-row{display:flex;gap:8px;}
+.btn-mc{flex:1;padding:11px;background:transparent;border:1px solid rgba(200,160,80,.22);border-radius:4px;color:rgba(200,160,80,.6);font-size:13px;cursor:pointer;}
+.btn-ms{flex:2;padding:11px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;}
+/* Biblioteca de santos */
+.bib-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);flex-direction:column;}
+.bib-modal.aberto{display:flex;}
+.bib-hd{padding:14px 16px;border-bottom:1px solid rgba(200,160,80,.2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.bib-tit{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);}
+.bib-close{background:transparent;border:none;color:rgba(240,230,208,.6);font-size:22px;cursor:pointer;}
 .bib-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
-.bib-item{border-radius:10px;overflow:hidden;border:1px solid rgba(200,160,80,.2);
-  cursor:pointer;transition:all .2s;position:relative;}
-.bib-item:hover,.bib-item.ativo{border-color:var(--gold);}
-.bib-item img{width:100%;height:130px;object-fit:cover;display:block;}
-.bib-nome{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;
-  color:var(--gold2);padding:7px 8px;background:rgba(10,6,0,.9);text-align:center;}
+.bib-item{border-radius:10px;overflow:hidden;border:2px solid rgba(200,160,80,.15);cursor:pointer;transition:all .2s;}
+.bib-item:hover,.bib-item.sel{border-color:var(--gold);}
+.bib-item img{width:100%;height:120px;object-fit:cover;display:block;}
+.bib-nome{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.8px;color:var(--gold2);padding:6px 8px;background:rgba(10,6,0,.92);text-align:center;}
 
 /* Botão IA rápido */
 .btn-ia-rapido{margin:14px 14px 0;padding:14px 16px;
@@ -333,61 +251,11 @@ textarea:focus{border-color:rgba(200,160,80,.5);}
   color:var(--gold2);font-size:16px;cursor:pointer;transition:all .2s;text-align:center;}
 .btn-ia:hover{background:rgba(200,160,80,.22);border-color:var(--gold);}
 
-/* ── MODO CLARO ── */
-body.claro{background:#ede0c4;color:#180a00;}
-body.claro .hdr{background:rgba(235,220,175,.99);border-bottom-color:rgba(150,100,10,.3);}
-body.claro .fundo{opacity:.22;}
-body.claro .navbar{background:rgba(240,228,185,.99);border-top-color:rgba(150,100,10,.28);}
-body.claro .nb-item{color:rgba(80,40,0,.4);}
-body.claro .nb-item.ativo{color:#4a2400;}
-body.claro .inp-wrap{background:rgba(235,220,175,.98);}
-body.claro .sidebar{background:rgba(242,228,185,.99);border-right-color:rgba(150,100,10,.28);}
-body.claro .painel{background:rgba(242,228,185,.99);}
-body.claro .sb-logo{color:#4a2400;}
-body.claro .sb-sub{color:rgba(80,40,0,.55);}
-body.claro .sb-sec{color:rgba(80,40,0,.55);}
-body.claro .btn-novo{color:#4a2400;border-color:rgba(150,100,10,.38);background:rgba(150,100,10,.12);}
-body.claro .ci{color:#180a00;}
-body.claro .ci:hover{background:rgba(150,100,10,.12);color:#3a1400;}
-body.claro .ci.ativo{background:rgba(150,100,10,.16);color:#3a1400;border-color:rgba(150,100,10,.28);}
-body.claro .mi{color:#180a00;}
-body.claro .mi:hover{background:rgba(150,100,10,.1);color:#3a1400;}
-body.claro .user-nome{color:#4a2400;}
-body.claro .lang-btn{color:rgba(80,40,0,.6);border-color:rgba(150,100,10,.22);}
-body.claro .lang-btn.ativo{color:#4a2400;border-color:#8b6820;}
-body.claro .btn-sair{color:rgba(80,40,0,.6);border-color:rgba(150,100,10,.2);}
-body.claro .btn-hbg{color:#4a2400;border-color:rgba(150,100,10,.4);}
-body.claro .btn-modo{color:#4a2400;}
-body.claro .mu{background:rgba(150,100,10,.2);color:#180a00;border-color:rgba(150,100,10,.3);}
-body.claro .mb{background:rgba(252,242,215,.97);color:#180a00;border-color:rgba(150,100,10,.2);}
-body.claro .mb-autor{color:#6a3800;}
-body.claro textarea{background:rgba(252,242,215,.92);color:#180a00;border-color:rgba(150,100,10,.38);}
-body.claro textarea::placeholder{color:rgba(80,40,0,.42);}
-body.claro .pi{background:rgba(252,242,215,.92);border-color:rgba(150,100,10,.2);color:#180a00;}
-body.claro .pi:hover{background:rgba(150,100,10,.14);color:#3a1400;}
-body.claro .pt{color:#180a00;}
-body.claro .pan-titulo{color:#4a2400;}
-body.claro .pan-head{border-bottom-color:rgba(150,100,10,.2);}
-body.claro .btn-xpan{color:rgba(60,25,0,.65);}
-body.claro .btn-nav{background:rgba(150,100,10,.14);border-color:rgba(150,100,10,.28);color:#4a2400;}
-body.claro .btn-ia{background:rgba(20,8,0,.85);color:var(--gold2);}
-body.claro .grid-item{background:rgba(150,100,10,.08);border-color:rgba(150,100,10,.2);}
-body.claro .grid-item:hover{background:rgba(150,100,10,.16);}
-body.claro .grid-nome{color:rgba(60,25,0,.75);}
-body.claro .versiculo-wrap{background:rgba(150,100,10,.06);border-color:rgba(150,100,10,.2);}
-body.claro .vers-txt{color:#180a00;}
-body.claro .santo-card{background:rgba(150,100,10,.06);border-color:rgba(150,100,10,.2);}
-body.claro .santo-nome{color:#4a2400;}
-body.claro .banner-bem{color:#4a2400;}
-body.claro .btn-ia-rapido{background:rgba(150,100,10,.12);border-color:rgba(150,100,10,.3);}
-body.claro .ia-titulo{color:#4a2400;}
-body.claro .btn-anexo{color:#4a2400;border-color:rgba(150,100,10,.38);}
-body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,100,10,.25);color:#4a2400;}
+
 </style>
 </head>
 <body id="body">
 
-<div class="fundo" id="fundo"></div>
 <div class="overlay" id="overlay" onclick="fecharTudo()"></div>
 
 <!-- Header -->
@@ -395,7 +263,6 @@ body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,
   <button class="btn-hbg" onclick="abrirSB()">☰</button>
   <div class="hdr-center">
     <div class="hdr-title">✝ VIRTUAL CATHOLICS</div>
-    <button class="btn-modo" id="btnModo" onclick="toggleModo()">🌙 {{ T.modo_escuro }}</button>
   </div>
   <div class="hdr-right">
     <button class="btn-hdr-ico" onclick="irParaChat()">💬</button>
@@ -410,49 +277,45 @@ body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,
 
     <!-- Hero -->
     <div class="hero">
-      <img class="hero-saint-img" id="heroSaintImg" src="" alt="">
-      <div class="hero-saint-overlay"></div>
-      <div class="hero-user">
-        <div class="hero-avatar-wrap" onclick="abrirModalPerfil()">
-          <div class="hero-avatar" id="heroAvatar">
-            {% if usuario.foto %}<img src="{{ usuario.foto }}" id="heroAvatarImg" alt="">{% else %}<span id="heroAvatarEmoji">🙏</span>{% endif %}
-          </div>
-          <div class="hero-edit-badge">✏</div>
+      <img class="hero-img" id="heroImg" src="" alt="">
+      <div class="hero-grad"></div>
+      <div class="hero-body">
+        <div class="hero-av" onclick="abrirModalPerfil()" id="heroAv">
+          {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
+          <div class="hero-edit">✏</div>
         </div>
         <div class="hero-info">
           <div class="hero-tag" id="bannerSanto">⭐ Santo do Dia</div>
           <div class="hero-bem">{{ T.bem_vindo }}, {{ usuario.nome.split()[0] }}</div>
           <div class="hero-sub" id="bannerTempoLiturgico">Carregando...</div>
         </div>
-        <button class="hero-saint-btn" onclick="abrirBiblioteca()" title="Escolher imagem do santo">🖼<br>Santos</button>
+        <button class="hero-bib-btn" onclick="abrirBiblioteca()">🖼<br>Santos</button>
       </div>
     </div>
 
-    <!-- Modal editar perfil -->
-    <div class="modal-perfil" id="modalPerfil">
-      <div class="modal-card">
-        <div class="modal-titulo">✝ EDITAR PERFIL</div>
-        <div class="modal-avatar-big" id="modalAvatarBig" onclick="document.getElementById('inputFotoPerfil').click()">
-          {% if usuario.foto %}<img src="{{ usuario.foto }}" id="modalAvatarImg" alt="">{% else %}🙏{% endif %}
+    <!-- Modal perfil -->
+    <div class="modal-bg" id="modalPerfil">
+      <div class="modal-box">
+        <div class="modal-tit">✝ EDITAR PERFIL</div>
+        <div class="modal-av" onclick="document.getElementById('fotoInput').click()" id="modalAv">
+          {% if usuario.foto %}<img src="{{ usuario.foto }}" alt="">{% else %}🙏{% endif %}
         </div>
-        <div class="modal-avatar-hint">Toque para trocar a foto</div>
-        <input type="file" id="inputFotoPerfil" accept="image/*" style="display:none" onchange="previewFotoPerfil(this)">
-        <div class="modal-field">
-          <label>Nome exibido</label>
-          <input type="text" id="inputNomePerfil" value="{{ usuario.nome }}" placeholder="Seu nome">
-        </div>
-        <div class="modal-btns">
-          <button class="btn-modal-cancel" onclick="fecharModalPerfil()">Cancelar</button>
-          <button class="btn-modal-save" onclick="salvarPerfil()">SALVAR</button>
+        <div class="modal-hint">Toque para trocar a foto</div>
+        <input type="file" id="fotoInput" accept="image/*" style="display:none" onchange="prevFoto(this)">
+        <label class="modal-lbl">Nome exibido</label>
+        <input class="modal-inp" type="text" id="nomeInput" value="{{ usuario.nome }}">
+        <div class="modal-row">
+          <button class="btn-mc" onclick="fecharModalPerfil()">Cancelar</button>
+          <button class="btn-ms" onclick="salvarPerfil()">SALVAR</button>
         </div>
       </div>
     </div>
 
-    <!-- Modal biblioteca de santos -->
-    <div class="modal-biblioteca" id="modalBiblioteca">
-      <div class="bib-head">
-        <div class="bib-titulo">📸 BIBLIOTECA DE SANTOS</div>
-        <button style="background:transparent;border:none;color:var(--text2);font-size:22px;cursor:pointer" onclick="fecharBiblioteca()">✕</button>
+    <!-- Biblioteca de santos -->
+    <div class="bib-modal" id="bibModal">
+      <div class="bib-hd">
+        <div class="bib-tit">📸 BIBLIOTECA DE SANTOS</div>
+        <button class="bib-close" onclick="fecharBiblioteca()">✕</button>
       </div>
       <div class="bib-grid" id="bibGrid"></div>
     </div>
@@ -642,27 +505,78 @@ body.claro .preview-anexo{background:rgba(150,100,10,.08);border-color:rgba(150,
 </div>
 
 <script>
-const IMG_ESC = "{{ url_for('static', filename='sagrada_escura.png') }}";
-const IMG_CLA = "{{ url_for('static', filename='sagrada_clara.png') }}";
-let claro = localStorage.getItem('modo') === 'claro';
 let chatAtual = null, mensagens = [], carregando = false;
 let novDias = [], novDia = 0;
 let arquivoAnexo = null;
 let emChat = false;
 
-// Init
-aplicarModo();
-[IMG_ESC, IMG_CLA].forEach(s=>{const i=new Image();i.src=s;});
-carregarHome();
+// ── BIBLIOTECA DE SANTOS ──
+const SANTOS_LIB = [
+  {nome:"Nossa Senhora Aparecida", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/600px-Nossa_Senhora_Aparecida.jpg"},
+  {nome:"Nossa Senhora de Fátima", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/600px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
+  {nome:"São Francisco de Assis", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/600px-Francisco_de_Zurbaran_006.jpg"},
+  {nome:"Santo Antônio de Lisboa", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/600px-Anthony_of_Padua_with_Christ_Child.jpg"},
+  {nome:"Santa Teresinha", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/600px-ThereseLisieuxPhoto.jpg"},
+  {nome:"São José", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/600px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
+  {nome:"São Pedro Apóstolo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/600px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
+  {nome:"Santa Maria Madalena", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/600px-Mariam_magdalene.jpg"},
+  {nome:"São João Batista", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/600px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
+  {nome:"Nossa Senhora do Carmo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg/600px-Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg"},
+  {nome:"Santo Agostinho", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/600px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
+  {nome:"Santa Rita de Cássia", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/600px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
+  {nome:"São João Paulo II", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/John_Paul_II_portrait_%28square%29.jpg/600px-John_Paul_II_portrait_%28square%29.jpg"},
+  {nome:"Padre Pio", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Padre_Pio_portrait.jpg/600px-Padre_Pio_portrait.jpg"},
+];
+let heroSantoUrl = localStorage.getItem('heroSanto') || null;
 
-// ── MODO ──
-function aplicarModo(){
-  const body=document.getElementById('body'),f=document.getElementById('fundo'),b=document.getElementById('btnModo');
-  if(claro){body.classList.add('claro');f.style.backgroundImage=`url('${IMG_CLA}')`;if(b)b.textContent='🌙 {{ T.modo_escuro }}';}
-  else{body.classList.remove('claro');f.style.backgroundImage=`url('${IMG_ESC}')`;if(b)b.textContent='☀️ {{ T.modo_claro }}';}
-  // hero saint image não muda com modo
+function carregarHeroImg(){
+  const img = document.getElementById('heroImg');
+  if(!img) return;
+  let url = heroSantoUrl;
+  if(!url) url = SANTOS_LIB[new Date().getDate() % SANTOS_LIB.length].url;
+  img.onload = () => img.classList.add('loaded');
+  img.onerror = () => img.style.display = 'none';
+  img.src = url;
 }
-function toggleModo(){claro=!claro;localStorage.setItem('modo',claro?'claro':'escuro');aplicarModo();}
+
+function abrirBiblioteca(){
+  const grid = document.getElementById('bibGrid');
+  grid.innerHTML = '';
+  SANTOS_LIB.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'bib-item' + (s.url === heroSantoUrl ? ' sel' : '');
+    d.innerHTML = `<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
+    d.onclick = () => { heroSantoUrl = s.url; localStorage.setItem('heroSanto', s.url); carregarHeroImg(); fecharBiblioteca(); };
+    grid.appendChild(d);
+  });
+  document.getElementById('bibModal').classList.add('aberto');
+}
+function fecharBiblioteca(){ document.getElementById('bibModal').classList.remove('aberto'); }
+
+// ── MODAL PERFIL ──
+function abrirModalPerfil(){ document.getElementById('modalPerfil').classList.add('aberto'); }
+function fecharModalPerfil(){ document.getElementById('modalPerfil').classList.remove('aberto'); }
+function prevFoto(input){
+  if(!input.files||!input.files[0]) return;
+  const r = new FileReader();
+  r.onload = e => {
+    document.getElementById('modalAv').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    document.getElementById('heroAv').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"><div class="hero-edit">✏</div>`;
+  };
+  r.readAsDataURL(input.files[0]);
+}
+function salvarPerfil(){
+  const nome = document.getElementById('nomeInput').value.trim();
+  if(!nome) return;
+  document.querySelectorAll('.hero-bem').forEach(e => { const t = e.textContent; e.textContent = t.replace(/,.*/, ', '+nome.split(' ')[0]); });
+  document.querySelectorAll('.user-nome').forEach(e => e.textContent = nome);
+  fecharModalPerfil();
+  // TODO: persistir via /api/atualizar-perfil
+}
+
+// Init
+carregarHeroImg();
+carregarHome();
 
 // ── NAVEGAÇÃO ──
 function irParaInicio(){
@@ -699,8 +613,6 @@ function setNbAtivo(id){
 
 // ── HOME: carrega dados ──
 async function carregarHome(){
-  // Banner imagem
-  if(bb)bb.style.backgroundImage=claro?`url('${IMG_CLA}')`:`url('${IMG_ESC}')`;
   // Santo do dia
   try{
     const r=await fetch('/api/santo-dia'),d=await r.json();
@@ -757,11 +669,22 @@ async function abrirPainel(tipo){
 
   if(tipo==='santo'){
     document.getElementById('panTitulo').textContent='SANTO DO DIA';
-    const r=await fetch('/api/santo-dia'),d=await r.json();
-    if(d.santo){
-      const nome=d.santo;
-      body.innerHTML=`<div style="text-align:center;padding:20px 10px 16px"><div style="font-size:42px;margin-bottom:8px">⭐</div><div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div><div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold2);margin-bottom:14px;line-height:1.3">${nome}</div><div style="font-size:15px;font-style:italic;color:rgba(240,230,208,.75);line-height:1.7;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏</div></div><div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\\'")}')">✨ Perguntar à IA sobre ${nome}</div>`;
-    }else{body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0">Nenhum santo registrado para hoje.</div>';}
+    body.innerHTML='<div class="pt">Carregando... ⭐</div>';
+    try{
+      const r=await fetch('/api/santo-dia'),d=await r.json();
+      if(d.santo){
+        const nome=d.santo;
+        body.innerHTML=`<div style="text-align:center;padding:20px 10px 10px">
+          <div style="font-size:38px;margin-bottom:8px">⭐</div>
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px">${d.data}</div>
+          <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold2);margin-bottom:12px;line-height:1.4">${nome}</div>
+          <div style="font-size:14px;font-style:italic;color:rgba(240,230,208,.7);line-height:1.7;padding:0 8px">Que a intercessão deste(a) santo(a) nos alcance as graças de que tanto precisamos neste dia. 🙏</div>
+        </div>
+        <div class="btn-ia" onclick="perguntarSanto('${nome.replace(/'/g,"\'")}')">✨ Perguntar à IA sobre ${nome}</div>`;
+      } else {
+        body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0;font-style:italic;color:rgba(240,230,208,.5)">Nenhum santo registrado para hoje.<br><br>🙏</div>';
+      }
+    }catch(e){ body.innerHTML='<div class="pt">Erro ao carregar. Tente novamente.</div>'; }
     return;
   }
   if(tipo==='calendario'){
@@ -814,27 +737,39 @@ async function abrirPainel(tipo){
   }
   if(tipo==='catecismo'){
     document.getElementById('panTitulo').textContent='CATECISMO';
-    const r=await fetch('/api/dados/catecismo'),pilares=await r.json();
-    body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b>\nEscolha um pilar:</div>';
-    pilares.forEach(p=>{const el=document.createElement('div');el.className='pi';el.textContent=p;el.onclick=()=>abrirPilar(p);body.appendChild(el);});
+    body.innerHTML='<div class="pt">Carregando... 📖</div>';
+    try{
+      const r=await fetch('/api/dados/catecismo'),pilares=await r.json();
+      if(Array.isArray(pilares)&&pilares.length>0){
+        body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo da Igreja Católica</b>\nEscolha um pilar:</div>';
+        pilares.forEach(p=>{const el=document.createElement('div');el.className='pi';el.textContent=p;el.onclick=()=>abrirPilar(p);body.appendChild(el);});
+      } else {
+        body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo</b>\n\nPara estudar o Catecismo da Igreja Católica, você pode perguntar diretamente à IA!</div><div class="btn-ia" onclick="perguntarIA('Explique um artigo do Catecismo da Igreja Católica')">✨ Perguntar à IA sobre o Catecismo</div>';
+      }
+    }catch(e){
+      body.innerHTML='<div class="pt"><b style="color:var(--gold)">📖 Catecismo</b>\n\nPergunte à IA sobre qualquer tema do Catecismo!</div><div class="btn-ia" onclick="perguntarIA('Explique um artigo do Catecismo da Igreja Católica')">✨ Perguntar à IA</div>';
+    }
     return;
   }
   if(tipo==='creditos'){
     document.getElementById('panTitulo').textContent='CRÉDITOS';
-    const r=await fetch('/api/creditos'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\n${d.criador}\n<small>${d.criador_desc}</small>\n\n<b style="color:var(--gold)">💡 Agradecimento</b>\n${d.agradecimento_nome}\n<small>${d.agradecimento_desc}</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>${d.dedicatoria}</small>\n\n<small style="opacity:.5">${d.versao} ✝️</small></div>`;
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">👨‍💻 Criador</b>\nPedro Pimentel\n<small>Desenvolvedor e idealizador do Virtual Catholics</small>\n\n<b style="color:var(--gold)">🤖 IA</b>\nGroq (LLaMA 3.3 70B)\n<small>Motor de inteligência artificial do assistente espiritual</small>\n\n<b style="color:var(--gold)">🗄️ Banco de dados</b>\nSupabase\n<small>Armazenamento de usuários, chats e memórias</small>\n\n<b style="color:var(--gold)">🙏 Dedicado a</b>\n<small>À Virgem Maria, mãe e rainha de todos nós.</small>\n\n<small style="opacity:.5">Virtual Catholics v1.0 ✝️</small></div>`;
     return;
   }
   if(tipo==='feedback'){
     document.getElementById('panTitulo').textContent='FEEDBACK & SUPORTE';
-    const r=await fetch('/api/info'),d=await r.json();
-    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:1rem;font-weight:600">${d.email}</span>\n\n<small>Envie suas sugestões e dúvidas. Respondemos com caridade! 🙏</small></div>`;
+    body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:1rem;font-weight:600">pimenteldanubia2014@gmail.com</span>\n\n<small>Envie suas sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>`;
     return;
   }
   if(tipo==='doacoes'){
     document.getElementById('panTitulo').textContent='APOIE O PROJETO';
-    const r=await fetch('/api/info'),d=await r.json();
-    body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua doação mantém este ministério digital.</small>\n\n<b style="color:var(--gold)">📱 Pix — escaneie o QR Code:</b></div><div style="text-align:center;padding:10px"><img src="${d.pix_qr}" style="border-radius:10px;border:2px solid var(--gold);width:160px" alt="Pix QR"></div><div class="pt" style="text-align:center;opacity:.6"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
+    body.innerHTML=`<div class="pt" style="text-align:center"><b style="color:var(--gold)">💚 Apoie o Virtual Catholics</b>\n\n<small>Sua contribuição mantém este ministério digital vivo.</small></div>
+    <div style="background:rgba(200,160,80,.08);border:1px solid rgba(200,160,80,.25);border-radius:10px;padding:16px;margin:10px 0;text-align:center">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:8px">📱 CHAVE PIX</div>
+      <div style="font-size:16px;color:var(--text);word-break:break-all;margin-bottom:10px">pimenteldanubia2014@gmail.com</div>
+      <button onclick="navigator.clipboard.writeText('pimenteldanubia2014@gmail.com').then(()=>alert('Chave Pix copiada! 🙏'))" style="background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:4px;color:#0a0600;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:9px 18px;cursor:pointer">COPIAR CHAVE</button>
+    </div>
+    <div class="pt" style="text-align:center;opacity:.6"><small>Que Deus abençoe quem contribui! ✝️</small></div>`;
     return;
   }
   document.getElementById('panTitulo').textContent=tipo.replace('_',' ').toUpperCase();
@@ -907,6 +842,11 @@ async function comentarioLiturgia(){
   const inp=document.getElementById('inputMsg');
   inp.value=`Comente a liturgia do dia de hoje (${new Date().toLocaleDateString('pt-BR')}) — as leituras da Missa, o evangelho e uma reflexão espiritual.`;
   autoResize(inp);inp.focus();
+}
+async function perguntarIA(texto){
+  fecharPainel();irParaChat();await novoChat();
+  const inp=document.getElementById('inputMsg');
+  inp.value=texto;autoResize(inp);inp.focus();
 }
 async function perguntarSanto(nome){
   fecharPainel();irParaChat();await novoChat();
@@ -1001,106 +941,6 @@ if(window.visualViewport){
     wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb-h'))}px`:'var(--nb-h)';
   });
 }
-</script>
-
-<script>
-// ── BIBLIOTECA DE SANTOS ──
-const SANTOS_BIBLIOTECA = [
-  {nome:"Nossa Senhora Aparecida", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Nossa_Senhora_Aparecida.jpg/800px-Nossa_Senhora_Aparecida.jpg"},
-  {nome:"Nossa Senhora de Fátima", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg/800px-Our_Lady_of_F%C3%A1tima_%28Ven%C3%A2ncio%29.jpg"},
-  {nome:"São Francisco de Assis", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Francisco_de_Zurbaran_006.jpg/800px-Francisco_de_Zurbaran_006.jpg"},
-  {nome:"Santo Antônio de Lisboa", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Anthony_of_Padua_with_Christ_Child.jpg/800px-Anthony_of_Padua_with_Christ_Child.jpg"},
-  {nome:"Santa Teresinha", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ThereseLisieuxPhoto.jpg/800px-ThereseLisieuxPhoto.jpg"},
-  {nome:"São José", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg/800px-Guido_Reni_-_Saint_Joseph_with_the_Infant_Jesus_-_WGA19304.jpg"},
-  {nome:"São Pedro Apóstolo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Guido_Reni_-_Saint_Peter_-_WGA19289.jpg/800px-Guido_Reni_-_Saint_Peter_-_WGA19289.jpg"},
-  {nome:"Santa Maria Madalena", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Mariam_magdalene.jpg/800px-Mariam_magdalene.jpg"},
-  {nome:"São João Batista", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg/800px-Da_Vinci_-_St._John_the_Baptist_c.1513-1516.jpg"},
-  {nome:"Nossa Senhora do Carmo", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg/800px-Our_Lady_of_Mount_Carmel_%28G._B._Tiepolo%29.jpg"},
-  {nome:"Santo Agostinho", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg/800px-Sandro_Botticelli_-_St_Augustine_-_WGA02840.jpg"},
-  {nome:"Santa Rita de Cássia", url:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg/800px-Francesco_Speltri_-_Saint_Rita_of_Cascia.jpg"},
-];
-
-let santoSelecionado = localStorage.getItem('heroSanto') || null;
-
-function carregarHeroSanto(){
-  const img = document.getElementById('heroSaintImg');
-  if(!img) return;
-  let url = santoSelecionado;
-  if(!url && SANTOS_BIBLIOTECA.length > 0){
-    // Rotaciona pelo dia do mês
-    const idx = new Date().getDate() % SANTOS_BIBLIOTECA.length;
-    url = SANTOS_BIBLIOTECA[idx].url;
-  }
-  if(url){
-    img.onload = () => img.classList.add('loaded');
-    img.src = url;
-  }
-}
-
-function abrirBiblioteca(){
-  const grid = document.getElementById('bibGrid');
-  grid.innerHTML = '';
-  SANTOS_BIBLIOTECA.forEach((s, i) => {
-    const div = document.createElement('div');
-    div.className = 'bib-item' + (s.url === santoSelecionado ? ' ativo' : '');
-    div.innerHTML = `<img src="${s.url}" alt="${s.nome}" loading="lazy"><div class="bib-nome">${s.nome}</div>`;
-    div.onclick = () => selecionarSanto(s.url);
-    grid.appendChild(div);
-  });
-  document.getElementById('modalBiblioteca').classList.add('aberto');
-}
-
-function fecharBiblioteca(){
-  document.getElementById('modalBiblioteca').classList.remove('aberto');
-}
-
-function selecionarSanto(url){
-  santoSelecionado = url;
-  localStorage.setItem('heroSanto', url);
-  const img = document.getElementById('heroSaintImg');
-  img.classList.remove('loaded');
-  img.onload = () => img.classList.add('loaded');
-  img.src = url;
-  fecharBiblioteca();
-}
-
-// ── MODAL PERFIL ──
-function abrirModalPerfil(){
-  document.getElementById('modalPerfil').classList.add('aberto');
-}
-function fecharModalPerfil(){
-  document.getElementById('modalPerfil').classList.remove('aberto');
-}
-
-function previewFotoPerfil(input){
-  if(!input.files || !input.files[0]) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const url = e.target.result;
-    // Atualiza modal
-    const big = document.getElementById('modalAvatarBig');
-    big.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-    // Atualiza hero
-    const av = document.getElementById('heroAvatar');
-    av.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover">`;
-  };
-  reader.readAsDataURL(input.files[0]);
-}
-
-function salvarPerfil(){
-  const nome = document.getElementById('inputNomePerfil').value.trim();
-  if(!nome){ alert('Informe um nome.'); return; }
-  // Atualiza visual imediato
-  document.querySelectorAll('.hero-bem').forEach(el => {
-    el.textContent = el.textContent.replace(/,.+$/, ', ' + nome.split(' ')[0]);
-  });
-  document.querySelectorAll('.user-nome').forEach(el => el.textContent = nome);
-  fecharModalPerfil();
-  // TODO: chamar API /api/atualizar-perfil para persistir no Supabase
-}
-
-// Inicializa hero ao carregar
-document.addEventListener('DOMContentLoaded', carregarHeroSanto);
 </script>
 </body>
 </html>
