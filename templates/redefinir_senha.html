@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Catholics — Nova Senha</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--white:#FDFAF4;--glass-bg:rgba(255,252,245,.10);--glass-border:rgba(201,168,76,.30);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cormorant Garamond',serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px 20px;background:linear-gradient(160deg,#1a1208,#2c1f06,#0f0b03);}
+.card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:24px;padding:44px 36px 36px;width:100%;max-width:380px;backdrop-filter:blur(22px);box-shadow:0 8px 60px rgba(0,0,0,.55);animation:fadeUp .7s cubic-bezier(.16,1,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.top{text-align:center;margin-bottom:32px}
+.cross{display:inline-block;font-size:34px;color:var(--gold);margin-bottom:14px;filter:drop-shadow(0 0 12px rgba(201,168,76,.7));animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 8px rgba(201,168,74,.5))}50%{filter:drop-shadow(0 0 22px rgba(232,201,122,.9))}}
+.title{font-family:'Cinzel',serif;font-size:20px;font-weight:600;letter-spacing:2px;color:var(--white);margin-bottom:6px}
+.subtitle{font-size:14px;font-style:italic;color:var(--gold-light);opacity:.85}
+.msg{background:rgba(160,30,30,.15);border:1px solid rgba(180,60,60,.35);border-radius:10px;color:#ffaaaa;font-size:14px;padding:11px 14px;margin-bottom:14px;display:none}
+.msg.show{display:block}
+.field{position:relative;margin-bottom:14px}
+.field input{width:100%;padding:15px 18px;background:rgba(255,252,245,.08);border:1px solid rgba(201,168,76,.20);border-radius:12px;color:var(--white);font-family:'Cormorant Garamond',serif;font-size:17px;outline:none;transition:all .25s;}
+.field input::placeholder{color:rgba(253,250,244,.35)}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+.eye{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:rgba(201,168,76,.55);cursor:pointer;font-size:15px;transition:color .2s;user-select:none}
+.eye:hover{color:var(--gold)}
+.btn{width:100%;padding:15px;background:linear-gradient(135deg,#C9A84C,#E8C97A,#C9A84C);border:none;border-radius:12px;color:#1a1208;font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:3px;cursor:pointer;box-shadow:0 4px 24px rgba(201,168,76,.35);transition:all .3s;margin-top:4px}
+.btn:hover{box-shadow:0 6px 32px rgba(201,168,76,.55);transform:translateY(-1px)}
+.btn.loading{opacity:.6;pointer-events:none}
+.ok-msg{text-align:center;color:#88cc88;font-style:italic;font-size:15px;margin-top:16px;display:none}
+.ok-msg.show{display:block}
+.blessing{text-align:center;margin-top:22px;font-style:italic;font-size:12px;color:rgba(201,168,76,.35)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <span class="cross">✝</span>
+    <div class="title">NOVA SENHA</div>
+    <div class="subtitle">Digite e confirme sua nova senha</div>
+  </div>
+
+  <div id="msg" class="msg"></div>
+
+  <div class="field">
+    <input type="password" id="nova" placeholder="Nova senha">
+    <span class="eye" onclick="toggle('nova',this)">👁</span>
+  </div>
+  <div class="field">
+    <input type="password" id="confirma" placeholder="Confirmar senha">
+    <span class="eye" onclick="toggle('confirma',this)">👁</span>
+  </div>
+
+  <button class="btn" id="btn" onclick="salvar()">✝ &nbsp; SALVAR NOVA SENHA</button>
+  <div class="ok-msg" id="ok">Senha redefinida! <a href="/login" style="color:var(--gold)">Entrar agora →</a></div>
+  <div class="blessing">Que Deus te abençoe &nbsp;✦&nbsp; Paz e Bem</div>
+</div>
+
+<script>
+const TOKEN = "{{ token }}";
+
+function toggle(id, el) {
+  const i = document.getElementById(id);
+  i.type = i.type === 'password' ? 'text' : 'password';
+  el.textContent = i.type === 'password' ? '👁' : '🙈';
+}
+
+function erro(m) {
+  const e = document.getElementById('msg');
+  e.textContent = m; e.classList.add('show');
+}
+
+async function salvar() {
+  document.getElementById('msg').classList.remove('show');
+  const nova     = document.getElementById('nova').value.trim();
+  const confirma = document.getElementById('confirma').value.trim();
+
+  if (!nova || !confirma) { erro('Preencha os dois campos.'); return; }
+  if (nova !== confirma)  { erro('As senhas não coincidem.'); return; }
+  if (nova.length < 6)    { erro('A senha deve ter pelo menos 6 caracteres.'); return; }
+
+  const btn = document.getElementById('btn');
+  btn.textContent = 'Salvando...'; btn.classList.add('loading');
+
+  try {
+    const r = await fetch('/api/redefinir-senha', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ token: TOKEN, nova_senha: nova })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      btn.style.display = 'none';
+      document.getElementById('ok').classList.add('show');
+    } else {
+      erro(d.erro || 'Erro ao redefinir. Tente novamente.');
+    }
+  } catch(e) {
+    erro('Erro de conexão.');
+  }
+
+  btn.textContent = '✝  SALVAR NOVA SENHA'; btn.classList.remove('loading');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') salvar(); });
+</script>
+</body>
+</html>

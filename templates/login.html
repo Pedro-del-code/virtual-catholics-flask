@@ -109,6 +109,25 @@ body{
 .footer-link a{color:var(--gold-light);font-weight:500;text-decoration:none;transition:opacity .2s}
 .footer-link a:hover{opacity:.75}
 .blessing{text-align:center;margin-top:18px;font-style:italic;font-size:12.5px;color:rgba(201,168,76,.35);letter-spacing:.5px}
+
+/* Modal esqueci senha */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-box{background:rgba(20,14,6,.95);border:1px solid var(--glass-border);border-radius:20px;padding:36px 32px;width:90%;max-width:360px;animation:fadeUp .4s cubic-bezier(.16,1,.3,1) both;text-align:center}
+.modal-cross{font-size:24px;color:var(--gold);margin-bottom:12px;filter:drop-shadow(0 0 8px rgba(201,168,76,.6))}
+.modal-title{font-family:'Cinzel',serif;font-size:15px;letter-spacing:2px;color:var(--white);margin-bottom:6px}
+.modal-sub{font-size:13.5px;font-style:italic;color:rgba(253,250,244,.5);margin-bottom:22px;line-height:1.6}
+.modal-input{width:100%;padding:14px 16px;background:var(--input-bg);border:1px solid rgba(201,168,76,.2);border-radius:10px;color:var(--white);font-family:'Cormorant Garamond',serif;font-size:16px;outline:none;margin-bottom:14px;transition:all .25s}
+.modal-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.modal-input::placeholder{color:rgba(253,250,244,.35)}
+.modal-btn{width:100%;padding:13px;background:linear-gradient(135deg,#C9A84C,#E8C97A,#C9A84C);border:none;border-radius:10px;color:#1a1208;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2.5px;cursor:pointer;margin-bottom:10px;transition:all .3s}
+.modal-btn:hover{box-shadow:0 4px 20px rgba(201,168,76,.4)}
+.modal-btn.loading{opacity:.6;pointer-events:none}
+.modal-cancel{font-size:13px;font-style:italic;color:rgba(201,168,76,.5);cursor:pointer;transition:color .2s}
+.modal-cancel:hover{color:var(--gold)}
+.modal-msg{font-size:13.5px;margin-top:10px;min-height:18px;font-style:italic}
+.modal-msg.ok{color:#88cc88}
+.modal-msg.err{color:#ffaaaa}
 </style>
 </head>
 <body>
@@ -136,7 +155,7 @@ body{
       </div>
     </div>
 
-    <a href="#" class="forgot">Esqueci minha senha</a>
+    <a href="#" class="forgot" onclick="abrirModalSenha();return false">Esqueci minha senha</a>
     <button class="btn-main" id="btn-entrar" onclick="fazerLogin()">✝ &nbsp; {{ T.entrar }}</button>
     <div class="or">ou</div>
     <button class="btn-google" onclick="window.location.href='/auth/google'">
@@ -147,11 +166,54 @@ body{
     <div class="blessing">Que Deus te abençoe &nbsp;✦&nbsp; Paz e Bem</div>
   </div>
 </div>
+<!-- Modal esqueci minha senha -->
+<div class="modal-overlay" id="modalSenha">
+  <div class="modal-box">
+    <div class="modal-cross">✝</div>
+    <div class="modal-title">REDEFINIR SENHA</div>
+    <div class="modal-sub">Digite seu e-mail e enviaremos um link para redefinir sua senha.</div>
+    <input type="email" id="modal-email" class="modal-input" placeholder="Seu e-mail">
+    <button class="modal-btn" id="modal-btn" onclick="enviarRedefinicao()">✝ &nbsp; ENVIAR LINK</button>
+    <div class="modal-msg" id="modal-msg"></div>
+    <div class="modal-cancel" onclick="fecharModalSenha()">Cancelar</div>
+  </div>
+</div>
 <script>
 let idioma='{{ idioma }}';
 function mostrarErro(m){const e=document.getElementById('erro');e.textContent=m;e.classList.add('show')}
 function limparErro(){document.getElementById('erro').classList.remove('show')}
-function toggleSenha(id,el){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';el.textContent=inp.type==='password'?'👁':'🙈'}
+function abrirModalSenha(){
+  document.getElementById('modalSenha').classList.add('show');
+  document.getElementById('modal-email').value='';
+  document.getElementById('modal-msg').textContent='';
+  document.getElementById('modal-msg').className='modal-msg';
+  setTimeout(()=>document.getElementById('modal-email').focus(),100);
+}
+function fecharModalSenha(){
+  document.getElementById('modalSenha').classList.remove('show');
+}
+async function enviarRedefinicao(){
+  const email=document.getElementById('modal-email').value.trim();
+  const msg=document.getElementById('modal-msg');
+  const btn=document.getElementById('modal-btn');
+  if(!email){msg.textContent='Digite seu e-mail.';msg.className='modal-msg err';return;}
+  btn.textContent='Enviando...';btn.classList.add('loading');
+  msg.textContent='';msg.className='modal-msg';
+  try{
+    const r=await fetch('/api/esqueci-senha',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const d=await r.json();
+    if(d.ok){
+      msg.textContent='Link enviado! Verifique seu e-mail.';msg.className='modal-msg ok';
+      btn.style.display='none';
+    }else{
+      msg.textContent=d.erro||'Erro ao enviar. Tente novamente.';msg.className='modal-msg err';
+    }
+  }catch(e){msg.textContent='Erro de conexão.';msg.className='modal-msg err';}
+  btn.textContent='✝  ENVIAR LINK';btn.classList.remove('loading');
+}
+// Fechar ao clicar fora
+document.getElementById('modalSenha').addEventListener('click',function(e){if(e.target===this)fecharModalSenha();});
+(id,el){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';el.textContent=inp.type==='password'?'👁':'🙈'}
 async function fazerLogin(){
   limparErro();
   const u=document.getElementById('login-user').value.trim();
