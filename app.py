@@ -29,7 +29,7 @@ HEADERS = {
     "Prefer": "return=representation"
 }
 
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 APP_URL        = os.environ.get("APP_URL", "https://virtual-catholics-flask.onrender.com")
 
 def sb_get(table, filters=""):
@@ -170,20 +170,20 @@ def enviar_email_reset(destinatario, link):
     </div>
     """
     r = http_req.post(
-        "https://api.resend.com/emails",
+        "https://api.brevo.com/v3/smtp/email",
         headers={
-            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "api-key": BREVO_API_KEY,
             "Content-Type": "application/json"
         },
         json={
-            "from": "Virtual Catholics <onboarding@resend.dev>",
-            "to": [destinatario],
+            "sender": {"name": "Virtual Catholics", "email": "noreply@virtualcatholics.com.br"},
+            "to": [{"email": destinatario}],
             "subject": "Virtual Catholics - Redefinicao de senha",
-            "html": html
+            "htmlContent": html
         }
     )
     if not r.ok:
-        raise Exception(f"Resend error {r.status_code}: {r.text}")
+        raise Exception(f"Brevo error {r.status_code}: {r.text}")
 
 # ── BASE DE CONHECIMENTO ───────────────────────────────────────────────────────
 def carregar_base_conhecimento():
