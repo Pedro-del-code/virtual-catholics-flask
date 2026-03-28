@@ -291,8 +291,7 @@ body::after{
 
 /* Mensagens */
 .msg-row{display:flex;gap:8px;align-items:flex-start;}
-.msg-row.user{align-items:flex-end;}
-.msg-row.user{flex-direction:row-reverse;}
+.msg-row.user{flex-direction:row-reverse;align-items:flex-end;}
 .msg-av{
   width:30px;height:30px;border-radius:50%;flex-shrink:0;
   background:rgba(200,160,74,.15);border:1px solid var(--bord2);
@@ -1450,7 +1449,7 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb'))}px`:'var(--nb)';
+    wrap.style.bottom=diff>50?`${diff}px`:'var(--nb)';
   });
 }
 
