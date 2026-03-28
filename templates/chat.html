@@ -1304,7 +1304,7 @@ async function abrirChat(id,el){
   const area=document.getElementById('chatArea');area.innerHTML='';
   if(!mensagens.length)await novoChat();
   else mensagens.forEach(m=>addMsg(m.role,m.content));
-  area.scrollTop=area.scrollHeight;
+  scrollFim();
 }
 
 function addMsg(role,txt){
@@ -1328,7 +1328,7 @@ function addMsg(role,txt){
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
   row.appendChild(av);row.appendChild(bubble);
-  area.appendChild(row);area.scrollTop=area.scrollHeight;
+  area.appendChild(row);scrollFim();
   return row;
 }
 
@@ -1353,7 +1353,7 @@ async function enviar(){
   const typBub=document.createElement('div');typBub.className='msg-bubble';
   typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
   typRow.appendChild(typAv);typRow.appendChild(typBub);
-  area.appendChild(typRow);area.scrollTop=area.scrollHeight;
+  area.appendChild(typRow);scrollFim();
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
     let resp;
@@ -1364,7 +1364,7 @@ async function enviar(){
       resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatAtual,mensagens})});
     }
     const d=await resp.json();typRow.remove();
-    if(d.resposta){mensagens.push({role:'assistant',content:d.resposta});addMsg('assistant',d.resposta);}
+    if(d.resposta){mensagens.push({role:'assistant',content:d.resposta});addMsg('assistant',d.resposta);scrollFim();}
   }catch(e){typRow.remove();addMsg('assistant','Desculpe, ocorreu um erro. Tente novamente. 🙏');}
   remAnexo();carregando=false;document.getElementById('btnEnv').disabled=false;
   document.getElementById('msgInput').focus();
@@ -1384,6 +1384,16 @@ function selArquivo(input){
 function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classList.remove('on');}
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+
+function scrollFim(){
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  // Força scroll imediato e depois confirma após render
+  area.scrollTop=area.scrollHeight;
+  setTimeout(()=>{area.scrollTop=area.scrollHeight;},50);
+  setTimeout(()=>{area.scrollTop=area.scrollHeight;},200);
+  setTimeout(()=>{area.scrollTop=area.scrollHeight;},500);
+}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
