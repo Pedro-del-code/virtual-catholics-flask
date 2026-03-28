@@ -290,7 +290,8 @@ body::after{
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
 
 /* Mensagens */
-.msg-row{display:flex;gap:8px;align-items:flex-end;}
+.msg-row{display:flex;gap:8px;align-items:flex-start;}
+.msg-row.user{align-items:flex-end;}
 .msg-row.user{flex-direction:row-reverse;}
 .msg-av{
   width:30px;height:30px;border-radius:50%;flex-shrink:0;
@@ -1449,13 +1450,7 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    const kb=diff>50;
-    wrap.style.bottom=kb?`${diff}px`:'var(--nb)';
-    const area=document.getElementById('chatArea');
-    if(area){
-      area.style.paddingBottom=kb?`${diff+64}px`:`calc(var(--nb) + 70px)`;
-      setTimeout(()=>{area.scrollTop=area.scrollHeight;},50);
-    }
+    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb'))}px`:'var(--nb)';
   });
 }
 
