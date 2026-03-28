@@ -213,7 +213,7 @@ async function enviarRedefinicao(){
 }
 // Fechar ao clicar fora
 document.getElementById('modalSenha').addEventListener('click',function(e){if(e.target===this)fecharModalSenha();});
-(id,el){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';el.textContent=inp.type==='password'?'👁':'🙈'}
+function toggleSenha(id,el){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';el.textContent=inp.type==='password'?'👁':'🙈'}
 async function fazerLogin(){
   limparErro();
   const u=document.getElementById('login-user').value.trim();
