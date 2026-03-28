@@ -410,6 +410,8 @@ body::after{
   border-top:1px solid rgba(200,160,74,.15);
   z-index:20;display:none;
   backdrop-filter:blur(10px);
+  touch-action:none;
+  overscroll-behavior:none;
 }
 .inp-wrap.on{display:block;}
 .inp-anexo{
@@ -434,6 +436,8 @@ textarea#msgInput{
   color:var(--text);font-family:'Lora',serif;font-size:15px;
   padding:9px 12px;resize:none;outline:none;
   min-height:38px;max-height:110px;line-height:1.5;
+  overscroll-behavior:none;
+  touch-action:pan-y;
 }
 textarea#msgInput::placeholder{color:rgba(200,160,74,.25);}
 textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rgba(200,160,74,.05);}
@@ -1450,11 +1454,7 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    const kb=diff>50;
-    wrap.style.bottom=kb?`${diff}px`:'var(--nb)';
-    // Limita o main ao espaço visível para o chat não vazar atrás do teclado
-    const main=document.querySelector('.main');
-    if(main) main.style.height=kb?`${window.visualViewport.height}px`:'';
+    wrap.style.bottom=diff>50?`${diff}px`:'var(--nb)';
   });
 }
 
