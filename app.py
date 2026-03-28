@@ -4,7 +4,7 @@ import uuid
 import re
 import io
 import json
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from flask import Flask, session, redirect, url_for, request, jsonify, render_template
 from authlib.integrations.flask_client import OAuth
 import requests as http_req
@@ -124,7 +124,7 @@ def usuario_por_email(email):
     return r[0] if r and isinstance(r, list) and len(r) > 0 else None
 
 def salvar_token_reset(username, token):
-    expira = (datetime.utcnow() + timedelta(hours=1)).isoformat() + "Z"
+    expira = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
     http_req.delete(f"{SUPABASE_URL}/rest/v1/reset_senha?username=eq.{username}", headers=HEADERS)
     sb_post("reset_senha", {"username": username, "token": token, "expira_em": expira})
 
@@ -708,8 +708,8 @@ def pagina_redefinir_senha():
     registro = buscar_token_reset(token)
     if not registro:
         return redirect("/login?erro=token_invalido")
-    expira = datetime.fromisoformat(registro["expira_em"].replace("Z", ""))
-    if datetime.utcnow() > expira:
+    expira = datetime.fromisoformat(registro["expira_em"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expira:
         deletar_token_reset(token)
         return redirect("/login?erro=token_expirado")
     return render_template("redefinir_senha.html", token=token)
@@ -726,8 +726,8 @@ def api_redefinir_senha():
     registro = buscar_token_reset(token)
     if not registro:
         return jsonify({"erro": "Link inválido ou já usado."}), 400
-    expira = datetime.fromisoformat(registro["expira_em"].replace("Z", ""))
-    if datetime.utcnow() > expira:
+    expira = datetime.fromisoformat(registro["expira_em"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expira:
         deletar_token_reset(token)
         return jsonify({"erro": "Link expirado. Solicite um novo."}), 400
     sb_patch("usuarios", f"username=eq.{registro['username']}", {"senha_hash": hash_senha(nova)})
