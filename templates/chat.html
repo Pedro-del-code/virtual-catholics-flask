@@ -285,6 +285,7 @@ body::after{
   flex:1;overflow-y:auto;padding:14px 14px calc(var(--nb) + 70px);
   display:flex;flex-direction:column;gap:12px;
   -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
@@ -1449,7 +1450,11 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.bottom=diff>50?`${diff}px`:'var(--nb)';
+    const kb=diff>50;
+    wrap.style.bottom=kb?`${diff}px`:'var(--nb)';
+    // Limita o main ao espaço visível para o chat não vazar atrás do teclado
+    const main=document.querySelector('.main');
+    if(main) main.style.height=kb?`${window.visualViewport.height}px`:'';
   });
 }
 
