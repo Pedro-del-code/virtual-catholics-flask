@@ -737,7 +737,8 @@ def api_redefinir_senha():
     if datetime.now(timezone.utc) > expira:
         deletar_token_reset(token)
         return jsonify({"erro": "Link expirado. Solicite um novo."}), 400
-    http_req.patch(f"{SUPABASE_URL}/rest/v1/usuarios?username=eq.{registro['username']}", headers=SERVICE_HEADERS, json={"senha_hash": hash_senha(nova)})
+    r = http_req.patch(f"{SUPABASE_URL}/rest/v1/usuarios?username=eq.{registro['username']}", headers=SERVICE_HEADERS, json={"senha_hash": hash_senha(nova)})
+    print(f"[PATCH STATUS] {r.status_code} | {r.text} | username={registro['username']}")
     deletar_token_reset(token)
     return jsonify({"ok": True})
 
