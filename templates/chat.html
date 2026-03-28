@@ -1318,7 +1318,8 @@ async function abrirChat(id,el){
 
 function addMsg(role,txt){
   const area=document.getElementById('chatArea');
-  const empty=area.querySelector('.chat-empty');if(empty)empty.remove();
+  const inner=document.getElementById('chatInner');
+  const empty=inner.querySelector('.chat-empty');if(empty)empty.remove();
   const row=document.createElement('div');row.className=`msg-row ${role==='user'?'user':'bot'}`;
   // Avatar — usa foto/nome atual em memória, não o template estático
   const av=document.createElement('div');
@@ -1337,7 +1338,7 @@ function addMsg(role,txt){
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
   row.appendChild(av);row.appendChild(bubble);
-  area.appendChild(row);
+  document.getElementById('chatInner').appendChild(row);
   return row;
 }
 
