@@ -1397,7 +1397,10 @@ function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();envia
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
 function scrollFim(){
-  // desativado — não puxa scroll automático durante leitura
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<200;
+  if(atBottom)area.scrollTop=area.scrollHeight;
 }
 function scrollFimForce(){
   const area=document.getElementById('chatArea');
