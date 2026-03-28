@@ -1333,11 +1333,7 @@ function addMsg(role,txt){
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
   row.appendChild(av);row.appendChild(bubble);
-  // Trava o scroll antes de adicionar — impede Chrome mobile de puxar automaticamente
-  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
-  const prevTop=area.scrollTop;
   area.appendChild(row);
-  if(!atBottom)area.scrollTop=prevTop;
   return row;
 }
 
@@ -1355,16 +1351,16 @@ async function enviar(){
     document.getElementById('listaChats').prepend(el);
   }
   mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.file.name}]`:'')});
-  addMsg('user',txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:''));
   const area=document.getElementById('chatArea');
+  const _eraNoFim=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  addMsg('user',txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:''));
+  if(_eraNoFim)area.scrollTop=area.scrollHeight;
   const typRow=document.createElement('div');typRow.className='msg-row bot';
   const typAv=document.createElement('div');typAv.className='msg-av bot-av';
   const typBub=document.createElement('div');typBub.className='msg-bubble';
   typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
   typRow.appendChild(typAv);typRow.appendChild(typBub);
-  const _prevTop=area.scrollTop,_atBot=area.scrollHeight-area.scrollTop-area.clientHeight<80;
   area.appendChild(typRow);
-  if(!_atBot)area.scrollTop=_prevTop;
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
     let resp;
@@ -1399,7 +1395,8 @@ function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrol
 function scrollFim(){
   const area=document.getElementById('chatArea');
   if(!area)return;
-  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<200;
+  // Só rola pro fim se o usuário JÁ estava no fim (não interrompeu leitura)
+  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<120;
   if(atBottom)area.scrollTop=area.scrollHeight;
 }
 function scrollFimForce(){
