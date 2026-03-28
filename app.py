@@ -122,7 +122,7 @@ def usuario_por_email(email):
     return r[0] if r and isinstance(r, list) and len(r) > 0 else None
 
 def salvar_token_reset(username, token):
-    expira = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+    expira = (datetime.utcnow() + timedelta(hours=1)).isoformat() + "Z"
     http_req.delete(f"{SUPABASE_URL}/rest/v1/reset_senha?username=eq.{username}", headers=HEADERS)
     sb_post("reset_senha", {"username": username, "token": token, "expira_em": expira})
 
@@ -653,6 +653,7 @@ def api_registro():
     nome = data.get("nome", "").strip()
     username = data.get("username", "").strip()
     senha = data.get("senha", "").strip()
+    email = data.get("email", "").strip().lower()
     idioma = data.get("idioma", "pt")
     T = TRADUCOES[idioma]
     if not nome or not username or not senha:
@@ -663,7 +664,7 @@ def api_registro():
         return jsonify({"erro": T["erro_nome_improprio"]}), 400
     if carregar_usuario(username):
         return jsonify({"erro": T["erro_usuario_existe"]}), 400
-    criar_usuario_normal(username, nome, senha)
+    sb_post("usuarios", {"username": username, "nome": nome, "senha_hash": hash_senha(senha), "email": email})
     session["username"] = username
     session["nome"] = nome
     session["foto"] = ""
