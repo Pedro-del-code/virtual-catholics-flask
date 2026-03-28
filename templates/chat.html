@@ -436,8 +436,7 @@ textarea#msgInput{
   color:var(--text);font-family:'Lora',serif;font-size:15px;
   padding:9px 12px;resize:none;outline:none;
   min-height:38px;max-height:110px;line-height:1.5;
-  overscroll-behavior:none;
-  touch-action:pan-y;
+  overscroll-behavior:none;touch-action:pan-y;
 }
 textarea#msgInput::placeholder{color:rgba(200,160,74,.25);}
 textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rgba(200,160,74,.05);}
@@ -1394,11 +1393,7 @@ function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrol
 function scrollFim(){
   const area=document.getElementById('chatArea');
   if(!area)return;
-  // Força scroll imediato e depois confirma após render
   area.scrollTop=area.scrollHeight;
-  setTimeout(()=>{area.scrollTop=area.scrollHeight;},50);
-  setTimeout(()=>{area.scrollTop=area.scrollHeight;},200);
-  setTimeout(()=>{area.scrollTop=area.scrollHeight;},500);
 }
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
