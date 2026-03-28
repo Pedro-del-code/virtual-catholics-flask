@@ -176,7 +176,7 @@ def enviar_email_reset(destinatario, link):
             "Content-Type": "application/json"
         },
         json={
-            "sender": {"name": "Virtual Catholics", "email": "noreply@virtualcatholics.com.br"},
+            "sender": {"name": "Virtual Catholics", "email": "virtualcatholics@gmail.com"},
             "to": [{"email": destinatario}],
             "subject": "Virtual Catholics - Redefinicao de senha",
             "htmlContent": html
