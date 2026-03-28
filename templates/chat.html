@@ -1333,7 +1333,11 @@ function addMsg(role,txt){
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
   row.appendChild(av);row.appendChild(bubble);
-  area.appendChild(row);scrollFim();
+  // Trava o scroll antes de adicionar — impede Chrome mobile de puxar automaticamente
+  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  const prevTop=area.scrollTop;
+  area.appendChild(row);
+  if(!atBottom)area.scrollTop=prevTop;
   return row;
 }
 
@@ -1358,7 +1362,9 @@ async function enviar(){
   const typBub=document.createElement('div');typBub.className='msg-bubble';
   typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
   typRow.appendChild(typAv);typRow.appendChild(typBub);
-  area.appendChild(typRow);scrollFim();
+  const _prevTop=area.scrollTop,_atBot=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  area.appendChild(typRow);
+  if(!_atBot)area.scrollTop=_prevTop;
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
     let resp;
