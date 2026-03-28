@@ -1449,7 +1449,13 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.bottom=diff>50?`${diff+parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb'))}px`:'var(--nb)';
+    const kb=diff>50;
+    wrap.style.bottom=kb?`${diff}px`:'var(--nb)';
+    const area=document.getElementById('chatArea');
+    if(area){
+      area.style.paddingBottom=kb?`${diff+64}px`:`calc(var(--nb) + 70px)`;
+      setTimeout(()=>{area.scrollTop=area.scrollHeight;},50);
+    }
   });
 }
 
