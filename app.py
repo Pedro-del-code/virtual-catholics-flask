@@ -3,9 +3,7 @@ import hashlib
 import uuid
 import re
 import io
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import json
 from datetime import datetime, date, timedelta
 from flask import Flask, session, redirect, url_for, request, jsonify, render_template
 from authlib.integrations.flask_client import OAuth
@@ -31,9 +29,8 @@ HEADERS = {
     "Prefer": "return=representation"
 }
 
-MAIL_USER = os.environ.get("MAIL_USER", "")
-MAIL_PASS = os.environ.get("MAIL_PASS", "")
-APP_URL   = os.environ.get("APP_URL", "https://virtual-catholics-flask.onrender.com")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+APP_URL        = os.environ.get("APP_URL", "https://virtual-catholics-flask.onrender.com")
 
 def sb_get(table, filters=""):
     url = f"{SUPABASE_URL}/rest/v1/{table}?{filters}"
@@ -139,47 +136,54 @@ def deletar_token_reset(token):
     http_req.delete(f"{SUPABASE_URL}/rest/v1/reset_senha?token=eq.{token}", headers=HEADERS)
 
 def enviar_email_reset(destinatario, link):
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = "✝ Virtual Catholics — Redefinição de senha"
-    msg["From"]    = MAIL_USER
-    msg["To"]      = destinatario
     html = f"""
     <div style="font-family:Georgia,serif;max-width:480px;margin:auto;background:#0f0c1a;
                 border:1px solid #c8a04a;border-radius:16px;padding:36px 32px;color:#f0ece4;">
       <div style="text-align:center;margin-bottom:24px">
-        <span style="font-size:32px;color:#c8a04a;">✝</span>
+        <span style="font-size:32px;color:#c8a04a;">&#x271D;</span>
         <h2 style="font-family:Georgia,serif;color:#e8cc88;letter-spacing:2px;margin:8px 0 4px">
           VIRTUAL CATHOLICS
         </h2>
         <p style="color:rgba(200,160,74,.6);font-style:italic;font-size:13px;margin:0">
-          Redefinição de senha
+          Redefini&#x00E7;&#x00E3;o de senha
         </p>
       </div>
       <p style="font-size:15px;line-height:1.7;margin-bottom:20px">
-        Recebemos uma solicitação para redefinir sua senha.<br>
-        Clique no botão abaixo para criar uma nova senha.<br>
+        Recebemos uma solicita&#x00E7;&#x00E3;o para redefinir sua senha.<br>
+        Clique no bot&#x00E3;o abaixo para criar uma nova senha.<br>
         Este link expira em <strong>1 hora</strong>.
       </p>
       <div style="text-align:center;margin:28px 0">
         <a href="{link}" style="background:linear-gradient(135deg,#c8a04a,#e8cc88);
            color:#09070d;font-family:Georgia,serif;font-size:13px;letter-spacing:2px;
            padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;">
-          ✝ &nbsp; REDEFINIR MINHA SENHA
+          REDEFINIR MINHA SENHA
         </a>
       </div>
       <p style="font-size:13px;color:rgba(240,236,228,.5);line-height:1.6">
-        Se você não solicitou isso, ignore este e-mail. Sua senha permanece a mesma.
+        Se voc&#x00EA; n&#x00E3;o solicitou isso, ignore este e-mail.
       </p>
       <hr style="border:none;border-top:1px solid rgba(200,160,74,.2);margin:24px 0">
       <p style="text-align:center;font-style:italic;font-size:12px;color:rgba(200,160,74,.4)">
-        Que Deus te abençoe &nbsp;✦&nbsp; Paz e Bem
+        Que Deus te aben&#x00E7;oe &nbsp;&#x2726;&nbsp; Paz e Bem
       </p>
     </div>
     """
-    msg.attach(MIMEText(html, "html"))
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(MAIL_USER, MAIL_PASS)
-        smtp.sendmail(MAIL_USER, destinatario, msg.as_string())
+    r = http_req.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "from": "Virtual Catholics <onboarding@resend.dev>",
+            "to": [destinatario],
+            "subject": "Virtual Catholics - Redefinicao de senha",
+            "html": html
+        }
+    )
+    if not r.ok:
+        raise Exception(f"Resend error {r.status_code}: {r.text}")
 
 # ── BASE DE CONHECIMENTO ───────────────────────────────────────────────────────
 def carregar_base_conhecimento():
