@@ -2,6 +2,7 @@ import os
 import hashlib
 import uuid
 import re
+import io
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -11,6 +12,10 @@ from authlib.integrations.flask_client import OAuth
 import requests as http_req
 from groq import Groq
 from dotenv import load_dotenv
+try:
+    import PyPDF2
+except ImportError:
+    PyPDF2 = None
 
 load_dotenv()
 
@@ -653,7 +658,6 @@ def api_registro():
     nome = data.get("nome", "").strip()
     username = data.get("username", "").strip()
     senha = data.get("senha", "").strip()
-    email = data.get("email", "").strip().lower()
     idioma = data.get("idioma", "pt")
     T = TRADUCOES[idioma]
     if not nome or not username or not senha:
@@ -664,6 +668,7 @@ def api_registro():
         return jsonify({"erro": T["erro_nome_improprio"]}), 400
     if carregar_usuario(username):
         return jsonify({"erro": T["erro_usuario_existe"]}), 400
+    email = data.get("email", "").strip().lower()
     sb_post("usuarios", {"username": username, "nome": nome, "senha_hash": hash_senha(senha), "email": email})
     session["username"] = username
     session["nome"] = nome
@@ -1332,7 +1337,8 @@ def api_base_adicionar():
         nome = arquivo.filename.lower()
         if nome.endswith(".pdf"):
             try:
-                import PyPDF2, io
+                if PyPDF2 is None:
+                    return jsonify({"error": "PyPDF2 não instalado"}), 500
                 reader = PyPDF2.PdfReader(io.BytesIO(arquivo.read()))
                 conteudo = "\n".join((p.extract_text() or "") for p in reader.pages)
             except Exception as e:
