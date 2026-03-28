@@ -1309,7 +1309,7 @@ async function abrirChat(id,el){
   const area=document.getElementById('chatArea');area.innerHTML='';
   if(!mensagens.length)await novoChat();
   else mensagens.forEach(m=>addMsg(m.role,m.content));
-  scrollFim();
+  scrollFimForce();
 }
 
 function addMsg(role,txt){
@@ -1391,6 +1391,13 @@ function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();envia
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
 function scrollFim(){
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  // Só rola automaticamente se o usuário já tiver perto do fim (dentro de 80px)
+  const perto=area.scrollHeight-area.scrollTop-area.clientHeight<80;
+  if(perto)area.scrollTop=area.scrollHeight;
+}
+function scrollFimForce(){
   const area=document.getElementById('chatArea');
   if(!area)return;
   area.scrollTop=area.scrollHeight;
