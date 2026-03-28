@@ -1029,7 +1029,7 @@ function irChat(){
   document.getElementById('inpWrap').classList.add('on');
   setNb('nb-chat');
   if(!chatAtual){const p=document.querySelector('.ci');if(p)abrirChat(p.id.replace('ci-',''),p);else novoChat();}
-  setTimeout(()=>{const a=document.getElementById('chatArea');a.scrollTop=a.scrollHeight;document.getElementById('msgInput').focus();},80);
+  setTimeout(()=>{document.getElementById('msgInput').focus();},80);
 }
 
 function acaoRapida(tipo){
@@ -1393,7 +1393,6 @@ function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrol
 function scrollFim(){
   const area=document.getElementById('chatArea');
   if(!area)return;
-  // Só rola automaticamente se o usuário já tiver perto do fim (dentro de 80px)
   const perto=area.scrollHeight-area.scrollTop-area.clientHeight<80;
   if(perto)area.scrollTop=area.scrollHeight;
 }
