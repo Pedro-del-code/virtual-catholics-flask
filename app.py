@@ -22,9 +22,16 @@ app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
 HEADERS = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+    "Prefer": "return=representation"
+}
+SERVICE_HEADERS = {
+    "apikey": SUPABASE_SERVICE_KEY,
+    "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
     "Content-Type": "application/json",
     "Prefer": "return=representation"
 }
@@ -730,7 +737,7 @@ def api_redefinir_senha():
     if datetime.now(timezone.utc) > expira:
         deletar_token_reset(token)
         return jsonify({"erro": "Link expirado. Solicite um novo."}), 400
-    sb_patch("usuarios", f"username=eq.{registro['username']}", {"senha_hash": hash_senha(nova)})
+    http_req.patch(f"{SUPABASE_URL}/rest/v1/usuarios?username=eq.{registro['username']}", headers=SERVICE_HEADERS, json={"senha_hash": hash_senha(nova)})
     deletar_token_reset(token)
     return jsonify({"ok": True})
 
