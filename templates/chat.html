@@ -288,10 +288,9 @@ body::after{
   overflow-anchor:none;
 }
 .chat-inner{
-  display:block;
+  display:flex;flex-direction:column;gap:12px;
   overflow-anchor:none;
 }
-.msg-row{margin-bottom:12px;}
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
 
@@ -1339,7 +1338,11 @@ function addMsg(role,txt){
   if(role!=='user'){const a=document.createElement('div');a.className='msg-autor';a.textContent='✝ VIRTUAL CATHOLICS';bubble.appendChild(a);}
   const t=document.createElement('div');t.textContent=txt;bubble.appendChild(t);
   row.appendChild(av);row.appendChild(bubble);
+  const _a=document.getElementById('chatArea');
+  const _atFim=_a.scrollHeight-_a.scrollTop-_a.clientHeight<60;
+  const _st=_a.scrollTop;
   document.getElementById('chatInner').appendChild(row);
+  if(!_atFim){_a.scrollTop=_st;}
   return row;
 }
 
@@ -1358,14 +1361,19 @@ async function enviar(){
   }
   mensagens.push({role:'user',content:txt||(arquivoAnexo?`[${arquivoAnexo.tipo}: ${arquivoAnexo.file.name}]`:'')});
   const area=document.getElementById('chatArea');
+  const _eraNoFim=area.scrollHeight-area.scrollTop-area.clientHeight<80;
   addMsg('user',txt+(arquivoAnexo?`\n📎 ${arquivoAnexo.file.name}`:''));
-  scrollFim();
+  if(_eraNoFim)area.scrollTop=area.scrollHeight;
   const typRow=document.createElement('div');typRow.className='msg-row bot';
   const typAv=document.createElement('div');typAv.className='msg-av bot-av';
   const typBub=document.createElement('div');typBub.className='msg-bubble';
   typBub.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';
   typRow.appendChild(typAv);typRow.appendChild(typBub);
+  const _ta=document.getElementById('chatArea');
+  const _tatFim=_ta.scrollHeight-_ta.scrollTop-_ta.clientHeight<60;
+  const _tst=_ta.scrollTop;
   document.getElementById('chatInner').appendChild(typRow);
+  if(!_tatFim){_ta.scrollTop=_tst;}
   carregando=true;document.getElementById('btnEnv').disabled=true;
   try{
     let resp;
@@ -1397,30 +1405,50 @@ function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classL
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
-// ── SCROLL ──
-let _pinBottom=true; // true = acompanha fim automaticamente
-function _initScroll(){
-  const area=document.getElementById('chatArea');
-  if(!area||area._scrollInited)return;
-  area._scrollInited=true;
-  area.addEventListener('touchstart',()=>{
-    _pinBottom=area.scrollHeight-area.scrollTop-area.clientHeight<60;
-  },{passive:true});
-  area.addEventListener('scroll',()=>{
-    _pinBottom=area.scrollHeight-area.scrollTop-area.clientHeight<60;
-  },{passive:true});
-}
+let _usuarioSubiu=false;
 function scrollFim(){
-  if(!_pinBottom)return;
+  if(_usuarioSubiu)return;
   const area=document.getElementById('chatArea');
-  if(area)area.scrollTop=area.scrollHeight;
+  if(!area)return;
+  area.scrollTop=area.scrollHeight;
 }
 function scrollFimForce(){
-  _pinBottom=true;
+  _usuarioSubiu=false;
   const area=document.getElementById('chatArea');
-  if(area)area.scrollTop=area.scrollHeight;
+  if(!area)return;
+  area.scrollTop=area.scrollHeight;
 }
-function initScrollListener(){_initScroll();}
+// Detecta se usuario subiu manualmente — registrado quando chat abre
+let _lastScrollTop=0;
+let _scrollListenerAdded=false;
+function initScrollListener(){
+  if(_scrollListenerAdded)return;
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  _scrollListenerAdded=true;
+  // touch: detecta dedo subindo
+  area.addEventListener('touchstart',(e)=>{
+    _lastScrollTop=area.scrollTop;
+  },{passive:true});
+  area.addEventListener('touchmove',(e)=>{
+    if(area.scrollTop<_lastScrollTop-5){
+      _usuarioSubiu=true;
+    }
+    _lastScrollTop=area.scrollTop;
+  },{passive:true});
+  area.addEventListener('touchend',()=>{
+    if(area.scrollHeight-area.scrollTop-area.clientHeight<40){
+      _usuarioSubiu=false;
+    }
+  },{passive:true});
+  // mouse (desktop)
+  area.addEventListener('scroll',()=>{
+    const st=area.scrollTop;
+    if(st<_lastScrollTop-10){_usuarioSubiu=true;}
+    if(area.scrollHeight-st-area.clientHeight<40){_usuarioSubiu=false;}
+    _lastScrollTop=st;
+  },{passive:true});
+}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
