@@ -287,7 +287,7 @@ body::after{
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
   display:flex;
-  flex-direction:column-reverse;
+  flex-direction:column;
 }
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
@@ -1391,16 +1391,21 @@ function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classL
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
-// SCROLL: com column-reverse, scrollTop=0 é o fim (embaixo)
-// Não precisa de nenhuma lógica — o browser nunca puxa porque
-// o "fim" natural do column-reverse É o topo do scroll container
+// Verifica se o usuário está perto do final (menos de 120px acima)
+function usuarioNoFinal(){
+  const area=document.getElementById('chatArea');
+  if(!area)return true;
+  return area.scrollHeight - area.scrollTop - area.clientHeight < 120;
+}
+// SCROLL: só rola se o usuário já estiver no final
 function scrollFim(){
   const area=document.getElementById('chatArea');
-  if(area)area.scrollTop=0;
+  if(area && usuarioNoFinal())area.scrollTop=area.scrollHeight;
 }
+// Força o scroll — usado só ao abrir/carregar conversa
 function scrollFimForce(){
   const area=document.getElementById('chatArea');
-  if(area)area.scrollTop=0;
+  if(area){area.scrollTop=area.scrollHeight;setTimeout(()=>{area.scrollTop=area.scrollHeight;},80);}
 }
 function initScrollListener(){}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
