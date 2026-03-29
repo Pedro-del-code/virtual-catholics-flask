@@ -1287,7 +1287,7 @@ async function perguntarSanto(nome){await perguntarIA(`Me fale sobre ${nome} —
 
 // ── CHAT ──
 async function novoChat(){
-  fecharSB();chatAtual=null;mensagens=[];
+  fecharSB();initScrollListener();chatAtual=null;mensagens=[];
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   document.getElementById('chatInner').innerHTML=`<div class="chat-empty">
     <div style="position:relative;display:flex;align-items:center;justify-content:center;width:80px;height:80px">
@@ -1305,7 +1305,7 @@ async function novoChat(){
 function setMsg(txt){const inp=document.getElementById('msgInput');inp.value=txt;autoResize(inp);inp.focus();}
 
 async function abrirChat(id,el){
-  fecharSB();irChat();chatAtual=id;
+  fecharSB();irChat();initScrollListener();chatAtual=id;
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   if(el)el.classList.add('on');
   const r=await fetch(`/api/chat/${id}`),d=await r.json();
@@ -1410,18 +1410,37 @@ function scrollFimForce(){
   if(!area)return;
   area.scrollTop=area.scrollHeight;
 }
-// Detecta se usuario subiu manualmente
+// Detecta se usuario subiu manualmente — registrado quando chat abre
 let _lastScrollTop=0;
-window.addEventListener('load',()=>{
+let _scrollListenerAdded=false;
+function initScrollListener(){
+  if(_scrollListenerAdded)return;
   const area=document.getElementById('chatArea');
   if(!area)return;
+  _scrollListenerAdded=true;
+  // touch: detecta dedo subindo
+  area.addEventListener('touchstart',(e)=>{
+    _lastScrollTop=area.scrollTop;
+  },{passive:true});
+  area.addEventListener('touchmove',(e)=>{
+    if(area.scrollTop<_lastScrollTop-5){
+      _usuarioSubiu=true;
+    }
+    _lastScrollTop=area.scrollTop;
+  },{passive:true});
+  area.addEventListener('touchend',()=>{
+    if(area.scrollHeight-area.scrollTop-area.clientHeight<40){
+      _usuarioSubiu=false;
+    }
+  },{passive:true});
+  // mouse (desktop)
   area.addEventListener('scroll',()=>{
     const st=area.scrollTop;
     if(st<_lastScrollTop-10){_usuarioSubiu=true;}
-    if(area.scrollHeight-st-area.clientHeight<30){_usuarioSubiu=false;}
+    if(area.scrollHeight-st-area.clientHeight<40){_usuarioSubiu=false;}
     _lastScrollTop=st;
   },{passive:true});
-});
+}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
