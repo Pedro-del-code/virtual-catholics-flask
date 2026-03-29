@@ -1308,7 +1308,11 @@ async function novoChat(){
 function setMsg(txt){const inp=document.getElementById('msgInput');inp.value=txt;autoResize(inp);inp.focus();}
 
 async function abrirChat(id,el){
-  fecharSB();irChat();initScrollListener();chatAtual=id;_userScrolledUp=false;
+  fecharSB();
+  chatAtual=id; // atribui ANTES de chamar irChat, evita loop recursivo
+  _userScrolledUp=false;
+  irChat();
+  initScrollListener();
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   if(el)el.classList.add('on');
   const r=await fetch(`/api/chat/${id}`),d=await r.json();
@@ -1399,48 +1403,37 @@ function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrol
 
 // Flag: detecta se o usuário subiu para ler — impede scroll automático forçado
 let _userScrolledUp=false;
-(function attachScrollGuard(){
-  // Aguarda o DOM estar pronto para anexar o listener
-  document.addEventListener('DOMContentLoaded',()=>{
-    const area=document.getElementById('chatArea');
-    if(!area)return;
-    area.addEventListener('scroll',()=>{
-      const distToBottom=area.scrollHeight-area.scrollTop-area.clientHeight;
-      // Se subiu mais de 120px, marca que está lendo
-      _userScrolledUp=distToBottom>120;
-    },{passive:true});
-  });
-})();
+let _scrollGuardAttached=false;
 
-// Verifica se o usuário está perto do final (menos de 120px acima)
+function _attachScrollGuard(){
+  if(_scrollGuardAttached)return;
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  _scrollGuardAttached=true;
+  area.addEventListener('scroll',()=>{
+    const dist=area.scrollHeight-area.scrollTop-area.clientHeight;
+    _userScrolledUp=dist>150;
+  },{passive:true});
+}
+
 function usuarioNoFinal(){
   const area=document.getElementById('chatArea');
   if(!area)return true;
-  return area.scrollHeight - area.scrollTop - area.clientHeight < 120;
+  return area.scrollHeight-area.scrollTop-area.clientHeight<150;
 }
-// SCROLL: só rola se o usuário NÃO tiver subido manualmente para ler
 function scrollFim(){
+  if(_userScrolledUp)return;
   const area=document.getElementById('chatArea');
-  if(!area)return;
-  if(!_userScrolledUp)area.scrollTo({top:area.scrollHeight,behavior:'smooth'});
+  if(area)area.scrollTop=area.scrollHeight;
 }
-// Força o scroll — usado só ao abrir/carregar conversa
 function scrollFimForce(){
   const area=document.getElementById('chatArea');
   if(!area)return;
-  // Rola para o final imediatamente
   area.scrollTop=area.scrollHeight;
-  // Uma segunda passagem após layout (conteúdo pode ter sido inserido)
-  requestAnimationFrame(()=>{
-    area.scrollTop=area.scrollHeight;
-  });
+  requestAnimationFrame(()=>{ area.scrollTop=area.scrollHeight; });
 }
-// Remove listeners de scroll antigos para evitar acumulação entre conversas
 function initScrollListener(){
-  const area=document.getElementById('chatArea');
-  if(!area)return;
-  // Clona o elemento para remover todos os listeners anteriores de forma limpa
-  // (neste caso não há listeners dinâmicos, mas fica seguro para futuras adições)
+  _attachScrollGuard();
 }
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
