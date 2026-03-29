@@ -1290,7 +1290,7 @@ async function perguntarSanto(nome){await perguntarIA(`Me fale sobre ${nome} —
 
 // ── CHAT ──
 async function novoChat(){
-  fecharSB();initScrollListener();chatAtual=null;mensagens=[];
+  fecharSB();initScrollListener();chatAtual=null;mensagens=[];_userScrolledUp=false;
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   document.getElementById('chatArea').innerHTML=`<div class="chat-empty">
     <div style="position:relative;display:flex;align-items:center;justify-content:center;width:80px;height:80px">
@@ -1308,7 +1308,7 @@ async function novoChat(){
 function setMsg(txt){const inp=document.getElementById('msgInput');inp.value=txt;autoResize(inp);inp.focus();}
 
 async function abrirChat(id,el){
-  fecharSB();irChat();initScrollListener();chatAtual=id;
+  fecharSB();irChat();initScrollListener();chatAtual=id;_userScrolledUp=false;
   document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
   if(el)el.classList.add('on');
   const r=await fetch(`/api/chat/${id}`),d=await r.json();
@@ -1348,6 +1348,7 @@ async function enviar(){
   if(carregando)return;
   const inp=document.getElementById('msgInput'),txt=inp.value.trim();
   if(!txt&&!arquivoAnexo)return;
+  _userScrolledUp=false; // usuário enviou mensagem — pode rolar para baixo
   inp.value='';autoResize(inp);
   if(!chatAtual){
     const r=await fetch('/api/novo-chat',{method:'POST'}),d=await r.json();
@@ -1396,16 +1397,32 @@ function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classL
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
+// Flag: detecta se o usuário subiu para ler — impede scroll automático forçado
+let _userScrolledUp=false;
+(function attachScrollGuard(){
+  // Aguarda o DOM estar pronto para anexar o listener
+  document.addEventListener('DOMContentLoaded',()=>{
+    const area=document.getElementById('chatArea');
+    if(!area)return;
+    area.addEventListener('scroll',()=>{
+      const distToBottom=area.scrollHeight-area.scrollTop-area.clientHeight;
+      // Se subiu mais de 120px, marca que está lendo
+      _userScrolledUp=distToBottom>120;
+    },{passive:true});
+  });
+})();
+
 // Verifica se o usuário está perto do final (menos de 120px acima)
 function usuarioNoFinal(){
   const area=document.getElementById('chatArea');
   if(!area)return true;
   return area.scrollHeight - area.scrollTop - area.clientHeight < 120;
 }
-// SCROLL: só rola se o usuário já estiver no final
+// SCROLL: só rola se o usuário NÃO tiver subido manualmente para ler
 function scrollFim(){
   const area=document.getElementById('chatArea');
-  if(area && usuarioNoFinal())area.scrollTo({top:area.scrollHeight,behavior:'smooth'});
+  if(!area)return;
+  if(!_userScrolledUp)area.scrollTo({top:area.scrollHeight,behavior:'smooth'});
 }
 // Força o scroll — usado só ao abrir/carregar conversa
 function scrollFimForce(){
