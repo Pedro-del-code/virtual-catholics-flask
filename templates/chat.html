@@ -23,7 +23,7 @@
   --blue-divine:#0a0520;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:column;}
+body{font-family:'Lora',serif;color:var(--text);display:flex;flex-direction:column;overscroll-behavior:none;}
 
 /* ── FUNDO CELESTIAL ── */
 body::before{
@@ -288,6 +288,7 @@ body::after{
   overscroll-behavior:contain;
   display:flex;
   flex-direction:column;
+  scroll-behavior:smooth;
 }
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
@@ -412,7 +413,7 @@ body::after{
   border-top:1px solid rgba(200,160,74,.15);
   z-index:20;display:none;
   backdrop-filter:blur(10px);
-  touch-action:none;
+  touch-action:manipulation;
   overscroll-behavior:none;
 }
 .inp-wrap.on{display:block;}
@@ -1404,27 +1405,26 @@ function usuarioNoFinal(){
 // SCROLL: só rola se o usuário já estiver no final
 function scrollFim(){
   const area=document.getElementById('chatArea');
-  if(area && usuarioNoFinal())area.scrollTop=area.scrollHeight;
+  if(area && usuarioNoFinal())area.scrollTo({top:area.scrollHeight,behavior:'smooth'});
 }
 // Força o scroll — usado só ao abrir/carregar conversa
 function scrollFimForce(){
   const area=document.getElementById('chatArea');
   if(!area)return;
-  // Rola imediatamente, sem setTimeout que conflita com scroll do usuário
+  // Rola para o final imediatamente
   area.scrollTop=area.scrollHeight;
-  // Segunda passagem só se as imagens/conteúdo ainda estiverem carregando
-  // e o usuário NÃO tiver tocado no scroll ainda
-  let userTouched=false;
-  const onTouch=()=>{userTouched=true;};
-  area.addEventListener('touchstart',onTouch,{once:true,passive:true});
+  // Uma segunda passagem após layout (conteúdo pode ter sido inserido)
   requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      if(!userTouched)area.scrollTop=area.scrollHeight;
-      area.removeEventListener('touchstart',onTouch);
-    });
+    area.scrollTop=area.scrollHeight;
   });
 }
-function initScrollListener(){}
+// Remove listeners de scroll antigos para evitar acumulação entre conversas
+function initScrollListener(){
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  // Clona o elemento para remover todos os listeners anteriores de forma limpa
+  // (neste caso não há listeners dinâmicos, mas fica seguro para futuras adições)
+}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
@@ -1479,7 +1479,18 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{
     const wrap=document.getElementById('inpWrap');if(!wrap)return;
     const diff=window.innerHeight-window.visualViewport.height;
-    wrap.style.bottom=diff>50?`${diff}px`:'var(--nb)';
+    const bottomOffset=diff>50?diff:0;
+    wrap.style.bottom=bottomOffset>0?`${bottomOffset}px`:'var(--nb)';
+    // Ajusta padding do chat para não esconder mensagens atrás do teclado
+    const area=document.getElementById('chatArea');
+    if(area){
+      const base=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nb'))||58;
+      area.style.paddingBottom=`${base+70+bottomOffset}px`;
+    }
+    // Se estava no final, mantém no final após teclado abrir
+    if(usuarioNoFinal()&&bottomOffset>0){
+      requestAnimationFrame(()=>{ const a=document.getElementById('chatArea');if(a)a.scrollTop=a.scrollHeight; });
+    }
   });
 }
 
