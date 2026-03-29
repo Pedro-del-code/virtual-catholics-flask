@@ -289,7 +289,7 @@ body::after{
 }
 .chat-inner{
   display:flex;flex-direction:column;gap:12px;
-  min-height:100%;
+  overflow-anchor:none;
 }
 .chat-area::-webkit-scrollbar{width:2px;}
 .chat-area::-webkit-scrollbar-thumb{background:var(--bord2);}
@@ -1397,18 +1397,31 @@ function remAnexo(){arquivoAnexo=null;document.getElementById('inpAnexo').classL
 function teclaEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
 
+let _usuarioSubiu=false;
 function scrollFim(){
-  const area=document.getElementById('chatArea');
-  if(!area)return;
-  // Só rola pro fim se o usuário JÁ estava no fim (não interrompeu leitura)
-  const atBottom=area.scrollHeight-area.scrollTop-area.clientHeight<120;
-  if(atBottom)area.scrollTop=area.scrollHeight;
-}
-function scrollFimForce(){
+  if(_usuarioSubiu)return;
   const area=document.getElementById('chatArea');
   if(!area)return;
   area.scrollTop=area.scrollHeight;
 }
+function scrollFimForce(){
+  _usuarioSubiu=false;
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  area.scrollTop=area.scrollHeight;
+}
+// Detecta se usuario subiu manualmente
+let _lastScrollTop=0;
+window.addEventListener('load',()=>{
+  const area=document.getElementById('chatArea');
+  if(!area)return;
+  area.addEventListener('scroll',()=>{
+    const st=area.scrollTop;
+    if(st<_lastScrollTop-10){_usuarioSubiu=true;}
+    if(area.scrollHeight-st-area.clientHeight<30){_usuarioSubiu=false;}
+    _lastScrollTop=st;
+  },{passive:true});
+});
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
 async function setIdioma(l){await fetch('/api/idioma',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idioma:l})});location.reload();}
 
