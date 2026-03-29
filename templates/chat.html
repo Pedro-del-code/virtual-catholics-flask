@@ -1031,7 +1031,11 @@ function irChat(){
   document.getElementById('inpWrap').classList.add('on');
   setNb('nb-chat');
   if(!chatAtual){const p=document.querySelector('.ci');if(p)abrirChat(p.id.replace('ci-',''),p);else novoChat();}
-  setTimeout(()=>{document.getElementById('msgInput').focus();},80);
+  // focus sem scroll — evita que o browser role a tela ao focar o input
+  setTimeout(()=>{
+    const inp=document.getElementById('msgInput');
+    if(inp){inp.focus({preventScroll:true});}
+  },80);
 }
 
 function acaoRapida(tipo){
@@ -1405,7 +1409,20 @@ function scrollFim(){
 // Força o scroll — usado só ao abrir/carregar conversa
 function scrollFimForce(){
   const area=document.getElementById('chatArea');
-  if(area){area.scrollTop=area.scrollHeight;setTimeout(()=>{area.scrollTop=area.scrollHeight;},80);}
+  if(!area)return;
+  // Rola imediatamente, sem setTimeout que conflita com scroll do usuário
+  area.scrollTop=area.scrollHeight;
+  // Segunda passagem só se as imagens/conteúdo ainda estiverem carregando
+  // e o usuário NÃO tiver tocado no scroll ainda
+  let userTouched=false;
+  const onTouch=()=>{userTouched=true;};
+  area.addEventListener('touchstart',onTouch,{once:true,passive:true});
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(!userTouched)area.scrollTop=area.scrollHeight;
+      area.removeEventListener('touchstart',onTouch);
+    });
+  });
 }
 function initScrollListener(){}
 function compartilhar(){const r=document.getElementById('versRef').textContent,t=document.getElementById('versTxt').textContent;if(navigator.share)navigator.share({text:`${t} — ${r}\n\nVirtual Catholics`});else if(navigator.clipboard)navigator.clipboard.writeText(`${t} — ${r}`);}
