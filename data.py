@@ -287,8 +287,96 @@ NOVENAS = {
         "São Jose, que recebestés de Deus a missão de cuidar do Filho de Deus, ensinai-me a cumprir com amor a missão que Deus me confiou. Amem.",
         "Gloriosó São Jose, padroeiro de uma boa morte, acompanhai-me na hora de minha morte. Que eu morra em paz, na graça de Deus. Amem.",
         "São Jose, neste ultimo dia de novena, confio a Vos minha vida, minha família e meus projetos. Sede meu pai e meu protetor para sempre. Amem."
-    ]
-    ,
+    ],
+    "Novena a Nossa Senhora de Fátima": [
+        "Ó Nossa Senhora de Fátima, que aparecestes a três pastorinhos humildes em Cova da Iria, neste primeiro dia de novena venho a vós com fé e confiança. Ensinai-me a rezar o Rosário com devoção, como pedistes. Amem.",
+        "Nossa Senhora de Fátima, vós que pedistes penitência e conversão, concedei-me a graça de me converter de coração e de abandonar todo pecado que me afasta de Deus. Amem.",
+        "Ó Virgem de Fátima, vós que revelastes o segredo da paz ao mundo, trazei a paz a minha alma, a minha família e a todas as nações. Amem.",
+        "Nossa Senhora, vós que dissestes 'rezai, rezai muito e fazei sacrifícios pelos pecadores', aceitai os pequenos sacrifícios que ofereço hoje pelas almas que mais precisam da misericórdia de Deus. Amem.",
+        "Ó Mãe de Fátima, vós que prometestes que o Vosso Imaculado Coração triunfará, renovai em mim a esperança de que o bem vence o mal e que Deus governa a história. Amem.",
+        "Nossa Senhora de Fátima, intercedei pela conversão dos pecadores, pela paz no mundo e pela consagração das nações ao Vosso Imaculado Coração. Amem.",
+        "Ó Virgem do Rosário, ensinai-me a meditar os mistérios da vida de Cristo com amor e devoção, para que o Rosário seja verdadeira oração do coração. Amem.",
+        "Nossa Senhora de Fátima, protegei a Igreja, o Papa e todos os sacerdotes. Que eles sejam santos ministros do amor de Deus. Amem.",
+        "Ó Nossa Senhora de Fátima, neste último dia de novena, consagro-me ao Vosso Imaculado Coração. Levai minha oração ao Vosso Filho Jesus e alcançai-me a graça que espero, se for da Sua santa vontade. Amem."
+    ],
+    "Novena a São Miguel Arcanjo": [
+        "Glorioso São Miguel Arcanjo, príncipe das milícias celestiais, vencedor do dragão infernal, neste primeiro dia de novena imploro vossa poderosa proteção. Defendei-me de todo ataque do inimigo. Amem.",
+        "São Miguel Arcanjo, que bradais 'Quem é como Deus?' diante do orgulho de Lúcifer, ensinai-me a humildade e o amor à glória de Deus acima de tudo. Amem.",
+        "Glorioso Arcanjo, guardião da Igreja de Cristo, protegei o Santo Padre, os bispos e todos os fiéis das heresias e dos ataques espirituais do inimigo. Amem.",
+        "São Miguel, que com a vossa espada de fogo protegeis as almas dos pecadores arrependidos, intercedei por mim junto ao trono de Deus e livrai-me das ciladas do demônio. Amem.",
+        "Poderoso Arcanjo, companheiro das almas no caminho do purgatório, intercedei pelas almas que purificam seus pecados e acelerai a sua entrada na glória. Amem.",
+        "São Miguel Arcanjo, que tendes autoridade sobre os anjos e demônios, exercei vosso poder em minha vida: afastai todo espírito de medo, divisão e desânimo. Amem.",
+        "Glorioso São Miguel, mensageiro da misericórdia divina, levai ao Senhor minhas orações e alcançai-me fortaleza nos momentos de tentação e fraqueza espiritual. Amem.",
+        "São Miguel Arcanjo, protetor das almas na hora da morte, acompanhai-me e a todos que amo naquele momento decisivo. Que não sejamos separados de Deus para sempre. Amem.",
+        "Glorioso príncipe São Miguel, neste último dia de novena, prostro-me diante de Deus e, pela vossa intercessão, peço proteção espiritual para minha vida, minha família e minha alma. Amem."
+    ],
+    "Novena da Divina Misericórdia": [
+        "Ó Jesus misericordioso, neste primeiro dia ofereço-Vos toda a humanidade, especialmente os pecadores. Que a Vossa misericórdia os envolva e os conduza à conversão. Abismo de misericórdia, envolve o mundo inteiro. Amem.",
+        "Jesus, hoje ofereço-Vos as almas dos sacerdotes e religiosos. Eles são Vossos ministros na terra; fortalecei-os na fidelidade, na santidade e no amor ao Vosso Coração. Amem.",
+        "Ó Jesus, hoje ofereço-Vos as almas dos devotos e fiéis. Que eles cresçam na fé, na esperança e na caridade, e sejam luz no mundo pelas suas boas obras. Amem.",
+        "Jesus misericordioso, ofereço-Vos hoje os que não creem e os que ainda não Vos conhecem. Que a Vossa luz os ilumine e Vossa misericórdia os alcance antes da hora da morte. Amem.",
+        "Ó Jesus, hoje ofereço-Vos as almas dos hereges e cismáticos. Que se dissipem as trevas do erro e que todos se unam à Vossa Santa Igreja. Amem.",
+        "Jesus, hoje ofereço-Vos as almas mansas e humildes e as almas das crianças. Elas são as mais próximas do Vosso Coração. Protegei a infância do mundo. Amem.",
+        "Ó Jesus, hoje ofereço-Vos as almas que veneram e glorificam particularmente Vossa misericórdia. Elas são a consolação do Vosso Coração adorável. Amem.",
+        "Jesus misericordioso, hoje ofereço-Vos as almas do purgatório. Que o sangue e a água que jorrastes do Vosso Coração as refresque e as leve à glória eterna. Amem.",
+        "Ó Jesus, neste último dia de novena ofereço-Vos as almas tiepias. Que o fogo do Vosso amor as inflame. Ó sangue e água, que jorraste do Coração de Jesus como fonte de misericórdia para nós, confio em Vós! Amem."
+    ],
+    "Novena a Santo Antônio": [
+        "Glorioso Santo Antônio de Lisboa e Pádua, Doutor da Igreja e taumaturgo, neste primeiro dia de novena recorro à vossa intercessão com fé e confiança. Alcançai-me do Senhor as graças de que necessito. Amem.",
+        "Santo Antônio, vós que pregastes com tanta eloquência e convertestes tantos pecadores, intercedei pela conversão dos que estão longe de Deus e pela perseverança dos que já O amam. Amem.",
+        "Glorioso Santo, protetor dos pobres e dos humildes, intercedei por todos os que sofrem necessidade material e espiritual. Que Deus lhes proveja com abundância. Amem.",
+        "Santo Antônio, que encontrastes o que estava perdido, ajudai-me a reencontrar o que perdi — não apenas coisas materiais, mas também a paz da alma, a fé e a esperança. Amem.",
+        "Glorioso Antônio, vós que tivestes aparições do Menino Jesus, alcançai-me a graça de sentir a presença de Cristo em minha vida diária, especialmente nos momentos mais difíceis. Amem.",
+        "Santo Antônio, padroeiro dos casamentos e das famílias, protegei minha família e intercedei pelos que buscam encontrar um bom companheiro de vida segundo o coração de Deus. Amem.",
+        "Glorioso taumaturgo, vós que realizastes tantos milagres em vida e após a morte, intercedei junto a Deus pelo milagre que necessito, se for de acordo com a Sua santa vontade. Amem.",
+        "Santo Antônio, homem de profunda oração e contemplação, ensinai-me a amar a oração, a Sagrada Escritura e a Eucaristia como vós amáveis. Amem.",
+        "Glorioso Santo Antônio, neste último dia de novena, confio em vossa poderosa intercessão. Levai minha prece ao Senhor e alcançai-me a graça pedida, para maior glória de Deus e bem da minha alma. Amem."
+    ],
+    "Novena a Santa Rita de Cássia": [
+        "Gloriosa Santa Rita, advogada das causas impossíveis, neste primeiro dia venho a vós com uma causa que parece impossível aos olhos humanos. Intercedei por mim junto a Deus, que nada é impossível. Amem.",
+        "Santa Rita, vós que sofrestes com paciência heroica os espinhos da vida — a viuvez, a perda dos filhos, a clausura — ensinai-me a abraçar minha cruz com amor e resignação cristã. Amem.",
+        "Gloriosa Santa, que recebestes o espinho da coroa de Cristo na vossa fronte como sinal da Paixão, fazei que eu also medite e ame o sofrimento redentor de Jesus. Amem.",
+        "Santa Rita, modelo de fidelidade conjugal e maternal, intercedei pelos casamentos em crise, pelas famílias desunidas e pelos filhos que se afastaram de Deus. Amem.",
+        "Gloriosa advogada das causas impossíveis, apresentai ao Senhor esta minha necessidade que considero impossível: (faça seu pedido). Nada é impossível a Deus! Amem.",
+        "Santa Rita, que vivestes com tanta intensidade a Paixão de Cristo, obtende-me a graça de participar do sofrimento de Jesus pela salvação das almas, oferecendo minhas dores cotidianas. Amem.",
+        "Gloriosa Santa, que tanto amáveis a Eucaristia e dela vos nutrieis espiritualmente, alcançai-me um amor mais profundo por Jesus presente no Santíssimo Sacramento. Amem.",
+        "Santa Rita, intercessora dos que sofrem, consolai os que hoje estão mergulhados em dor, tristeza e desespero. Que a misericórdia de Deus os envolva como envolveu a vossa vida. Amem.",
+        "Gloriosa Santa Rita de Cássia, neste último dia de novena, com fé renovada e coração aberto, peço a vossa intercessão. Alcançai-me a graça que necessito e ajudai-me a conformar minha vontade à santa vontade de Deus. Amem."
+    ],
+    "Novena a Nossa Senhora de Lourdes": [
+        "Ó Imaculada Virgem de Lourdes, que vos aparecestes à humilde Bernadete Soubirous, neste primeiro dia de novena recorro à vossa intercessão com fé e devoção. Sede minha mãe e minha advogada. Amem.",
+        "Nossa Senhora de Lourdes, vós que vos identificastes dizendo 'Eu sou a Imaculada Conceição', confirmando o dogma proclamado por Pio IX, aumentai em mim a fé nos ensinamentos da Santa Igreja. Amem.",
+        "Virgem de Lourdes, que fizestes brotar uma fonte milagrosa para cura dos enfermos, rogai a Deus pela saúde dos que estão doentes — corpo e alma — especialmente os que a vós recorrem. Amem.",
+        "Ó Nossa Senhora, que pedistes a Bernadete penitência e oração pelos pecadores, ensinai-me a oferecer meus sacrifícios cotidianos pela conversão dos pecadores e pelas almas do purgatório. Amem.",
+        "Imaculada Virgem, sede saúde dos enfermos, conforto dos que sofrem, esperança dos desesperados. Cobri com vosso manto maternal todos os que hoje padecem em hospitais e leitos de dor. Amem.",
+        "Nossa Senhora de Lourdes, que inspirastes a construção de um santuário onde milhões de peregrinos encontram graças e curas, fazei que minha alma seja também um templo de Deus. Amem.",
+        "Ó Virgem Imaculada, intercedei pelo Papa, pelos bispos e pelos sacerdotes. Que a Igreja seja sempre fiel ao Evangelho e à doutrina que Cristo lhe confiou. Amem.",
+        "Nossa Senhora de Lourdes, lembrai-vos dos doentes, dos que sofrem em silêncio, dos que perderam a esperança. Que a água da Vossa graça cure o que a medicina não alcança. Amem.",
+        "Ó Nossa Senhora de Lourdes, neste último dia de novena, renovo minha fé em Deus e minha devoção a vós. Alcançai-me a graça que peço, se for da vontade do vosso Filho, e conduzi-me pela mão ao Céu. Amem."
+    ],
+    "Novena a Santa Faustina": [
+        "Santa Faustina Kowalska, apóstola da Divina Misericórdia, neste primeiro dia de novena venho a vós com confiança. Intercedei por mim junto a Jesus misericordioso. Amem.",
+        "Santa Faustina, vós que recebestes de Jesus a missão de revelar ao mundo a sua infinita misericórdia, alcançai-me a graça de confiar plenamente no amor de Deus, mesmo nos momentos mais escuros. Amem.",
+        "Gloriosa visionária, vós que contemplastes o Coração de Jesus transbordando de misericórdia, ensinai-me a recorrer sempre ao sacramento da Confissão com contrição sincera e confiança filial. Amem.",
+        "Santa Faustina, que sofrestes muito em silêncio para participar da Paixão de Cristo, concedei-me a graça de aceitar os sofrimentos da minha vida como participação na Cruz redentora. Amem.",
+        "Apóstola da misericórdia, que escrevestes no Diário as palavras de Jesus, ajudai-me a meditar essas palavras e a deixar que a misericórdia de Deus transforme meu coração. Amem.",
+        "Santa Faustina, intercedei pelos que duvidam da misericórdia de Deus, pelos que se julgam indignos do perdão, pelos que vivem em desespero. Que a luz da misericórdia divina os alcance. Amem.",
+        "Gloriosa Santa, que propagastes a devoção à Imagem de Jesus misericordioso — 'Jesus, eu confio em Vós' — fazei que esta confiança seja a atitude fundamental da minha vida espiritual. Amem.",
+        "Santa Faustina, intercedei pelos agonizantes, especialmente pelos que morrem sem os sacramentos. Que a misericórdia de Deus os alcance no último instante. Amem.",
+        "Santa Faustina Kowalska, neste último dia de novena, com toda a confiança que podeis inspirar em mim, peço a vossa intercessão. Que o lema da vossa vida — 'Jesus, eu confio em Vós' — seja também o meu. Amem."
+    ],
+    "Novena a São Francisco de Assis": [
+        "Glorioso São Francisco de Assis, Poverello de Cristo, que abandonastes tudo para seguir o Senhor na pobreza e na alegria, neste primeiro dia de novena imploro vossa intercessão. Ensinai-me o desapego das coisas do mundo. Amem.",
+        "São Francisco, que ouvistes de Cristo na igrejinha de São Damião: 'Vai e reconstrói a minha Igreja', concedei-me a graça de ser também instrumento de renovação da Igreja pelo testemunho da minha vida. Amem.",
+        "Glorioso Poverello, que amáveis todas as criaturas como irmãs e irmãos — o sol, a lua, o vento, a água, a morte — ensinai-me a ver a mão de Deus em toda a criação e a cuidar do mundo que Ele nos confiou. Amem.",
+        "São Francisco, que recebestes os estigmas de Cristo no monte Alverne como sinal do vosso amor à Paixão do Senhor, alcançai-me um amor mais profundo ao Cristo crucificado. Amem.",
+        "Glorioso São Francisco, fundador de uma grande família religiosa que renovou a Igreja medieval, intercedei por todos os franciscanos e por todos os que buscam viver o Evangelho com radicalidade. Amem.",
+        "São Francisco, que compusestes o Cântico das Criaturas em louvor de Deus, ensinai-me a louvar o Senhor em todo momento, nas alegrias e nas tristezas, na saúde e na doença. Amem.",
+        "Glorioso Poverello, que fostes instrumento de paz onde havia ódio, perdão onde havia ofensa, amor onde havia ódio — como diz a oração que vos é atribuída —, fazei de mim também um instrumento de paz. Amem.",
+        "São Francisco, intercessor dos pobres, dos enfermos e dos marginalizados, olhai com amor especial por todos os que sofrem na periferia da sociedade. Que a Igreja seja sempre a casa dos pobres. Amem.",
+        "Glorioso São Francisco de Assis, neste último dia de novena, de joelhos diante de Cristo crucificado como vós diante do Crucifixo de São Damião, ofereço minha vida ao Senhor. Intercedei por mim e alcançai-me a graça de seguir a Jesus com alegria e simplicidade. Amem."
+    ],
+    
     "Novena das Maos Ensanguentadas de Jesus": [
         "Jesus, coloca Tuas maos benditas, ensanguentadas, chagadas e abertas sobre mim neste momento.\n(Faca o seu pedido)\nSinto-me completamente sem forcas para prosseguir carregando as minhas cruzes.\nPreciso que a forca e o poder de Tuas maos, que suportaram a mais profunda dor ao serem pregadas na Cruz, me reergam e me curem agora.\nJesus nao peco somente por mim, mas tambem por todos aqueles que mais amo. Nos precisamos desesperadamente de cura, fisica e espiritual, atraves do toque consolador de Tuas maos ensanguentadas e imensamente poderosas. Eu reconheco, apesar de toda a minha limitacao e da infinidade dos meus pecados, que es Deus Onipotente e misericordioso para agir e realizar o impossivel.\nCom fe e total confianca posso dizer:\nMaos ensanguentadas de Jesus, maos feridas la na Cruz! Vem tocar em mim. Vem Senhor Jesus!\nAmem.",
         "Jesus, coloca Tuas maos benditas, ensanguentadas, chagadas e abertas sobre mim neste momento.\n(Faca o seu pedido)\nSinto-me completamente sem forcas para prosseguir carregando as minhas cruzes.\nPreciso que a forca e o poder de Tuas maos, que suportaram a mais profunda dor ao serem pregadas na Cruz, me reergam e me curem agora.\nJesus nao peco somente por mim, mas tambem por todos aqueles que mais amo. Nos precisamos desesperadamente de cura, fisica e espiritual, atraves do toque consolador de Tuas maos ensanguentadas e imensamente poderosas. Eu reconheco, apesar de toda a minha limitacao e da infinidade dos meus pecados, que es Deus Onipotente e misericordioso para agir e realizar o impossivel.\nCom fe e total confianca posso dizer:\nMaos ensanguentadas de Jesus, maos feridas la na Cruz! Vem tocar em mim. Vem Senhor Jesus!\nAmem.",
