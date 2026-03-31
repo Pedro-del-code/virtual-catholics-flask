@@ -839,7 +839,7 @@ def api_chat():
     info_santo = f"O santo do dia {hoje.day}/{hoje.month} e: {santo_hoje}." if santo_hoje else ""
     idioma_instrucao = T.get("idioma_instrucao", "")
     base_conhecimento_str = montar_base_para_prompt()
-    biblioteca_str = _montar_biblioteca() if _montar_biblioteca else ""
+    biblioteca_str = _montar_biblioteca(resumida=True) if _montar_biblioteca else ""
     system_prompt = f"""Você é o Virtual Catholics, um assistente espiritual católico criado por Pedro.
 
 IDENTIDADE E PERSONALIDADE:
@@ -1040,6 +1040,9 @@ IMPORTANTE: Quando perguntado sobre um santo específico, discorra SOMENTE sobre
 
         return jsonify({"resposta": texto})
     except Exception as e:
+        import traceback
+        print(f"[ERRO API CHAT] {e}")
+        traceback.print_exc()
         return jsonify({"erro": str(e)}), 500
 
 @app.route("/api/chats")
