@@ -1096,87 +1096,62 @@ def api_santo_dia():
     santo = _SANTOS.get((hoje.month, hoje.day), "")
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
+@app.route("/api/liturgia-debug")
+def api_liturgia_debug():
+    resultados = {}
+    try:
+        r = http_req.get("https://api.aelf.org/v1/messes/2026-04-01/pt", timeout=8, headers={"User-Agent": "VirtualCatholics/1.0"})
+        resultados["aelf"] = {"status": r.status_code, "body": r.text[:300]}
+    except Exception as e:
+        resultados["aelf"] = {"erro": str(e)}
+    try:
+        r2 = http_req.get("https://liturgia.cancaonova.com/2026/04/01/", timeout=8, headers={"User-Agent": "Mozilla/5.0"})
+        resultados["cancaonova"] = {"status": r2.status_code, "body": r2.text[:300]}
+    except Exception as e:
+        resultados["cancaonova"] = {"erro": str(e)}
+    try:
+        r3 = http_req.get("https://www.cnbb.org.br/liturgia/", timeout=8, headers={"User-Agent": "Mozilla/5.0"})
+        resultados["cnbb"] = {"status": r3.status_code, "body": r3.text[:300]}
+    except Exception as e:
+        resultados["cnbb"] = {"erro": str(e)}
+    return jsonify(resultados)
+
 @app.route("/api/liturgia-dia")
 def api_liturgia_dia():
-    import re as _re
     hoje = date.today()
     data_fmt = hoje.strftime("%d/%m/%Y")
+    data_extensa = hoje.strftime("%d de %B de %Y")
     url_cnbb = "https://www.cnbb.org.br/liturgia/"
-
-    # Tenta API AELF (JSON)
     try:
-        data_str = hoje.strftime("%Y-%m-%d")
-        r = http_req.get(
-            f"https://api.aelf.org/v1/messes/{data_str}/pt",
-            timeout=8,
-            headers={"User-Agent": "VirtualCatholics/1.0"}
+        resp = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{
+                "role": "user",
+                "content": (
+                    f"Hoje é {data_extensa}. "
+                    "Você é um especialista em liturgia católica romana. "
+                    "Informe as leituras litúrgicas do dia de hoje conforme o calendário litúrgico romano oficial. "
+                    "Inclua: nome do tempo litúrgico, 1ª Leitura (referência + texto completo), Salmo Responsorial (referência + texto), "
+                    "2ª Leitura se houver (referência + texto), Evangelho (referência + texto completo). "
+                    "Use os textos bíblicos reais e corretos. Formate assim:\n"
+                    "📅 [TEMPO LITÚRGICO — ex: Quarta-feira Santa]\n\n"
+                    "📖 1ª LEITURA — [Referência]\n[Texto]\n\n"
+                    "🎵 SALMO — [Referência]\n[Texto]\n\n"
+                    "✝️ EVANGELHO — [Referência]\n[Texto]\n\n"
+                    "Responda APENAS com as leituras, sem introduções ou comentários extras."
+                )
+            }],
+            max_tokens=1800,
+            temperature=0.1
         )
-        if r.ok:
-            dados = r.json()
-            missa = dados.get("messe", {})
-            partes = []
-            TIPO_MAP = {
-                "lecture_1": "📖 1ª Leitura",
-                "lecture_2": "📖 2ª Leitura",
-                "psaume":    "🎵 Salmo",
-                "alleluia":  "✨ Aclamação",
-                "evangile":  "✝️ Evangelho",
-            }
-            for leitura in missa.get("lectures", []):
-                tipo = leitura.get("type", "")
-                ref  = leitura.get("ref", "")
-                texte = _re.sub(r"<[^>]+>", "", leitura.get("texte", "")).strip()
-                if not texte:
-                    continue
-                cabecalho = TIPO_MAP.get(tipo, tipo)
-                bloco = cabecalho
-                if ref:
-                    bloco += f" — {ref}"
-                bloco += f"\n\n{texte[:800]}"
-                partes.append(bloco)
-            if partes:
-                return jsonify({
-                    "data": data_fmt,
-                    "texto": "\n\n─────────────\n\n".join(partes),
-                    "url_cnbb": url_cnbb
-                })
+        texto = resp.choices[0].message.content.strip()
+        return jsonify({"data": data_fmt, "texto": texto, "url_cnbb": url_cnbb})
     except Exception:
-        pass
-
-    # Fallback: scraping Canção Nova
-    try:
-        ano  = hoje.strftime("%Y")
-        mes  = hoje.strftime("%m")
-        dia  = hoje.strftime("%d")
-        url_cn = f"https://liturgia.cancaonova.com/{ano}/{mes}/{dia}/"
-        r2 = http_req.get(url_cn, timeout=8, headers={"User-Agent": "Mozilla/5.0"})
-        if r2.ok:
-            html = r2.text
-            # Pega título da liturgia
-            titulo_m = _re.search(r'<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>(.*?)</h1>', html, _re.S)
-            titulo = _re.sub(r"<[^>]+>", "", titulo_m.group(1)).strip() if titulo_m else ""
-            # Pega conteúdo principal
-            content_m = _re.search(r'<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>(.*?)</div>\s*<footer', html, _re.S)
-            if content_m:
-                raw = content_m.group(1)
-                # Remove scripts/styles
-                raw = _re.sub(r'<(script|style)[^>]*>.*?</\1>', '', raw, flags=_re.S)
-                # Remove tags, normaliza espaços
-                texto = _re.sub(r"<[^>]+>", "\n", raw)
-                texto = _re.sub(r"\n{3,}", "\n\n", texto).strip()
-                texto = texto[:2000]
-                if titulo:
-                    texto = f"📅 {titulo}\n\n{texto}"
-                return jsonify({"data": data_fmt, "texto": texto, "url_cnbb": url_cnbb})
-    except Exception:
-        pass
-
-    # Fallback final
-    return jsonify({
-        "data": data_fmt,
-        "texto": "Não foi possível carregar as leituras agora.\nAcesse o site da CNBB para conferir a liturgia de hoje.",
-        "url_cnbb": url_cnbb
-    })
+        return jsonify({
+            "data": data_fmt,
+            "texto": "Não foi possível carregar as leituras agora.\nAcesse o site da CNBB para conferir a liturgia de hoje.",
+            "url_cnbb": url_cnbb
+        })
 
 if __name__ == "__main__":
     app.run(debug=True)
