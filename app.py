@@ -1098,48 +1098,85 @@ def api_santo_dia():
 
 @app.route("/api/liturgia-dia")
 def api_liturgia_dia():
+    import re as _re
     hoje = date.today()
-    data_str = hoje.strftime("%Y-%m-%d")
+    data_fmt = hoje.strftime("%d/%m/%Y")
     url_cnbb = "https://www.cnbb.org.br/liturgia/"
+
+    # Tenta API AELF (JSON)
     try:
+        data_str = hoje.strftime("%Y-%m-%d")
         r = http_req.get(
             f"https://api.aelf.org/v1/messes/{data_str}/pt",
-            timeout=8
+            timeout=8,
+            headers={"User-Agent": "VirtualCatholics/1.0"}
         )
-        if not r.ok:
-            raise Exception("AELF indisponível")
-        dados = r.json()
-        partes = []
-        missa = dados.get("messe", {})
-        # Leituras
-        for leitura in missa.get("lectures", []):
-            tipo = leitura.get("type", "")
-            ref  = leitura.get("ref", "")
-            intro = leitura.get("intro_lue", "")
-            texte = leitura.get("texte", "")
-            # Remove tags HTML simples
-            import re as _re
-            texte_limpo = _re.sub(r"<[^>]+>", "", texte).strip()
-            if tipo and texte_limpo:
-                cabecalho = tipo.replace("lecture_1", "1ª Leitura").replace("lecture_2", "2ª Leitura").replace("psaume", "Salmo").replace("evangile", "Evangelho").replace("alleluia", "Aclamação")
-                bloco = f"📖 {cabecalho}"
+        if r.ok:
+            dados = r.json()
+            missa = dados.get("messe", {})
+            partes = []
+            TIPO_MAP = {
+                "lecture_1": "📖 1ª Leitura",
+                "lecture_2": "📖 2ª Leitura",
+                "psaume":    "🎵 Salmo",
+                "alleluia":  "✨ Aclamação",
+                "evangile":  "✝️ Evangelho",
+            }
+            for leitura in missa.get("lectures", []):
+                tipo = leitura.get("type", "")
+                ref  = leitura.get("ref", "")
+                texte = _re.sub(r"<[^>]+>", "", leitura.get("texte", "")).strip()
+                if not texte:
+                    continue
+                cabecalho = TIPO_MAP.get(tipo, tipo)
+                bloco = cabecalho
                 if ref:
-                    bloco += f" ({ref})"
-                if intro:
-                    intro_limpo = _re.sub(r"<[^>]+>", "", intro).strip()
-                    bloco += f"\n{intro_limpo}"
-                bloco += f"\n\n{texte_limpo[:600]}"
+                    bloco += f" — {ref}"
+                bloco += f"\n\n{texte[:800]}"
                 partes.append(bloco)
-        texto_final = "\n\n---\n\n".join(partes) if partes else "Leituras não disponíveis para hoje."
-        data_fmt = hoje.strftime("%d/%m/%Y")
-        return jsonify({"data": data_fmt, "texto": texto_final, "url_cnbb": url_cnbb})
+            if partes:
+                return jsonify({
+                    "data": data_fmt,
+                    "texto": "\n\n─────────────\n\n".join(partes),
+                    "url_cnbb": url_cnbb
+                })
     except Exception:
-        data_fmt = hoje.strftime("%d/%m/%Y")
-        return jsonify({
-            "data": data_fmt,
-            "texto": "Não foi possível carregar as leituras agora.\nAcesse o site da CNBB para conferir a liturgia de hoje.",
-            "url_cnbb": url_cnbb
-        })
+        pass
+
+    # Fallback: scraping Canção Nova
+    try:
+        ano  = hoje.strftime("%Y")
+        mes  = hoje.strftime("%m")
+        dia  = hoje.strftime("%d")
+        url_cn = f"https://liturgia.cancaonova.com/{ano}/{mes}/{dia}/"
+        r2 = http_req.get(url_cn, timeout=8, headers={"User-Agent": "Mozilla/5.0"})
+        if r2.ok:
+            html = r2.text
+            # Pega título da liturgia
+            titulo_m = _re.search(r'<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>(.*?)</h1>', html, _re.S)
+            titulo = _re.sub(r"<[^>]+>", "", titulo_m.group(1)).strip() if titulo_m else ""
+            # Pega conteúdo principal
+            content_m = _re.search(r'<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>(.*?)</div>\s*<footer', html, _re.S)
+            if content_m:
+                raw = content_m.group(1)
+                # Remove scripts/styles
+                raw = _re.sub(r'<(script|style)[^>]*>.*?</\1>', '', raw, flags=_re.S)
+                # Remove tags, normaliza espaços
+                texto = _re.sub(r"<[^>]+>", "\n", raw)
+                texto = _re.sub(r"\n{3,}", "\n\n", texto).strip()
+                texto = texto[:2000]
+                if titulo:
+                    texto = f"📅 {titulo}\n\n{texto}"
+                return jsonify({"data": data_fmt, "texto": texto, "url_cnbb": url_cnbb})
+    except Exception:
+        pass
+
+    # Fallback final
+    return jsonify({
+        "data": data_fmt,
+        "texto": "Não foi possível carregar as leituras agora.\nAcesse o site da CNBB para conferir a liturgia de hoje.",
+        "url_cnbb": url_cnbb
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
