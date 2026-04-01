@@ -1096,6 +1096,51 @@ def api_santo_dia():
     santo = _SANTOS.get((hoje.month, hoje.day), "")
     return jsonify({"santo": santo, "data": f"{hoje.day}/{hoje.month}"})
 
+@app.route("/api/liturgia-dia")
+def api_liturgia_dia():
+    hoje = date.today()
+    data_str = hoje.strftime("%Y-%m-%d")
+    url_cnbb = "https://www.cnbb.org.br/liturgia/"
+    try:
+        r = http_req.get(
+            f"https://api.aelf.org/v1/messes/{data_str}/pt",
+            timeout=8
+        )
+        if not r.ok:
+            raise Exception("AELF indisponível")
+        dados = r.json()
+        partes = []
+        missa = dados.get("messe", {})
+        # Leituras
+        for leitura in missa.get("lectures", []):
+            tipo = leitura.get("type", "")
+            ref  = leitura.get("ref", "")
+            intro = leitura.get("intro_lue", "")
+            texte = leitura.get("texte", "")
+            # Remove tags HTML simples
+            import re as _re
+            texte_limpo = _re.sub(r"<[^>]+>", "", texte).strip()
+            if tipo and texte_limpo:
+                cabecalho = tipo.replace("lecture_1", "1ª Leitura").replace("lecture_2", "2ª Leitura").replace("psaume", "Salmo").replace("evangile", "Evangelho").replace("alleluia", "Aclamação")
+                bloco = f"📖 {cabecalho}"
+                if ref:
+                    bloco += f" ({ref})"
+                if intro:
+                    intro_limpo = _re.sub(r"<[^>]+>", "", intro).strip()
+                    bloco += f"\n{intro_limpo}"
+                bloco += f"\n\n{texte_limpo[:600]}"
+                partes.append(bloco)
+        texto_final = "\n\n---\n\n".join(partes) if partes else "Leituras não disponíveis para hoje."
+        data_fmt = hoje.strftime("%d/%m/%Y")
+        return jsonify({"data": data_fmt, "texto": texto_final, "url_cnbb": url_cnbb})
+    except Exception:
+        data_fmt = hoje.strftime("%d/%m/%Y")
+        return jsonify({
+            "data": data_fmt,
+            "texto": "Não foi possível carregar as leituras agora.\nAcesse o site da CNBB para conferir a liturgia de hoje.",
+            "url_cnbb": url_cnbb
+        })
+
 if __name__ == "__main__":
     app.run(debug=True)
 
