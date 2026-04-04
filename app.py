@@ -1254,29 +1254,63 @@ def api_biblia_capitulos(livro):
 @app.route("/api/biblia/versiculo")
 def api_biblia_versiculo():
     import requests as req
-    livro = request.args.get("livro", "john")
+
+    livro    = request.args.get("livro", "john").lower()
     capitulo = request.args.get("capitulo", "3")
     versiculo = request.args.get("versiculo", "")
-    # Traduções católicas em ordem de preferência:
-    # "bpt" = Bíblia Pastoral (tradução católica oficial do Brasil, CNBB)
-    # "nvi" = Nova Versão Internacional (mais completa nos Salmos)
-    # "acf" = Almeida Corrigida e Fiel (fallback)
-    TRADUCOES = ["bpt", "nvi", "acf"]
+
+    # Mapeamento dos IDs internos → abreviações da abibliadigital.com.br
+    _ABD_MAP = {
+        "genesis":"gn","exodus":"ex","leviticus":"lv","numbers":"nm",
+        "deuteronomy":"dt","joshua":"js","judges":"jz","ruth":"rt",
+        "1samuel":"1sm","2samuel":"2sm","1kings":"1rs","2kings":"2rs",
+        "job":"jo","psalms":"sl","proverbs":"pv","ecclesiastes":"ecl",
+        "songofsolomon":"ct","isaiah":"is","jeremiah":"jr",
+        "lamentations":"lm","ezekiel":"ez","daniel":"dn","hosea":"os",
+        "joel":"jl","amos":"am","jonah":"jn","micah":"mq",
+        "matthew":"mt","mark":"mc","luke":"lc","john":"jo",
+        "acts":"at","romans":"rm","1corinthians":"1co","2corinthians":"2co",
+        "galatians":"gl","ephesians":"ef","philippians":"fp",
+        "colossians":"cl","1thessalonians":"1ts","hebrews":"hb",
+        "james":"tg","1peter":"1pe","1john":"1jo","revelation":"ap",
+    }
+
+    abd_abrev = _ABD_MAP.get(livro, livro)
+
     try:
-        for traducao in TRADUCOES:
-            try:
-                if versiculo:
-                    url = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation={traducao}"
-                else:
-                    url = f"https://bible-api.com/{livro}+{capitulo}?translation={traducao}"
-                r = req.get(url, timeout=8)
-                data = r.json()
-                if data.get("verses") and len(data["verses"]) > 0:
-                    data["traducao_usada"] = traducao
-                    return jsonify(data)
-            except Exception:
-                continue
+        # ── Tentativa 1: abibliadigital.com.br (NVI, pt-BR) — API pública ────
+        if versiculo:
+            url_abd = f"https://www.abibliadigital.com.br/api/verses/nvi/{abd_abrev}/{capitulo}/{versiculo}"
+        else:
+            url_abd = f"https://www.abibliadigital.com.br/api/chapters/nvi/{abd_abrev}/{capitulo}"
+
+        r = req.get(url_abd, timeout=8)
+        if r.ok:
+            data = r.json()
+            # Normaliza para o formato que o frontend já espera: {"verses":[{"verse":N,"text":"..."}]}
+            if versiculo:
+                verses = [{"verse": data.get("number", int(versiculo)), "text": data.get("text", "")}]
+            else:
+                raw = data.get("verses", [])
+                verses = [{"verse": v.get("number", i+1), "text": v.get("text", "")} for i, v in enumerate(raw)]
+
+            if verses:
+                return jsonify({"verses": verses, "traducao_usada": "nvi"})
+
+        # ── Tentativa 2: bible-api.com com ACF (fallback sem token) ──────────
+        if versiculo:
+            url_acf = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation=acf"
+        else:
+            url_acf = f"https://bible-api.com/{livro}+{capitulo}?translation=acf"
+
+        r2 = req.get(url_acf, timeout=8)
+        data2 = r2.json()
+        if data2.get("verses") and len(data2["verses"]) > 0:
+            data2["traducao_usada"] = "acf"
+            return jsonify(data2)
+
         return jsonify({"error": "Capítulo não encontrado.", "verses": []}), 200
+
     except Exception as e:
         return jsonify({"error": str(e), "verses": []}), 500
 
