@@ -1187,6 +1187,25 @@ import pathlib as _pathlib
 
 _BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "bibliaAveMaria.json"
 
+_ABREV_MAP = {
+    "gênesis":"Gn","êxodo":"Ex","levítico":"Lv","números":"Nm","deuteronômio":"Dt",
+    "josué":"Js","juízes":"Jz","rute":"Rt","1 samuel":"1Sm","2 samuel":"2Sm",
+    "1 reis":"1Rs","2 reis":"2Rs","1 crônicas":"1Cr","2 crônicas":"2Cr",
+    "esdras":"Ed","neemias":"Ne","tobias":"Tb","judite":"Jdt","ester":"Est",
+    "1 macabeus":"1Mc","2 macabeus":"2Mc","jó":"Jó","salmos":"Sl","provérbios":"Pv",
+    "eclesiastes":"Ecl","cântico dos cânticos":"Ct","sabedoria":"Sb","eclesiástico":"Sir",
+    "isaías":"Is","jeremias":"Jr","lamentações":"Lm","baruc":"Br","ezequiel":"Ez",
+    "daniel":"Dn","oséias":"Os","joel":"Jl","amós":"Am","abdias":"Ab",
+    "jonas":"Jn","miquéias":"Mq","naum":"Na","habacuc":"Hab","sofonias":"Sf",
+    "ageu":"Ag","zacarias":"Zc","malaquias":"Ml",
+    "mateus":"Mt","marcos":"Mc","lucas":"Lc","joão":"Jo","atos dos apóstolos":"At",
+    "romanos":"Rm","1 coríntios":"1Cor","2 coríntios":"2Cor","gálatas":"Gl",
+    "efésios":"Ef","filipenses":"Fl","colossenses":"Cl","1 tessalonicenses":"1Ts",
+    "2 tessalonicenses":"2Ts","1 timóteo":"1Tm","2 timóteo":"2Tm","tito":"Tt",
+    "filêmon":"Fm","hebreus":"Hb","tiago":"Tg","1 pedro":"1Pd","2 pedro":"2Pd",
+    "1 joão":"1Jo","2 joão":"2Jo","3 joão":"3Jo","judas":"Jd","apocalipse":"Ap",
+}
+
 def _carregar_biblia():
     if not _BIBLIA_PATH.exists():
         print(f"[AVISO] bibliaAveMaria.json não encontrado em {_BIBLIA_PATH}. Funcionalidade da Bíblia desativada.")
@@ -1201,11 +1220,11 @@ def _carregar_biblia():
     livros_obj = []
     for l in at:
         nome = l.get("nome", "")
-        abrev = l.get("abrev", l.get("abbreviation", nome[:3].upper()))
+        abrev = _ABREV_MAP.get(nome.lower(), nome[:3])
         livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "AT"})
     for l in nt:
         nome = l.get("nome", "")
-        abrev = l.get("abrev", l.get("abbreviation", nome[:3].upper()))
+        abrev = _ABREV_MAP.get(nome.lower(), nome[:3])
         livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "NT"})
     return {"_livros": livros, "_livros_obj": livros_obj, "_capitulos": capitulos, "_raw": raw}
 
