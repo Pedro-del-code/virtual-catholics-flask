@@ -1182,65 +1182,18 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 # ── BÍBLIA ────────────────────────────────────────────────────────────────────
-LIVROS_BIBLIA = [
-    {"id":"genesis","nome":"Gênesis","abrev":"Gn","testamento":"AT"},
-    {"id":"exodus","nome":"Êxodo","abrev":"Ex","testamento":"AT"},
-    {"id":"leviticus","nome":"Levítico","abrev":"Lv","testamento":"AT"},
-    {"id":"numbers","nome":"Números","abrev":"Nm","testamento":"AT"},
-    {"id":"deuteronomy","nome":"Deuteronômio","abrev":"Dt","testamento":"AT"},
-    {"id":"joshua","nome":"Josué","abrev":"Js","testamento":"AT"},
-    {"id":"judges","nome":"Juízes","abrev":"Jz","testamento":"AT"},
-    {"id":"ruth","nome":"Rute","abrev":"Rt","testamento":"AT"},
-    {"id":"1samuel","nome":"1 Samuel","abrev":"1Sm","testamento":"AT"},
-    {"id":"2samuel","nome":"2 Samuel","abrev":"2Sm","testamento":"AT"},
-    {"id":"1kings","nome":"1 Reis","abrev":"1Rs","testamento":"AT"},
-    {"id":"2kings","nome":"2 Reis","abrev":"2Rs","testamento":"AT"},
-    {"id":"job","nome":"Jó","abrev":"Jó","testamento":"AT"},
-    {"id":"psalms","nome":"Salmos","abrev":"Sl","testamento":"AT"},
-    {"id":"proverbs","nome":"Provérbios","abrev":"Pr","testamento":"AT"},
-    {"id":"ecclesiastes","nome":"Eclesiastes","abrev":"Ecl","testamento":"AT"},
-    {"id":"songofsolomon","nome":"Cântico dos Cânticos","abrev":"Ct","testamento":"AT"},
-    {"id":"isaiah","nome":"Isaías","abrev":"Is","testamento":"AT"},
-    {"id":"jeremiah","nome":"Jeremias","abrev":"Jr","testamento":"AT"},
-    {"id":"lamentations","nome":"Lamentações","abrev":"Lm","testamento":"AT"},
-    {"id":"ezekiel","nome":"Ezequiel","abrev":"Ez","testamento":"AT"},
-    {"id":"daniel","nome":"Daniel","abrev":"Dn","testamento":"AT"},
-    {"id":"hosea","nome":"Oséias","abrev":"Os","testamento":"AT"},
-    {"id":"joel","nome":"Joel","abrev":"Jl","testamento":"AT"},
-    {"id":"amos","nome":"Amós","abrev":"Am","testamento":"AT"},
-    {"id":"jonah","nome":"Jonas","abrev":"Jn","testamento":"AT"},
-    {"id":"micah","nome":"Miquéias","abrev":"Mq","testamento":"AT"},
-    {"id":"matthew","nome":"Mateus","abrev":"Mt","testamento":"NT"},
-    {"id":"mark","nome":"Marcos","abrev":"Mc","testamento":"NT"},
-    {"id":"luke","nome":"Lucas","abrev":"Lc","testamento":"NT"},
-    {"id":"john","nome":"João","abrev":"Jo","testamento":"NT"},
-    {"id":"acts","nome":"Atos dos Apóstolos","abrev":"At","testamento":"NT"},
-    {"id":"romans","nome":"Romanos","abrev":"Rm","testamento":"NT"},
-    {"id":"1corinthians","nome":"1 Coríntios","abrev":"1Cor","testamento":"NT"},
-    {"id":"2corinthians","nome":"2 Coríntios","abrev":"2Cor","testamento":"NT"},
-    {"id":"galatians","nome":"Gálatas","abrev":"Gl","testamento":"NT"},
-    {"id":"ephesians","nome":"Efésios","abrev":"Ef","testamento":"NT"},
-    {"id":"philippians","nome":"Filipenses","abrev":"Fl","testamento":"NT"},
-    {"id":"colossians","nome":"Colossenses","abrev":"Cl","testamento":"NT"},
-    {"id":"1thessalonians","nome":"1 Tessalonicenses","abrev":"1Ts","testamento":"NT"},
-    {"id":"hebrews","nome":"Hebreus","abrev":"Hb","testamento":"NT"},
-    {"id":"james","nome":"Tiago","abrev":"Tg","testamento":"NT"},
-    {"id":"1peter","nome":"1 Pedro","abrev":"1Pd","testamento":"NT"},
-    {"id":"1john","nome":"1 João","abrev":"1Jo","testamento":"NT"},
-    {"id":"revelation","nome":"Apocalipse","abrev":"Ap","testamento":"NT"},
-]
+# ── BÍBLIA CATÓLICA — leitura do JSON local (73 livros, Ave Maria) ────────────
+import pathlib as _pathlib
 
-CAPITULOS_POR_LIVRO = {
-    "genesis":50,"exodus":40,"leviticus":27,"numbers":36,"deuteronomy":34,
-    "joshua":24,"judges":21,"ruth":4,"1samuel":31,"2samuel":24,
-    "1kings":22,"2kings":25,"job":42,"psalms":150,"proverbs":31,
-    "ecclesiastes":12,"songofsolomon":8,"isaiah":66,"jeremiah":52,
-    "lamentations":5,"ezekiel":48,"daniel":14,"hosea":14,"joel":4,
-    "amos":9,"jonah":4,"micah":7,"matthew":28,"mark":16,"luke":24,
-    "john":21,"acts":28,"romans":16,"1corinthians":16,"2corinthians":13,
-    "galatians":6,"ephesians":6,"philippians":4,"colossians":4,
-    "1thessalonians":5,"hebrews":13,"james":5,"1peter":5,"1john":5,"revelation":22,
-}
+_BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "biblia.json"
+
+def _carregar_biblia():
+    with open(_BIBLIA_PATH, encoding="utf-8") as f:
+        return json.load(f)
+
+_BIBLIA_DATA = _carregar_biblia()
+LIVROS_BIBLIA     = _BIBLIA_DATA["_livros"]
+CAPITULOS_POR_LIVRO = _BIBLIA_DATA["_capitulos"]
 
 @app.route("/api/biblia/livros")
 def api_biblia_livros():
@@ -1254,31 +1207,53 @@ def api_biblia_capitulos(livro):
 @app.route("/api/biblia/versiculo")
 def api_biblia_versiculo():
     import requests as req
-
     livro    = request.args.get("livro", "john").lower()
     capitulo = request.args.get("capitulo", "3")
     versiculo = request.args.get("versiculo", "")
 
-    # Mapeamento dos IDs internos → abreviações da abibliadigital.com.br
+    # ── Mapeamento ID interno → abreviação abibliadigital.com.br (NVI pt-BR) ──
     _ABD_MAP = {
         "genesis":"gn","exodus":"ex","leviticus":"lv","numbers":"nm",
         "deuteronomy":"dt","joshua":"js","judges":"jz","ruth":"rt",
         "1samuel":"1sm","2samuel":"2sm","1kings":"1rs","2kings":"2rs",
-        "job":"jo","psalms":"sl","proverbs":"pv","ecclesiastes":"ecl",
-        "songofsolomon":"ct","isaiah":"is","jeremiah":"jr",
-        "lamentations":"lm","ezekiel":"ez","daniel":"dn","hosea":"os",
-        "joel":"jl","amos":"am","jonah":"jn","micah":"mq",
-        "matthew":"mt","mark":"mc","luke":"lc","john":"jo",
-        "acts":"at","romans":"rm","1corinthians":"1co","2corinthians":"2co",
-        "galatians":"gl","ephesians":"ef","philippians":"fp",
-        "colossians":"cl","1thessalonians":"1ts","hebrews":"hb",
-        "james":"tg","1peter":"1pe","1john":"1jo","revelation":"ap",
+        "1chronicles":"1cr","2chronicles":"2cr","ezra":"ed","nehemiah":"ne",
+        "tobit":"tb","judith":"jdt","esther":"est","1maccabees":"1mac",
+        "2maccabees":"2mac","job":"jo","psalms":"sl","proverbs":"pv",
+        "ecclesiastes":"ecl","songofsolomon":"ct","wisdom":"sb",
+        "sirach":"sir","isaiah":"is","jeremiah":"jr","lamentations":"lm",
+        "baruch":"bar","ezekiel":"ez","daniel":"dn","hosea":"os",
+        "joel":"jl","amos":"am","obadiah":"abd","jonah":"jn","micah":"mq",
+        "nahum":"na","habakkuk":"hab","zephaniah":"sf","haggai":"ag",
+        "zechariah":"zc","malachi":"ml","matthew":"mt","mark":"mc",
+        "luke":"lc","john":"jo","acts":"at","romans":"rm",
+        "1corinthians":"1co","2corinthians":"2co","galatians":"gl",
+        "ephesians":"ef","philippians":"fp","colossians":"cl",
+        "1thessalonians":"1ts","2thessalonians":"2ts","1timothy":"1tm",
+        "2timothy":"2tm","titus":"tt","philemon":"fm","hebrews":"hb",
+        "james":"tg","1peter":"1pe","2peter":"2pe","1john":"1jo",
+        "2john":"2jo","3john":"3jo","jude":"jd","revelation":"ap",
     }
 
     abd_abrev = _ABD_MAP.get(livro, livro)
 
     try:
-        # ── Tentativa 1: abibliadigital.com.br (NVI, pt-BR) — API pública ────
+        # ── Bíblia Ave Maria local (deuterocanônicos ✓) ───────────────────────
+        livro_data = _BIBLIA_DATA.get(livro)
+        if livro_data:
+            cap_idx = int(capitulo) - 1
+            capitulos = livro_data.get("capitulos", [])
+            if 0 <= cap_idx < len(capitulos):
+                versiculos = capitulos[cap_idx]
+                if versiculo:
+                    v_idx = int(versiculo) - 1
+                    if 0 <= v_idx < len(versiculos):
+                        verses = [{"verse": int(versiculo), "text": versiculos[v_idx]}]
+                        return jsonify({"verses": verses, "traducao_usada": "Ave Maria"})
+                else:
+                    verses = [{"verse": i+1, "text": t} for i, t in enumerate(versiculos)]
+                    return jsonify({"verses": verses, "traducao_usada": "Ave Maria"})
+
+        # ── Fallback: abibliadigital.com.br (NVI) — cobre o que o JSON local não tiver ──
         if versiculo:
             url_abd = f"https://www.abibliadigital.com.br/api/verses/nvi/{abd_abrev}/{capitulo}/{versiculo}"
         else:
@@ -1287,27 +1262,13 @@ def api_biblia_versiculo():
         r = req.get(url_abd, timeout=8)
         if r.ok:
             data = r.json()
-            # Normaliza para o formato que o frontend já espera: {"verses":[{"verse":N,"text":"..."}]}
             if versiculo:
                 verses = [{"verse": data.get("number", int(versiculo)), "text": data.get("text", "")}]
             else:
                 raw = data.get("verses", [])
                 verses = [{"verse": v.get("number", i+1), "text": v.get("text", "")} for i, v in enumerate(raw)]
-
             if verses:
                 return jsonify({"verses": verses, "traducao_usada": "nvi"})
-
-        # ── Tentativa 2: bible-api.com com ACF (fallback sem token) ──────────
-        if versiculo:
-            url_acf = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation=acf"
-        else:
-            url_acf = f"https://bible-api.com/{livro}+{capitulo}?translation=acf"
-
-        r2 = req.get(url_acf, timeout=8)
-        data2 = r2.json()
-        if data2.get("verses") and len(data2["verses"]) > 0:
-            data2["traducao_usada"] = "acf"
-            return jsonify(data2)
 
         return jsonify({"error": "Capítulo não encontrado.", "verses": []}), 200
 
