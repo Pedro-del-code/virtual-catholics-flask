@@ -1189,10 +1189,14 @@ _BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "bibliaAveMaria.json"
 
 def _carregar_biblia():
     if not _BIBLIA_PATH.exists():
-        print(f"[AVISO] biblia.json não encontrado em {_BIBLIA_PATH}. Funcionalidade da Bíblia desativada.")
-        return {"_livros": [], "_capitulos": {}}
+        print(f"[AVISO] bibliaAveMaria.json não encontrado em {_BIBLIA_PATH}. Funcionalidade da Bíblia desativada.")
+        return {"_livros": [], "_capitulos": {}, "_raw": {}}
     with open(_BIBLIA_PATH, encoding="utf-8") as f:
-        return json.load(f)
+        raw = json.load(f)
+    todos = raw.get("antigoTestamento", []) + raw.get("novoTestamento", [])
+    livros = [l["nome"] for l in todos]
+    capitulos = {l["nome"].lower(): len(l["capitulos"]) for l in todos}
+    return {"_livros": livros, "_capitulos": capitulos, "_raw": raw}
 
 _BIBLIA_DATA = _carregar_biblia()
 LIVROS_BIBLIA     = _BIBLIA_DATA["_livros"]
@@ -1241,19 +1245,22 @@ def api_biblia_versiculo():
 
     try:
         # ── Bíblia Ave Maria local (deuterocanônicos ✓) ───────────────────────
-        livro_data = _BIBLIA_DATA.get(livro)
+        _raw = _BIBLIA_DATA.get("_raw", {})
+        _todos_livros = _raw.get("antigoTestamento", []) + _raw.get("novoTestamento", [])
+        livro_data = next((l for l in _todos_livros if l["nome"].lower() == livro.lower()), None)
         if livro_data:
             cap_idx = int(capitulo) - 1
-            capitulos = livro_data.get("capitulos", [])
-            if 0 <= cap_idx < len(capitulos):
-                versiculos = capitulos[cap_idx]
+            capitulos_livro = livro_data.get("capitulos", [])
+            if 0 <= cap_idx < len(capitulos_livro):
+                cap_data = capitulos_livro[cap_idx]
+                versiculos = cap_data.get("versiculos", [])
                 if versiculo:
                     v_idx = int(versiculo) - 1
                     if 0 <= v_idx < len(versiculos):
-                        verses = [{"verse": int(versiculo), "text": versiculos[v_idx]}]
+                        verses = [{"verse": int(versiculo), "text": versiculos[v_idx]["texto"]}]
                         return jsonify({"verses": verses, "traducao_usada": "Ave Maria"})
                 else:
-                    verses = [{"verse": i+1, "text": t} for i, t in enumerate(versiculos)]
+                    verses = [{"verse": v["versiculo"], "text": v["texto"]} for v in versiculos]
                     return jsonify({"verses": verses, "traducao_usada": "Ave Maria"})
 
         # ── Fallback: abibliadigital.com.br (NVI) — cobre o que o JSON local não tiver ──
