@@ -463,14 +463,15 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rg
 }
 .nb-item{
   flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;
+  align-items:center;justify-content:center;gap:2px;
   cursor:pointer;background:transparent;border:none;
   color:rgba(200,160,74,.38);transition:color .2s;
+  padding:0 2px;
 }
 .nb-item.on{color:var(--gold);}
 .nb-item:hover{color:var(--gold2);}
-.nb-ico{font-size:19px;line-height:1;}
-.nb-lbl{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.5px;}
+.nb-ico{font-size:17px;line-height:1;}
+.nb-lbl{font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.3px;}
 
 /* ── SIDEBAR ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:90;}
@@ -795,6 +796,9 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rg
   <button class="nb-item" id="nb-chat" onclick="irChat()">
     <div class="nb-ico">✝</div><div class="nb-lbl">IA</div>
   </button>
+  <button class="nb-item" id="nb-playlists" onclick="abrirPainel('playlists')">
+    <div class="nb-ico">▶️</div><div class="nb-lbl">Vídeos</div>
+  </button>
   <button class="nb-item" id="nb-rec" onclick="abrirSB()">
     <div class="nb-ico">☰</div><div class="nb-lbl">Recursos</div>
   </button>
@@ -831,6 +835,7 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rg
     <div class="sb-mi" onclick="abrirPainel('novenas')">🕯️ Novenas</div>
     <div class="sb-mi" onclick="abrirPainel('exame')">🔍 Exame de Consciência</div>
     <div class="sb-mi" onclick="abrirPainel('apoio')">🆘 Apoio Espiritual</div>
+    <div class="sb-mi" onclick="abrirPainel('playlists')">▶️ Playlists Católicas</div>
     <div class="sb-sec">SOBRE</div>
     <div class="sb-mi" onclick="abrirPainel('creditos')">👨‍💻 Créditos</div>
     <div class="sb-mi" onclick="abrirPainel('feedback')">📧 Suporte</div>
@@ -1184,6 +1189,51 @@ async function abrirPainel(tipo){
     document.getElementById('panTit').textContent='SUPORTE';
     body.innerHTML=`<div class="pt"><b style="color:var(--gold)">📧 Email de contato</b>\n\n<span style="font-size:15px">virtualcatholics@gmail.com</span>\n\n<small>Envie sugestões, dúvidas ou pedidos de oração. Respondemos com caridade! 🙏</small></div>
     <a href="mailto:virtualcatholics@gmail.com" style="display:block;background:rgba(200,160,74,.1);border:1px solid rgba(200,160,74,.28);border-radius:8px;padding:12px;text-align:center;color:var(--gold);text-decoration:none;margin-top:10px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px">✉ ENVIAR EMAIL</a>`;
+    return;
+  }
+  if(tipo==='playlists'){
+    document.getElementById('panTit').textContent='▶ PLAYLISTS CATÓLICAS';
+    body.innerHTML='<div class="pt" style="text-align:center;color:var(--text2);font-style:italic">Carregando conteúdos... ✝</div>';
+    try{
+      const r=await fetch('/api/playlists'), cats=await r.json();
+      body.innerHTML=`
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(200,160,74,.07);border:1px solid rgba(200,160,74,.18);border-radius:10px">
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);margin-bottom:6px">✝ SOBRE ESTA SEÇÃO</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6;font-style:italic">Conteúdos selecionados para ajudar todo católico a crescer na fé, na oração e no amor a Deus.</div>
+        </div>`;
+      cats.forEach(cat=>{
+        const sec=document.createElement('div');
+        sec.style.cssText='margin-bottom:18px';
+        sec.innerHTML=`
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:4px;padding:0 2px">${cat.categoria}</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px;font-style:italic;padding:0 2px">${cat.descricao}</div>`;
+        cat.playlists.forEach(pl=>{
+          const card=document.createElement('a');
+          card.href=pl.url;
+          card.target='_blank';
+          card.rel='noopener noreferrer';
+          card.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(15,12,26,.8);border:1px solid rgba(200,160,74,.15);border-radius:10px;margin-bottom:8px;text-decoration:none;transition:all .2s;';
+          card.innerHTML=`
+            <div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,#ff0000,#cc0000);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 8px rgba(255,0,0,.3)">▶</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5px;color:var(--gold2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.titulo}</div>
+              <div style="font-size:11px;color:rgba(200,160,74,.6);margin-bottom:2px">${pl.canal}</div>
+              <div style="font-size:11px;color:var(--text2);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.descricao}</div>
+            </div>
+            <div style="font-size:18px;color:rgba(200,160,74,.4);flex-shrink:0">›</div>`;
+          card.onmouseenter=()=>{card.style.borderColor='rgba(200,160,74,.4)';card.style.background='rgba(200,160,74,.08)';};
+          card.onmouseleave=()=>{card.style.borderColor='rgba(200,160,74,.15)';card.style.background='rgba(15,12,26,.8)';};
+          sec.appendChild(card);
+        });
+        body.appendChild(sec);
+      });
+      const footer=document.createElement('div');
+      footer.style.cssText='text-align:center;padding:16px 0 8px;border-top:1px solid rgba(200,160,74,.1);margin-top:8px';
+      footer.innerHTML=`<div style="font-size:12px;font-style:italic;color:rgba(200,160,74,.4)">"A fé vem pelo ouvir, e o ouvir pela Palavra de Deus." (Rm 10,17)</div>`;
+      body.appendChild(footer);
+    }catch(e){
+      body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0;font-style:italic;color:var(--text2)">Erro ao carregar playlists. Tente novamente. 🙏</div>';
+    }
     return;
   }
   if(tipo==='doacoes'){
