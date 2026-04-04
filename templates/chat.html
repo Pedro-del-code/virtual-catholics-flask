@@ -1193,46 +1193,78 @@ async function abrirPainel(tipo){
   }
   if(tipo==='playlists'){
     document.getElementById('panTit').textContent='▶ PLAYLISTS CATÓLICAS';
-    body.innerHTML='<div class="pt" style="text-align:center;color:var(--text2);font-style:italic">Carregando conteúdos... ✝</div>';
+    body.innerHTML='<div style="text-align:center;padding:40px 0;font-style:italic;color:var(--text2)">Carregando... ✝</div>';
     try{
       const r=await fetch('/api/playlists'), cats=await r.json();
-      body.innerHTML=`
-        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(200,160,74,.07);border:1px solid rgba(200,160,74,.18);border-radius:10px">
-          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold);margin-bottom:6px">✝ SOBRE ESTA SEÇÃO</div>
-          <div style="font-size:13px;color:var(--text2);line-height:1.6;font-style:italic">Conteúdos selecionados para ajudar todo católico a crescer na fé, na oração e no amor a Deus.</div>
-        </div>`;
-      cats.forEach(cat=>{
-        const sec=document.createElement('div');
-        sec.style.cssText='margin-bottom:18px';
-        sec.innerHTML=`
-          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:4px;padding:0 2px">${cat.categoria}</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:10px;font-style:italic;padding:0 2px">${cat.descricao}</div>`;
-        cat.playlists.forEach(pl=>{
-          const card=document.createElement('a');
-          card.href=pl.url;
-          card.target='_blank';
-          card.rel='noopener noreferrer';
-          card.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(15,12,26,.8);border:1px solid rgba(200,160,74,.15);border-radius:10px;margin-bottom:8px;text-decoration:none;transition:all .2s;';
-          card.innerHTML=`
-            <div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,#ff0000,#cc0000);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 8px rgba(255,0,0,.3)">▶</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5px;color:var(--gold2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.titulo}</div>
-              <div style="font-size:11px;color:rgba(200,160,74,.6);margin-bottom:2px">${pl.canal}</div>
-              <div style="font-size:11px;color:var(--text2);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.descricao}</div>
+      // Estado local do player
+      let catAtual=0, vidAtual=0;
+
+      function renderPlayer(){
+        const cat=cats[catAtual];
+        const vid=cat.videos[vidAtual];
+        body.innerHTML=`
+          <!-- Seletor de categoria -->
+          <div id="plCatBar" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:12px;scrollbar-width:none"></div>
+
+          <!-- Player YouTube -->
+          <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(200,160,74,.25);box-shadow:0 4px 24px rgba(0,0,0,.5);margin-bottom:12px;background:#000;position:relative">
+            <div style="position:relative;width:100%;padding-top:56.25%">
+              <iframe id="plIframe"
+                src="https://www.youtube.com/embed/${vid.video_id}?rel=0&modestbranding=1"
+                style="position:absolute;inset:0;width:100%;height:100%;border:none"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+              </iframe>
             </div>
-            <div style="font-size:18px;color:rgba(200,160,74,.4);flex-shrink:0">›</div>`;
-          card.onmouseenter=()=>{card.style.borderColor='rgba(200,160,74,.4)';card.style.background='rgba(200,160,74,.08)';};
-          card.onmouseleave=()=>{card.style.borderColor='rgba(200,160,74,.15)';card.style.background='rgba(15,12,26,.8)';};
-          sec.appendChild(card);
+          </div>
+
+          <!-- Info do vídeo atual -->
+          <div style="margin-bottom:14px;padding:12px 14px;background:rgba(15,12,26,.9);border:1px solid rgba(200,160,74,.18);border-radius:10px">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:var(--gold2);margin-bottom:4px">${vid.titulo}</div>
+            <div style="font-size:11px;color:rgba(200,160,74,.6);margin-bottom:3px">▶ ${vid.canal}</div>
+            <div style="font-size:12px;color:var(--text2);font-style:italic">${vid.descricao}</div>
+          </div>
+
+          <!-- Lista de vídeos da categoria -->
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:rgba(200,160,74,.5);margin-bottom:8px">VÍDEOS NESTA CATEGORIA</div>
+          <div id="plLista"></div>
+
+          <!-- Citação -->
+          <div style="text-align:center;padding:16px 0 4px;border-top:1px solid rgba(200,160,74,.1);margin-top:8px">
+            <div style="font-size:11px;font-style:italic;color:rgba(200,160,74,.35)">"A fé vem pelo ouvir, e o ouvir pela Palavra de Deus." (Rm 10,17)</div>
+          </div>`;
+
+        // Monta barra de categorias
+        const bar=document.getElementById('plCatBar');
+        cats.forEach((c,i)=>{
+          const btn=document.createElement('button');
+          btn.textContent=c.icone+' '+c.categoria.replace(/^[^\s]+\s/,'');
+          btn.style.cssText=`flex-shrink:0;padding:7px 12px;border-radius:20px;border:1px solid ${i===catAtual?'var(--gold)':'rgba(200,160,74,.22)'};background:${i===catAtual?'rgba(200,160,74,.15)':'transparent'};color:${i===catAtual?'var(--gold)':'rgba(200,160,74,.5)'};font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5px;cursor:pointer;white-space:nowrap;transition:all .2s`;
+          btn.onclick=()=>{ catAtual=i; vidAtual=0; renderPlayer(); };
+          bar.appendChild(btn);
         });
-        body.appendChild(sec);
-      });
-      const footer=document.createElement('div');
-      footer.style.cssText='text-align:center;padding:16px 0 8px;border-top:1px solid rgba(200,160,74,.1);margin-top:8px';
-      footer.innerHTML=`<div style="font-size:12px;font-style:italic;color:rgba(200,160,74,.4)">"A fé vem pelo ouvir, e o ouvir pela Palavra de Deus." (Rm 10,17)</div>`;
-      body.appendChild(footer);
+
+        // Monta lista de vídeos
+        const lista=document.getElementById('plLista');
+        cat.videos.forEach((v,i)=>{
+          const item=document.createElement('div');
+          const ativo=i===vidAtual;
+          item.style.cssText=`display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;cursor:pointer;border:1px solid ${ativo?'rgba(200,160,74,.4)':'rgba(200,160,74,.1)'};background:${ativo?'rgba(200,160,74,.1)':'rgba(15,12,26,.6)'};transition:all .2s`;
+          item.innerHTML=`
+            <div style="width:34px;height:34px;border-radius:8px;background:${ativo?'linear-gradient(135deg,#c8a04a,#7a5c1e)':'linear-gradient(135deg,#1a1040,#0d0820)'};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;border:1px solid rgba(200,160,74,${ativo?.4:.15})">${ativo?'▶':'⏵'}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;color:${ativo?'var(--gold2)':'var(--text)'};font-weight:${ativo?'bold':'normal'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${v.titulo}</div>
+              <div style="font-size:10px;color:rgba(200,160,74,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v.canal}</div>
+            </div>
+            ${ativo?'<div style="font-size:10px;color:var(--gold);font-family:Cinzel,serif;letter-spacing:1px">AO VIVO</div>':''}`;
+          item.onclick=()=>{ vidAtual=i; renderPlayer(); };
+          lista.appendChild(item);
+        });
+      }
+
+      renderPlayer();
     }catch(e){
-      body.innerHTML='<div class="pt" style="text-align:center;padding:30px 0;font-style:italic;color:var(--text2)">Erro ao carregar playlists. Tente novamente. 🙏</div>';
+      body.innerHTML='<div style="text-align:center;padding:40px 0;font-style:italic;color:var(--text2)">Erro ao carregar. Tente novamente. 🙏</div>';
     }
     return;
   }
