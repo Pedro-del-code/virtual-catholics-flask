@@ -1185,7 +1185,7 @@ if __name__ == "__main__":
 # ── BÍBLIA CATÓLICA — leitura do JSON local (73 livros, Ave Maria) ────────────
 import pathlib as _pathlib
 
-_BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "biblia.json"
+_BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "bibliaAveMaria.json"
 
 def _carregar_biblia():
     if not _BIBLIA_PATH.exists():
