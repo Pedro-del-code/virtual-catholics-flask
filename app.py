@@ -1257,15 +1257,28 @@ def api_biblia_versiculo():
     livro = request.args.get("livro", "john")
     capitulo = request.args.get("capitulo", "3")
     versiculo = request.args.get("versiculo", "")
+    # Traduções católicas em ordem de preferência:
+    # "bpt" = Bíblia Pastoral (tradução católica oficial do Brasil, CNBB)
+    # "nvi" = Nova Versão Internacional (mais completa nos Salmos)
+    # "acf" = Almeida Corrigida e Fiel (fallback)
+    TRADUCOES = ["bpt", "nvi", "acf"]
     try:
-        if versiculo:
-            url = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation=almeida"
-        else:
-            url = f"https://bible-api.com/{livro}+{capitulo}?translation=almeida"
-        r = req.get(url, timeout=8)
-        return jsonify(r.json())
+        for traducao in TRADUCOES:
+            try:
+                if versiculo:
+                    url = f"https://bible-api.com/{livro}+{capitulo}:{versiculo}?translation={traducao}"
+                else:
+                    url = f"https://bible-api.com/{livro}+{capitulo}?translation={traducao}"
+                r = req.get(url, timeout=8)
+                data = r.json()
+                if data.get("verses") and len(data["verses"]) > 0:
+                    data["traducao_usada"] = traducao
+                    return jsonify(data)
+            except Exception:
+                continue
+        return jsonify({"error": "Capítulo não encontrado.", "verses": []}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "verses": []}), 500
 
 # ── CATECISMO COMPLETO ────────────────────────────────────────────────────────
 @app.route("/api/catecismo/paragrafo/<int:num>")
