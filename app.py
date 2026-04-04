@@ -1190,21 +1190,33 @@ _BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "bibliaAveMaria.json"
 def _carregar_biblia():
     if not _BIBLIA_PATH.exists():
         print(f"[AVISO] bibliaAveMaria.json não encontrado em {_BIBLIA_PATH}. Funcionalidade da Bíblia desativada.")
-        return {"_livros": [], "_capitulos": {}, "_raw": {}}
+        return {"_livros": [], "_livros_obj": [], "_capitulos": {}, "_raw": {}}
     with open(_BIBLIA_PATH, encoding="utf-8") as f:
         raw = json.load(f)
-    todos = raw.get("antigoTestamento", []) + raw.get("novoTestamento", [])
+    at = raw.get("antigoTestamento", [])
+    nt = raw.get("novoTestamento", [])
+    todos = at + nt
     livros = [l["nome"] for l in todos]
     capitulos = {l["nome"].lower(): len(l["capitulos"]) for l in todos}
-    return {"_livros": livros, "_capitulos": capitulos, "_raw": raw}
+    livros_obj = []
+    for l in at:
+        nome = l.get("nome", "")
+        abrev = l.get("abrev", l.get("abbreviation", nome[:3].upper()))
+        livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "AT"})
+    for l in nt:
+        nome = l.get("nome", "")
+        abrev = l.get("abrev", l.get("abbreviation", nome[:3].upper()))
+        livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "NT"})
+    return {"_livros": livros, "_livros_obj": livros_obj, "_capitulos": capitulos, "_raw": raw}
 
 _BIBLIA_DATA = _carregar_biblia()
 LIVROS_BIBLIA     = _BIBLIA_DATA["_livros"]
+LIVROS_BIBLIA_OBJ = _BIBLIA_DATA["_livros_obj"]
 CAPITULOS_POR_LIVRO = _BIBLIA_DATA["_capitulos"]
 
 @app.route("/api/biblia/livros")
 def api_biblia_livros():
-    return jsonify(LIVROS_BIBLIA)
+    return jsonify(LIVROS_BIBLIA_OBJ)
 
 @app.route("/api/biblia/capitulos/<livro>")
 def api_biblia_capitulos(livro):
