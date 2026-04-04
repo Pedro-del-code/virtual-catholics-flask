@@ -1109,16 +1109,55 @@ async function abrirPainel(tipo){
     return;
   }
   if(tipo==='biblia'){
-    document.getElementById('panTit').textContent='BÍBLIA SAGRADA';
-    body.innerHTML='<div class="pt">Carregando... 📜</div>';
+    document.getElementById('panTit').textContent='📖 BÍBLIA SAGRADA';
+    body.innerHTML='<div style="text-align:center;padding:30px 0;font-style:italic;color:var(--text2)">Carregando... 📖</div>';
     const r=await fetch('/api/biblia/livros'),livros=await r.json();
-    body.innerHTML='<div class="pt"><b style="color:var(--gold)">📜 Antigo Testamento</b></div>';
-    let nt=false;
+    body.innerHTML=`
+      <!-- Cabeçalho -->
+      <div style="text-align:center;padding:16px 0 20px">
+        <div style="font-size:28px;margin-bottom:6px">✝</div>
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:rgba(200,160,74,.5)">TRADUÇÃO BÍBLIA PASTORAL — CNBB</div>
+      </div>
+      <!-- Barra de busca de versículo -->
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <input id="bibBuscaInp" type="text" placeholder="Ex: Jo 3,16 ou Sl 23..."
+          style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(200,160,74,.25);
+          border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:14px;
+          padding:9px 12px;outline:none;"
+          onkeydown="if(event.key==='Enter')buscarVersiculo()">
+        <button onclick="buscarVersiculo()" style="padding:9px 14px;background:linear-gradient(135deg,#7a5c1e,#c8a04a);border:none;border-radius:10px;color:#09070d;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer">IR</button>
+      </div>
+      <!-- Seção AT -->
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:rgba(200,160,74,.45);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(200,160,74,.1)">
+        📜 ANTIGO TESTAMENTO
+      </div>
+      <div id="bibListaAT" style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:18px"></div>
+      <!-- Seção NT -->
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:rgba(200,160,74,.45);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(200,160,74,.1)">
+        ✝ NOVO TESTAMENTO
+      </div>
+      <div id="bibListaNT" style="display:grid;grid-template-columns:1fr 1fr;gap:7px"></div>`;
+
+    const atEl=document.getElementById('bibListaAT');
+    const ntEl=document.getElementById('bibListaNT');
     livros.forEach(l=>{
-      if(l.testamento==='NT'&&!nt){nt=true;const s=document.createElement('div');s.className='pt';s.innerHTML='<b style="color:var(--gold)">✝️ Novo Testamento</b>';body.appendChild(s);}
-      const el=document.createElement('div');el.className='pi';
-      el.innerHTML=`<span style="color:var(--gold);font-size:11px;margin-right:6px">${l.abrev}</span>${l.nome}`;
-      el.onclick=()=>abrirLivro(l);body.appendChild(el);
+      const el=document.createElement('div');
+      el.style.cssText=`display:flex;align-items:center;gap:8px;padding:10px 12px;
+        border-radius:10px;cursor:pointer;
+        border:1px solid rgba(200,160,74,.12);
+        background:rgba(15,12,26,.6);
+        transition:all .2s;`;
+      el.innerHTML=`
+        <div style="width:32px;height:32px;border-radius:8px;
+          background:linear-gradient(135deg,rgba(200,160,74,.15),rgba(120,80,20,.1));
+          border:1px solid rgba(200,160,74,.2);
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Cinzel',serif;font-size:9px;color:var(--gold);flex-shrink:0">${l.abrev}</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.3;overflow:hidden">${l.nome}</div>`;
+      el.onmouseover=()=>el.style.background='rgba(200,160,74,.08)';
+      el.onmouseout=()=>el.style.background='rgba(15,12,26,.6)';
+      el.onclick=()=>abrirLivro(l);
+      (l.testamento==='AT'?atEl:ntEl).appendChild(el);
     });
     return;
   }
@@ -1447,20 +1486,82 @@ function mostrarDia(){const b=document.getElementById('panBody');document.getEle
 function navNov(d){novDia=Math.max(0,Math.min(novDias.length-1,novDia+d));mostrarDia();}
 
 async function abrirLivro(l){
-  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=l.abrev.toUpperCase();
+  const body=document.getElementById('panBody');
+  document.getElementById('panTit').textContent='📖 '+l.nome.toUpperCase();
   const r=await fetch(`/api/biblia/capitulos/${l.id}`),d=await r.json();
-  body.innerHTML=`<div class="pt"><b style="color:var(--gold)">${l.nome}</b>\n${d.total} capítulos</div>`;
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar à Bíblia';back.onclick=()=>abrirPainel('biblia');body.appendChild(back);
-  for(let c=1;c<=d.total;c++){const el=document.createElement('div');el.className='pi';el.textContent=`Capítulo ${c}`;el.onclick=(()=>{const cap=c;return()=>abrirCap(l,cap);})();body.appendChild(el);}
+  body.innerHTML=`
+    <button onclick="abrirPainel('biblia')" style="display:flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(200,160,74,.2);border-radius:8px;color:rgba(200,160,74,.6);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:7px 12px;cursor:pointer;margin-bottom:16px">← BÍBLIA</button>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold2);letter-spacing:2px">${l.nome}</div>
+      <div style="font-size:11px;color:rgba(200,160,74,.4);margin-top:3px">${d.total} capítulos · ${l.testamento==='AT'?'Antigo Testamento':'Novo Testamento'}</div>
+    </div>
+    <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:rgba(200,160,74,.4);margin-bottom:10px">ESCOLHA O CAPÍTULO</div>
+    <div id="bibCapGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px"></div>`;
+  const grid=document.getElementById('bibCapGrid');
+  for(let c=1;c<=d.total;c++){
+    const btn=document.createElement('button');
+    btn.textContent=c;
+    btn.style.cssText=`padding:10px 4px;border-radius:8px;border:1px solid rgba(200,160,74,.18);
+      background:rgba(15,12,26,.7);color:var(--gold2);font-family:'Cinzel',serif;
+      font-size:13px;cursor:pointer;transition:all .2s;`;
+    btn.onmouseover=()=>btn.style.background='rgba(200,160,74,.15)';
+    btn.onmouseout=()=>btn.style.background='rgba(15,12,26,.7)';
+    btn.onclick=(()=>{const cap=c;return()=>abrirCap(l,cap);})();
+    grid.appendChild(btn);
+  }
 }
+
 async function abrirCap(l,cap){
-  const body=document.getElementById('panBody');document.getElementById('panTit').textContent=`${l.abrev} ${cap}`;
-  body.innerHTML='<div class="pt">Carregando... 📖</div>';
+  const body=document.getElementById('panBody');
+  document.getElementById('panTit').textContent=`${l.abrev} ${cap}`;
+  body.innerHTML=`<div style="text-align:center;padding:30px 0;font-style:italic;color:var(--text2)">Carregando... 📖</div>`;
   const r=await fetch(`/api/biblia/versiculo?livro=${l.id}&capitulo=${cap}`),d=await r.json();
-  body.innerHTML='';
-  const back=document.createElement('div');back.className='pi';back.textContent='← Voltar ao livro';back.onclick=()=>abrirLivro(l);body.appendChild(back);
-  if(d.verses)d.verses.forEach(v=>{const el=document.createElement('div');el.className='pt';el.style.cssText='border-left:2px solid rgba(200,160,74,.3);padding-left:10px;margin-bottom:8px';el.innerHTML=`<b style="color:var(--gold);font-size:11px">${v.verse}</b> ${v.text}`;body.appendChild(el);});
-  else body.innerHTML+='<div class="pt">Versículos não disponíveis.</div>';
+
+  body.innerHTML=`
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button onclick="abrirLivro(${JSON.stringify(l).replace(/"/g,"'")})" style="flex:1;display:flex;align-items:center;gap:5px;background:transparent;border:1px solid rgba(200,160,74,.2);border-radius:8px;color:rgba(200,160,74,.6);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:7px 10px;cursor:pointer">← ${l.abrev.toUpperCase()}</button>
+      ${cap>1?`<button onclick="abrirCap(${JSON.stringify(l).replace(/"/g,"'")},${cap-1})" style="padding:7px 12px;background:rgba(200,160,74,.08);border:1px solid rgba(200,160,74,.2);border-radius:8px;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;cursor:pointer">‹</button>`:''}
+      <button onclick="abrirCap(${JSON.stringify(l).replace(/"/g,"'")},${cap+1})" style="padding:7px 12px;background:rgba(200,160,74,.08);border:1px solid rgba(200,160,74,.2);border-radius:8px;color:var(--gold);font-family:'Cinzel',serif;font-size:12px;cursor:pointer">›</button>
+    </div>
+    <!-- Cabeçalho do capítulo -->
+    <div style="text-align:center;padding:14px;background:linear-gradient(135deg,rgba(200,160,74,.1),rgba(120,80,20,.06));border:1px solid rgba(200,160,74,.2);border-radius:12px;margin-bottom:16px">
+      <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--gold2);letter-spacing:2px">${l.nome}</div>
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(200,160,74,.5);margin-top:3px">Capítulo ${cap}</div>
+    </div>
+    <div id="bibVersiculos"></div>
+    ${d.error?`<div style="text-align:center;padding:20px;font-style:italic;color:rgba(200,160,74,.4)">📖 Texto não disponível para este capítulo.<br><small>Tente outro capítulo ou consulte uma Bíblia impressa.</small></div>`:''}`;
+
+  if(d.verses && d.verses.length>0){
+    const cont=document.getElementById('bibVersiculos');
+    d.verses.forEach(v=>{
+      const el=document.createElement('div');
+      el.style.cssText=`display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(200,160,74,.06);line-height:1.75;`;
+      el.innerHTML=`
+        <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);opacity:.7;flex-shrink:0;padding-top:3px;min-width:18px;text-align:right">${v.verse}</span>
+        <span style="font-size:15px;color:rgba(240,236,228,.9);font-family:'Lora',serif">${v.text.trim()}</span>`;
+      cont.appendChild(el);
+    });
+    // Botão perguntar à IA
+    const ia=document.createElement('div');
+    ia.className='btn-ia';ia.style.marginTop='16px';
+    ia.innerHTML=`✨ Pedir reflexão sobre ${l.abrev} ${cap}`;
+    ia.onclick=()=>perguntarIA(`Faça uma reflexão espiritual católica sobre ${l.nome} capítulo ${cap}.`);
+    cont.appendChild(ia);
+  }
+}
+
+async function buscarVersiculo(){
+  const inp=document.getElementById('bibBuscaInp');
+  if(!inp)return;
+  const texto=inp.value.trim();
+  if(!texto)return;
+  // Tenta parsear "Jo 3,16" ou "Sl 23" etc.
+  // Manda direto pra IA interpretar e responder
+  fecharPan();irChat();await novoChat();
+  const msgInp=document.getElementById('msgInput');
+  msgInp.value=`Leia e comente o versículo bíblico: ${texto}`;
+  autoResize(msgInp);
+  enviar();
 }
 async function abrirMandamento(m,ato,cons){
   const body=document.getElementById('panBody');document.getElementById('panTit').textContent=`${m.numero}º MANDAMENTO`;
