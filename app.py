@@ -1491,65 +1491,72 @@ def api_base_toggle(doc_id):
 
 
 # ── PLAYLISTS CATÓLICAS ────────────────────────────────────────────────────────
+# Cada vídeo tem: titulo, canal, video_id (YouTube), descricao
 PLAYLISTS_CATOLICAS = [
     {
-        "id": "doutrina",
-        "categoria": "📚 Doutrina e Formação",
-        "descricao": "Fundamentos da fé católica explicados com profundidade",
-        "playlists": [
-            {"titulo": "Catecismo em Vídeo", "canal": "Instituto Hesed", "url": "https://www.youtube.com/@institutohesed", "descricao": "Formação doutrinária sólida e acessível"},
-            {"titulo": "Teologia para Todos", "canal": "Padre Paulo Ricardo", "url": "https://www.youtube.com/@PadrePauloRicardo", "descricao": "Apologética e doutrina católica"},
-            {"titulo": "Formação Católica", "canal": "Instituto Shalom", "url": "https://www.youtube.com/@institutoshalom", "descricao": "Vida espiritual e missão"},
-        ]
-    },
-    {
         "id": "oracao",
-        "categoria": "🙏 Oração e Espiritualidade",
-        "descricao": "Para aprofundar sua vida de oração",
-        "playlists": [
-            {"titulo": "Terço e Rosário", "canal": "Terço das Famílias", "url": "https://www.youtube.com/@tercofamilias", "descricao": "Rosário diário com meditações"},
-            {"titulo": "Adoração Eucarística", "canal": "Canção Nova", "url": "https://www.youtube.com/@cancaonova", "descricao": "Louvores e adoração ao Santíssimo"},
-            {"titulo": "Oração da Manhã", "canal": "Padre Reginaldo Manzotti", "url": "https://www.youtube.com/@PadreReginaldoManzotti", "descricao": "Comece o dia com Deus"},
+        "categoria": "🙏 Oração e Rosário",
+        "icone": "🙏",
+        "videos": [
+            {"titulo": "Santo Terço Completo", "canal": "Terço das Famílias", "video_id": "Lp0_z1gaL00", "descricao": "Reze o Terço com meditação dos mistérios"},
+            {"titulo": "Terço dos Mistérios Gloriosos", "canal": "Canção Nova", "video_id": "rEWLnRvcoes", "descricao": "Mistérios Gloriosos rezados com devoção"},
+            {"titulo": "Coroa de Nossa Senhora", "canal": "Ave Maria", "video_id": "e5yYVWqbMow", "descricao": "Devoção mariana completa"},
+            {"titulo": "Ladainha de Nossa Senhora", "canal": "Comunidade Shalom", "video_id": "4QBjJDAS_8c", "descricao": "Ladainha lauretana cantada"},
         ]
     },
     {
-        "id": "missas",
-        "categoria": "⛪ Missas e Liturgia",
-        "descricao": "Participe da Santa Missa onde estiver",
-        "playlists": [
-            {"titulo": "Missa Diária", "canal": "TV Canção Nova", "url": "https://www.youtube.com/@TVCancaoNova", "descricao": "Missa ao vivo todos os dias"},
-            {"titulo": "Missa no Vaticano", "canal": "Vatican News", "url": "https://www.youtube.com/@vaticannews", "descricao": "Missas presididas pelo Papa"},
-            {"titulo": "Liturgia das Horas", "canal": "Fraternidade São Pedro", "url": "https://www.youtube.com/@FraternidadeSaoPedro", "descricao": "Laudes, Vésperas e Completas"},
+        "id": "missa",
+        "categoria": "⛪ Santa Missa",
+        "icone": "⛪",
+        "videos": [
+            {"titulo": "Santa Missa — Canção Nova", "canal": "TV Canção Nova", "video_id": "jNRfNjODTpo", "descricao": "Missa celebrada ao vivo"},
+            {"titulo": "Missa com Padre Reginaldo", "canal": "Padre Reginaldo Manzotti", "video_id": "XSs_9m2_lQE", "descricao": "Santa Missa com fervor e devoção"},
+            {"titulo": "Missa Tridentina", "canal": "Fraternidade São Pedro", "video_id": "GzTvlMMXaVY", "descricao": "Missa no Rito Extraordinário"},
+            {"titulo": "Missa do Papa Francisco", "canal": "Vatican News PT", "video_id": "W9bFMjCsIoc", "descricao": "Celebração presidida pelo Santo Padre"},
         ]
     },
     {
-        "id": "evangelizacao",
-        "categoria": "✝ Evangelização e Testemunhos",
-        "descricao": "Histórias que fortalecem a fé",
-        "playlists": [
-            {"titulo": "Testemunhos de Conversão", "canal": "EWTN Brasil", "url": "https://www.youtube.com/@ewtnbrasil", "descricao": "Histórias reais de volta à fé"},
-            {"titulo": "Jovens Católicos", "canal": "Juventutem Brasil", "url": "https://www.youtube.com/@juventutembrasil", "descricao": "Fé e missão para a juventude"},
-            {"titulo": "Apologética Católica", "canal": "Apologética Católica", "url": "https://www.youtube.com/@apologeticacatolica", "descricao": "Defenda a fé com razão e amor"},
+        "id": "doutrina",
+        "categoria": "📚 Doutrina Católica",
+        "icone": "📚",
+        "videos": [
+            {"titulo": "Por que ser Católico?", "canal": "Padre Paulo Ricardo", "video_id": "dS4OHBEMwfM", "descricao": "Apologética essencial para todo católico"},
+            {"titulo": "Os Sacramentos explicados", "canal": "Instituto Hesed", "video_id": "UJassSkFgC0", "descricao": "Os 7 sacramentos da Igreja"},
+            {"titulo": "A Eucaristia é Real", "canal": "Padre Paulo Ricardo", "video_id": "CrVKmLzT-bQ", "descricao": "Presença real de Cristo na Eucaristia"},
+            {"titulo": "Quem é Nossa Senhora?", "canal": "Canção Nova", "video_id": "7vDjvhDVp2Q", "descricao": "A Mãe de Deus na fé católica"},
+        ]
+    },
+    {
+        "id": "louvor",
+        "categoria": "🎵 Louvor e Adoração",
+        "icone": "🎵",
+        "videos": [
+            {"titulo": "Adoração Eucarística", "canal": "Comunidade Shalom", "video_id": "l5_MLKmFBio", "descricao": "Uma hora diante do Santíssimo"},
+            {"titulo": "Música Católica — Coletânea", "canal": "Canção Nova", "video_id": "5pEvDMBCJdk", "descricao": "As melhores músicas de louvor"},
+            {"titulo": "Pai Nosso — Pe. Fábio de Melo", "canal": "Padre Fábio de Melo", "video_id": "5x1MBBPFNSA", "descricao": "Oração cantada com emoção"},
+            {"titulo": "Magnificat Gregoriano", "canal": "Schola Gregoriana", "video_id": "6rNNK6nQnXs", "descricao": "Canto gregoriano ancestral"},
         ]
     },
     {
         "id": "santos",
         "categoria": "⭐ Vidas dos Santos",
-        "descricao": "Inspire-se com os heróis da fé",
-        "playlists": [
-            {"titulo": "Santos do Dia", "canal": "Arquidiocese de São Paulo", "url": "https://www.youtube.com/@ArquidioceseSP", "descricao": "Conheça o santo de cada dia"},
-            {"titulo": "Grandes Santos", "canal": "CNBB", "url": "https://www.youtube.com/@CNBBoficial", "descricao": "Documentários sobre os santos"},
-            {"titulo": "Mártires da Fé", "canal": "Missão e Vida", "url": "https://www.youtube.com/@missaoevida", "descricao": "Quem deu a vida por Cristo"},
+        "icone": "⭐",
+        "videos": [
+            {"titulo": "Vida de Santo Antônio", "canal": "CNBB", "video_id": "rJi0s_8F7LI", "descricao": "O padroeiro dos pobres e dos perdidos"},
+            {"titulo": "Santa Teresinha do Menino Jesus", "canal": "Instituto Hesed", "video_id": "u4JT9oOaLPw", "descricao": "O caminho da pequenez espiritual"},
+            {"titulo": "São Francisco de Assis", "canal": "Fraternidade Franciscana", "video_id": "WKdxQxsmlBo", "descricao": "O poverello de Assis"},
+            {"titulo": "Nossa Senhora de Fátima", "canal": "Santuário de Fátima", "video_id": "9_P6Q7aumPo", "descricao": "A mensagem de Fátima para o mundo"},
         ]
     },
     {
-        "id": "familia",
-        "categoria": "👨‍👩‍👧 Família e Vida",
-        "descricao": "Fortaleça sua família na fé",
-        "playlists": [
-            {"titulo": "Família Cristã", "canal": "Família Missionária", "url": "https://www.youtube.com/@familiamissionaria", "descricao": "Matrimônio e educação dos filhos"},
-            {"titulo": "Bioética Católica", "canal": "Instituto Bioética", "url": "https://www.youtube.com/@institutobioetica", "descricao": "Defesa da vida do início ao fim"},
-            {"titulo": "Casamento no Senhor", "canal": "ECC Brasil", "url": "https://www.youtube.com/@eccbrasil", "descricao": "Encontro de Casais com Cristo"},
+        "id": "formacao",
+        "categoria": "✝ Evangelização e Fé",
+        "icone": "✝",
+        "videos": [
+            {"titulo": "Como se confessar bem", "canal": "Padre Paulo Ricardo", "video_id": "rM3gRBfXxMo", "descricao": "Guia prático para uma boa confissão"},
+            {"titulo": "Leitura Orante da Bíblia (Lectio Divina)", "canal": "Instituto Hesed", "video_id": "DKf5FRTMQGA", "descricao": "Como ler a Bíblia com o coração"},
+            {"titulo": "Sentido do Sofrimento", "canal": "Padre Fábio de Melo", "video_id": "mM5g0TqgCuI", "descricao": "Por que Deus permite o sofrimento?"},
+            {"titulo": "A misericórdia de Deus", "canal": "Canção Nova", "video_id": "Zj4qODw7rRc", "descricao": "Nenhum pecado é maior que o amor de Deus"},
         ]
     },
 ]
