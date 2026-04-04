@@ -1488,3 +1488,72 @@ def api_base_toggle(doc_id):
     ativo = data.get("ativo", True)
     sb_patch("base_conhecimento", f"id=eq.{doc_id}", {"ativo": ativo})
     return jsonify({"ok": True})
+
+
+# ── PLAYLISTS CATÓLICAS ────────────────────────────────────────────────────────
+PLAYLISTS_CATOLICAS = [
+    {
+        "id": "doutrina",
+        "categoria": "📚 Doutrina e Formação",
+        "descricao": "Fundamentos da fé católica explicados com profundidade",
+        "playlists": [
+            {"titulo": "Catecismo em Vídeo", "canal": "Instituto Hesed", "url": "https://www.youtube.com/@institutohesed", "descricao": "Formação doutrinária sólida e acessível"},
+            {"titulo": "Teologia para Todos", "canal": "Padre Paulo Ricardo", "url": "https://www.youtube.com/@PadrePauloRicardo", "descricao": "Apologética e doutrina católica"},
+            {"titulo": "Formação Católica", "canal": "Instituto Shalom", "url": "https://www.youtube.com/@institutoshalom", "descricao": "Vida espiritual e missão"},
+        ]
+    },
+    {
+        "id": "oracao",
+        "categoria": "🙏 Oração e Espiritualidade",
+        "descricao": "Para aprofundar sua vida de oração",
+        "playlists": [
+            {"titulo": "Terço e Rosário", "canal": "Terço das Famílias", "url": "https://www.youtube.com/@tercofamilias", "descricao": "Rosário diário com meditações"},
+            {"titulo": "Adoração Eucarística", "canal": "Canção Nova", "url": "https://www.youtube.com/@cancaonova", "descricao": "Louvores e adoração ao Santíssimo"},
+            {"titulo": "Oração da Manhã", "canal": "Padre Reginaldo Manzotti", "url": "https://www.youtube.com/@PadreReginaldoManzotti", "descricao": "Comece o dia com Deus"},
+        ]
+    },
+    {
+        "id": "missas",
+        "categoria": "⛪ Missas e Liturgia",
+        "descricao": "Participe da Santa Missa onde estiver",
+        "playlists": [
+            {"titulo": "Missa Diária", "canal": "TV Canção Nova", "url": "https://www.youtube.com/@TVCancaoNova", "descricao": "Missa ao vivo todos os dias"},
+            {"titulo": "Missa no Vaticano", "canal": "Vatican News", "url": "https://www.youtube.com/@vaticannews", "descricao": "Missas presididas pelo Papa"},
+            {"titulo": "Liturgia das Horas", "canal": "Fraternidade São Pedro", "url": "https://www.youtube.com/@FraternidadeSaoPedro", "descricao": "Laudes, Vésperas e Completas"},
+        ]
+    },
+    {
+        "id": "evangelizacao",
+        "categoria": "✝ Evangelização e Testemunhos",
+        "descricao": "Histórias que fortalecem a fé",
+        "playlists": [
+            {"titulo": "Testemunhos de Conversão", "canal": "EWTN Brasil", "url": "https://www.youtube.com/@ewtnbrasil", "descricao": "Histórias reais de volta à fé"},
+            {"titulo": "Jovens Católicos", "canal": "Juventutem Brasil", "url": "https://www.youtube.com/@juventutembrasil", "descricao": "Fé e missão para a juventude"},
+            {"titulo": "Apologética Católica", "canal": "Apologética Católica", "url": "https://www.youtube.com/@apologeticacatolica", "descricao": "Defenda a fé com razão e amor"},
+        ]
+    },
+    {
+        "id": "santos",
+        "categoria": "⭐ Vidas dos Santos",
+        "descricao": "Inspire-se com os heróis da fé",
+        "playlists": [
+            {"titulo": "Santos do Dia", "canal": "Arquidiocese de São Paulo", "url": "https://www.youtube.com/@ArquidioceseSP", "descricao": "Conheça o santo de cada dia"},
+            {"titulo": "Grandes Santos", "canal": "CNBB", "url": "https://www.youtube.com/@CNBBoficial", "descricao": "Documentários sobre os santos"},
+            {"titulo": "Mártires da Fé", "canal": "Missão e Vida", "url": "https://www.youtube.com/@missaoevida", "descricao": "Quem deu a vida por Cristo"},
+        ]
+    },
+    {
+        "id": "familia",
+        "categoria": "👨‍👩‍👧 Família e Vida",
+        "descricao": "Fortaleça sua família na fé",
+        "playlists": [
+            {"titulo": "Família Cristã", "canal": "Família Missionária", "url": "https://www.youtube.com/@familiamissionaria", "descricao": "Matrimônio e educação dos filhos"},
+            {"titulo": "Bioética Católica", "canal": "Instituto Bioética", "url": "https://www.youtube.com/@institutobioetica", "descricao": "Defesa da vida do início ao fim"},
+            {"titulo": "Casamento no Senhor", "canal": "ECC Brasil", "url": "https://www.youtube.com/@eccbrasil", "descricao": "Encontro de Casais com Cristo"},
+        ]
+    },
+]
+
+@app.route("/api/playlists")
+def api_playlists():
+    return jsonify(PLAYLISTS_CATOLICAS)
