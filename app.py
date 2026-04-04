@@ -1188,6 +1188,9 @@ import pathlib as _pathlib
 _BIBLIA_PATH = _pathlib.Path(__file__).parent / "data" / "biblia.json"
 
 def _carregar_biblia():
+    if not _BIBLIA_PATH.exists():
+        print(f"[AVISO] biblia.json não encontrado em {_BIBLIA_PATH}. Funcionalidade da Bíblia desativada.")
+        return {"_livros": [], "_capitulos": {}}
     with open(_BIBLIA_PATH, encoding="utf-8") as f:
         return json.load(f)
 
