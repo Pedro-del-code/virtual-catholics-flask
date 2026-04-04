@@ -1198,11 +1198,135 @@ async function abrirPainel(tipo){
       const r=await fetch('/api/playlists/v2'), cats=await r.json();
       // Estado local do player
       let catAtual=0, vidAtual=0;
+      let modoResultados=false; // true quando mostrando resultados de busca
+      let resultadosBusca=[];
+
+      // ── Barra de pesquisa ──
+      function renderBuscaBar(){
+        const existente=document.getElementById('plBuscaWrap');
+        if(existente)return;
+        const wrap=document.createElement('div');
+        wrap.id='plBuscaWrap';
+        wrap.style.cssText='display:flex;gap:8px;margin-bottom:14px;';
+        wrap.innerHTML=`
+          <input id="plBuscaInput" type="text" placeholder="🔍 Pesquisar vídeos católicos..."
+            style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(200,160,74,.3);
+            border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:14px;
+            padding:9px 12px;outline:none;"
+            onkeydown="if(event.key==='Enter')executarBusca()">
+          <button onclick="executarBusca()"
+            style="padding:9px 14px;background:linear-gradient(135deg,#7a5c1e,#c8a04a);
+            border:none;border-radius:10px;color:#09070d;font-family:'Cinzel',serif;
+            font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">
+            BUSCAR
+          </button>`;
+        body.prepend(wrap);
+        document.getElementById('plBuscaInput').focus();
+      }
+
+      window.executarBusca=async function(){
+        const inp=document.getElementById('plBuscaInput');
+        const termo=(inp?inp.value:'').trim();
+        if(!termo)return;
+        // Mostra loading
+        const listaEl=document.getElementById('plLista');
+        const playerEl=document.getElementById('plIframe');
+        if(listaEl)listaEl.innerHTML='<div style="text-align:center;padding:20px;font-style:italic;color:var(--text2)">Buscando... ✝</div>';
+        try{
+          const res=await fetch(`/api/playlists/buscar?q=${encodeURIComponent(termo)}`);
+          const d=await res.json();
+          if(d.erro){alert(d.erro);return;}
+          resultadosBusca=d.videos||[];
+          modoResultados=true;
+          vidAtual=0;
+          renderResultados();
+        }catch(e){
+          if(listaEl)listaEl.innerHTML='<div style="text-align:center;padding:20px;color:rgba(200,160,74,.4)">Erro na busca. Tente novamente.</div>';
+        }
+      };
+
+      window.voltarCategorias=function(){
+        modoResultados=false;
+        vidAtual=0;
+        renderPlayer();
+      };
+
+      function renderResultados(){
+        const vid=resultadosBusca[vidAtual];
+        if(!vid){
+          body.innerHTML='<div style="text-align:center;padding:30px;font-style:italic;color:var(--text2)">Nenhum resultado encontrado. Tente outro termo. 🙏</div>';
+          renderBuscaBar();
+          return;
+        }
+        // Mantém a busca bar e atualiza só o conteúdo abaixo
+        const existingBar=document.getElementById('plBuscaWrap');
+        body.innerHTML=`
+          ${existingBar?existingBar.outerHTML:''}
+          <!-- Botão voltar -->
+          <button onclick="voltarCategorias()" style="display:flex;align-items:center;gap:6px;
+            background:transparent;border:1px solid rgba(200,160,74,.25);border-radius:8px;
+            color:rgba(200,160,74,.7);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;
+            padding:6px 12px;cursor:pointer;margin-bottom:12px;">
+            ← VOLTAR ÀS CATEGORIAS
+          </button>
+          <!-- Label resultados -->
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:rgba(200,160,74,.5);margin-bottom:8px">
+            ${resultadosBusca.length} RESULTADO(S) ENCONTRADO(S)
+          </div>
+          <!-- Player -->
+          <div style="border-radius:12px;overflow:hidden;border:1px solid rgba(200,160,74,.25);box-shadow:0 4px 24px rgba(0,0,0,.5);margin-bottom:12px;background:#000">
+            <div style="position:relative;width:100%;padding-top:56.25%">
+              <iframe id="plIframe"
+                src="https://www.youtube-nocookie.com/embed/${vid.video_id}?rel=0&modestbranding=1"
+                style="position:absolute;inset:0;width:100%;height:100%;border:none"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+              </iframe>
+            </div>
+          </div>
+          <!-- Info -->
+          <div style="margin-bottom:14px;padding:12px 14px;background:rgba(15,12,26,.9);border:1px solid rgba(200,160,74,.18);border-radius:10px">
+            <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:var(--gold2);margin-bottom:4px">${vid.titulo}</div>
+            <div style="font-size:11px;color:rgba(200,160,74,.6);">▶ ${vid.canal}</div>
+          </div>
+          <!-- Lista resultados -->
+          <div id="plLista"></div>`;
+        // Monta lista de resultados
+        const lista=document.getElementById('plLista');
+        resultadosBusca.forEach((v,i)=>{
+          const ativo=i===vidAtual;
+          const item=document.createElement('div');
+          item.style.cssText=`display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;cursor:pointer;border:1px solid ${ativo?'rgba(200,160,74,.4)':'rgba(200,160,74,.1)'};background:${ativo?'rgba(200,160,74,.1)':'rgba(15,12,26,.6)'};transition:all .2s`;
+          item.innerHTML=`
+            <div style="width:34px;height:34px;border-radius:8px;background:${ativo?'linear-gradient(135deg,#c8a04a,#7a5c1e)':'linear-gradient(135deg,#1a1040,#0d0820)'};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">${ativo?'▶':'⏵'}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;color:${ativo?'var(--gold2)':'var(--text)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${v.titulo}</div>
+              <div style="font-size:10px;color:rgba(200,160,74,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v.canal}</div>
+            </div>`;
+          item.onclick=()=>{ vidAtual=i; renderResultados(); };
+          lista.appendChild(item);
+        });
+      }
 
       function renderPlayer(){
         const cat=cats[catAtual];
         const vid=cat.videos[vidAtual];
         body.innerHTML=`
+          <!-- Barra de pesquisa -->
+          <div id="plBuscaWrap" style="display:flex;gap:8px;margin-bottom:14px;">
+            <input id="plBuscaInput" type="text" placeholder="🔍 Pesquisar vídeos católicos..."
+              style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(200,160,74,.3);
+              border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:14px;
+              padding:9px 12px;outline:none;"
+              onkeydown="if(event.key==='Enter')executarBusca()">
+            <button onclick="executarBusca()"
+              style="padding:9px 14px;background:linear-gradient(135deg,#7a5c1e,#c8a04a);
+              border:none;border-radius:10px;color:#09070d;font-family:'Cinzel',serif;
+              font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">
+              BUSCAR
+            </button>
+          </div>
+
           <!-- Seletor de categoria -->
           <div id="plCatBar" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:12px;scrollbar-width:none"></div>
 
