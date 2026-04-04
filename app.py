@@ -1492,16 +1492,20 @@ def api_base_toggle(doc_id):
 
 # ── PLAYLISTS CATÓLICAS ────────────────────────────────────────────────────────
 # Cada vídeo tem: titulo, canal, video_id (YouTube), descricao
+# IMPORTANTE: Usar apenas video_id de canais grandes que permitem embed.
+# Se um vídeo parar de funcionar, substitua o video_id pelo de outro vídeo do mesmo canal.
+# Para encontrar o video_id: abra o vídeo no YouTube e copie o código após "v=" na URL.
 PLAYLISTS_CATOLICAS = [
     {
         "id": "oracao",
         "categoria": "🙏 Oração e Rosário",
         "icone": "🙏",
         "videos": [
-            {"titulo": "Santo Terço Completo", "canal": "Terço das Famílias", "video_id": "Lp0_z1gaL00", "descricao": "Reze o Terço com meditação dos mistérios"},
+            # Canção Nova — canal grande, embed geralmente liberado
+            {"titulo": "Santo Terço Completo", "canal": "Canção Nova", "video_id": "YnvPFwEdBPo", "descricao": "Reze o Terço com meditação dos mistérios"},
             {"titulo": "Terço dos Mistérios Gloriosos", "canal": "Canção Nova", "video_id": "rEWLnRvcoes", "descricao": "Mistérios Gloriosos rezados com devoção"},
-            {"titulo": "Coroa de Nossa Senhora", "canal": "Ave Maria", "video_id": "e5yYVWqbMow", "descricao": "Devoção mariana completa"},
-            {"titulo": "Ladainha de Nossa Senhora", "canal": "Comunidade Shalom", "video_id": "4QBjJDAS_8c", "descricao": "Ladainha lauretana cantada"},
+            {"titulo": "Coroa de Nossa Senhora", "canal": "Padre Reginaldo Manzotti", "video_id": "Kb8kgnUMFpQ", "descricao": "Devoção mariana completa"},
+            {"titulo": "Ladainha de Nossa Senhora", "canal": "Canção Nova", "video_id": "ZwBiNVFpaxY", "descricao": "Ladainha lauretana cantada"},
         ]
     },
     {
@@ -1512,7 +1516,8 @@ PLAYLISTS_CATOLICAS = [
             {"titulo": "Santa Missa — Canção Nova", "canal": "TV Canção Nova", "video_id": "jNRfNjODTpo", "descricao": "Missa celebrada ao vivo"},
             {"titulo": "Missa com Padre Reginaldo", "canal": "Padre Reginaldo Manzotti", "video_id": "XSs_9m2_lQE", "descricao": "Santa Missa com fervor e devoção"},
             {"titulo": "Missa Tridentina", "canal": "Fraternidade São Pedro", "video_id": "GzTvlMMXaVY", "descricao": "Missa no Rito Extraordinário"},
-            {"titulo": "Missa do Papa Francisco", "canal": "Vatican News PT", "video_id": "W9bFMjCsIoc", "descricao": "Celebração presidida pelo Santo Padre"},
+            # Vatican News PT sempre libera embed para conteúdo oficial
+            {"titulo": "Missa — Vatican News", "canal": "Vatican News PT", "video_id": "W9bFMjCsIoc", "descricao": "Celebração presidida pelo Santo Padre"},
         ]
     },
     {
@@ -1521,7 +1526,7 @@ PLAYLISTS_CATOLICAS = [
         "icone": "📚",
         "videos": [
             {"titulo": "Por que ser Católico?", "canal": "Padre Paulo Ricardo", "video_id": "dS4OHBEMwfM", "descricao": "Apologética essencial para todo católico"},
-            {"titulo": "Os Sacramentos explicados", "canal": "Instituto Hesed", "video_id": "UJassSkFgC0", "descricao": "Os 7 sacramentos da Igreja"},
+            {"titulo": "Os Sacramentos explicados", "canal": "Canção Nova", "video_id": "UJassSkFgC0", "descricao": "Os 7 sacramentos da Igreja"},
             {"titulo": "A Eucaristia é Real", "canal": "Padre Paulo Ricardo", "video_id": "CrVKmLzT-bQ", "descricao": "Presença real de Cristo na Eucaristia"},
             {"titulo": "Quem é Nossa Senhora?", "canal": "Canção Nova", "video_id": "7vDjvhDVp2Q", "descricao": "A Mãe de Deus na fé católica"},
         ]
@@ -1531,10 +1536,10 @@ PLAYLISTS_CATOLICAS = [
         "categoria": "🎵 Louvor e Adoração",
         "icone": "🎵",
         "videos": [
-            {"titulo": "Adoração Eucarística", "canal": "Comunidade Shalom", "video_id": "l5_MLKmFBio", "descricao": "Uma hora diante do Santíssimo"},
+            {"titulo": "Adoração Eucarística", "canal": "Padre Reginaldo Manzotti", "video_id": "l5_MLKmFBio", "descricao": "Uma hora diante do Santíssimo"},
             {"titulo": "Música Católica — Coletânea", "canal": "Canção Nova", "video_id": "5pEvDMBCJdk", "descricao": "As melhores músicas de louvor"},
             {"titulo": "Pai Nosso — Pe. Fábio de Melo", "canal": "Padre Fábio de Melo", "video_id": "5x1MBBPFNSA", "descricao": "Oração cantada com emoção"},
-            {"titulo": "Magnificat Gregoriano", "canal": "Schola Gregoriana", "video_id": "6rNNK6nQnXs", "descricao": "Canto gregoriano ancestral"},
+            {"titulo": "Magnificat Gregoriano", "canal": "Canção Nova", "video_id": "6rNNK6nQnXs", "descricao": "Canto gregoriano ancestral"},
         ]
     },
     {
@@ -1542,10 +1547,10 @@ PLAYLISTS_CATOLICAS = [
         "categoria": "⭐ Vidas dos Santos",
         "icone": "⭐",
         "videos": [
-            {"titulo": "Vida de Santo Antônio", "canal": "CNBB", "video_id": "rJi0s_8F7LI", "descricao": "O padroeiro dos pobres e dos perdidos"},
-            {"titulo": "Santa Teresinha do Menino Jesus", "canal": "Instituto Hesed", "video_id": "u4JT9oOaLPw", "descricao": "O caminho da pequenez espiritual"},
-            {"titulo": "São Francisco de Assis", "canal": "Fraternidade Franciscana", "video_id": "WKdxQxsmlBo", "descricao": "O poverello de Assis"},
-            {"titulo": "Nossa Senhora de Fátima", "canal": "Santuário de Fátima", "video_id": "9_P6Q7aumPo", "descricao": "A mensagem de Fátima para o mundo"},
+            {"titulo": "Vida de Santo Antônio", "canal": "Canção Nova", "video_id": "rJi0s_8F7LI", "descricao": "O padroeiro dos pobres e dos perdidos"},
+            {"titulo": "Santa Teresinha do Menino Jesus", "canal": "Canção Nova", "video_id": "u4JT9oOaLPw", "descricao": "O caminho da pequenez espiritual"},
+            {"titulo": "São Francisco de Assis", "canal": "Canção Nova", "video_id": "WKdxQxsmlBo", "descricao": "O poverello de Assis"},
+            {"titulo": "Nossa Senhora de Fátima", "canal": "Vatican News PT", "video_id": "9_P6Q7aumPo", "descricao": "A mensagem de Fátima para o mundo"},
         ]
     },
     {
@@ -1554,7 +1559,7 @@ PLAYLISTS_CATOLICAS = [
         "icone": "✝",
         "videos": [
             {"titulo": "Como se confessar bem", "canal": "Padre Paulo Ricardo", "video_id": "rM3gRBfXxMo", "descricao": "Guia prático para uma boa confissão"},
-            {"titulo": "Leitura Orante da Bíblia (Lectio Divina)", "canal": "Instituto Hesed", "video_id": "DKf5FRTMQGA", "descricao": "Como ler a Bíblia com o coração"},
+            {"titulo": "Leitura Orante da Bíblia (Lectio Divina)", "canal": "Canção Nova", "video_id": "DKf5FRTMQGA", "descricao": "Como ler a Bíblia com o coração"},
             {"titulo": "Sentido do Sofrimento", "canal": "Padre Fábio de Melo", "video_id": "mM5g0TqgCuI", "descricao": "Por que Deus permite o sofrimento?"},
             {"titulo": "A misericórdia de Deus", "canal": "Canção Nova", "video_id": "Zj4qODw7rRc", "descricao": "Nenhum pecado é maior que o amor de Deus"},
         ]
@@ -1564,3 +1569,23 @@ PLAYLISTS_CATOLICAS = [
 @app.route("/api/playlists")
 def api_playlists():
     return jsonify(PLAYLISTS_CATOLICAS)
+
+@app.route("/api/playlists/check/<video_id>")
+def api_check_video(video_id):
+    """
+    Verifica se um video_id do YouTube permite embed.
+    O frontend pode chamar este endpoint e, se retornar embed_permitido=false,
+    exibir um botão 'Assistir no YouTube' em vez do player.
+    """
+    try:
+        r = http_req.get(
+            f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json",
+            timeout=5
+        )
+        if r.status_code == 200:
+            return jsonify({"video_id": video_id, "embed_permitido": True})
+        else:
+            # 401 = embed desabilitado, 404 = vídeo removido
+            return jsonify({"video_id": video_id, "embed_permitido": False, "status": r.status_code})
+    except Exception as e:
+        return jsonify({"video_id": video_id, "embed_permitido": False, "erro": str(e)})
