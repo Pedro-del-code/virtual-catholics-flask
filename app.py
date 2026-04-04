@@ -1667,3 +1667,24 @@ def api_playlists_v2():
             "sem_api": len(videos) == 0
         })
     return jsonify(resultado)
+
+@app.route("/api/playlists/buscar")
+def api_playlists_buscar():
+    """
+    Busca vídeos católicos por termo livre.
+    O filtro católico é adicionado automaticamente ao query.
+    """
+    termo = request.args.get("q", "").strip()
+    if not termo:
+        return jsonify({"erro": "Termo de busca vazio"}), 400
+
+    # Termos proibidos — evita conteúdo não católico
+    _bloqueados = ["satã", "satan", "demônio", "demon", "macumba", "umbanda",
+                   "porn", "sex", "violência", "hack", "terror"]
+    if any(b in termo.lower() for b in _bloqueados):
+        return jsonify({"erro": "Busca não permitida"}), 400
+
+    # Força contexto católico no query
+    query_seguro = f"{termo} católico"
+    videos = _buscar_videos_yt(query_seguro, n=6)
+    return jsonify({"videos": videos, "query": query_seguro})
