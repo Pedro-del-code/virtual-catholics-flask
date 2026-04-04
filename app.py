@@ -1589,3 +1589,81 @@ def api_check_video(video_id):
             return jsonify({"video_id": video_id, "embed_permitido": False, "status": r.status_code})
     except Exception as e:
         return jsonify({"video_id": video_id, "embed_permitido": False, "erro": str(e)})
+
+# ── PLAYLISTS CATÓLICAS v2 — YouTube Data API ──────────────────────────────────
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "")
+
+PLAYLIST_CATEGORIAS = [
+    {"id": "oracao",   "categoria": "🙏 Oração e Rosário",    "icone": "🙏", "query": "santo terço completo católico rezar rosário"},
+    {"id": "missa",    "categoria": "⛪ Santa Missa",          "icone": "⛪", "query": "santa missa católica celebração eucarística"},
+    {"id": "doutrina", "categoria": "📚 Doutrina Católica",    "icone": "📚", "query": "doutrina católica catecismo apologética padre"},
+    {"id": "louvor",   "categoria": "🎵 Louvor e Adoração",   "icone": "🎵", "query": "louvor católico adoração eucarística música"},
+    {"id": "santos",   "categoria": "⭐ Vidas dos Santos",    "icone": "⭐", "query": "vida dos santos católicos história"},
+    {"id": "formacao", "categoria": "✝ Evangelização e Fé",  "icone": "✝", "query": "evangelização católica formação fé padre pregação"},
+]
+
+import time as _time
+_yt_cache = {}
+_yt_cache_ts = {}
+_YT_TTL = 6 * 3600
+
+def _buscar_videos_yt(query, n=4):
+    if not YOUTUBE_API_KEY:
+        return []
+    now = _time.time()
+    if query in _yt_cache and now - _yt_cache_ts.get(query, 0) < _YT_TTL:
+        return _yt_cache[query]
+    try:
+        r = http_req.get(
+            "https://www.googleapis.com/youtube/v3/search",
+            params={"part":"snippet","q":query,"type":"video",
+                    "videoEmbeddable":"true","relevanceLanguage":"pt",
+                    "regionCode":"BR","maxResults": n*2,"key": YOUTUBE_API_KEY},
+            timeout=8
+        )
+        if not r.ok:
+            return []
+        ids = [i["id"]["videoId"] for i in r.json().get("items", [])]
+        if not ids:
+            return []
+        r2 = http_req.get(
+            "https://www.googleapis.com/youtube/v3/videos",
+            params={"part":"snippet,status","id":",".join(ids),"key": YOUTUBE_API_KEY},
+            timeout=8
+        )
+        if not r2.ok:
+            return []
+        videos = []
+        for v in r2.json().get("items", []):
+            if not v.get("status", {}).get("embeddable", False):
+                continue
+            s = v["snippet"]
+            videos.append({
+                "titulo": s.get("title","")[:60],
+                "canal": s.get("channelTitle",""),
+                "video_id": v["id"],
+                "descricao": (s.get("description","") or "")[:80]
+            })
+            if len(videos) >= n:
+                break
+        _yt_cache[query] = videos
+        _yt_cache_ts[query] = now
+        return videos
+    except Exception as e:
+        print(f"[YT API] {e}")
+        return []
+
+@app.route("/api/playlists/v2")
+def api_playlists_v2():
+    """Retorna playlists com vídeos dinamicamente buscados via YouTube Data API."""
+    resultado = []
+    for cat in PLAYLIST_CATEGORIAS:
+        videos = _buscar_videos_yt(cat["query"])
+        resultado.append({
+            "id": cat["id"],
+            "categoria": cat["categoria"],
+            "icone": cat["icone"],
+            "videos": videos,
+            "sem_api": len(videos) == 0
+        })
+    return jsonify(resultado)
