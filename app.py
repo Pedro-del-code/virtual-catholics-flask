@@ -1221,11 +1221,11 @@ def _carregar_biblia():
     for l in at:
         nome = l.get("nome", "")
         abrev = _ABREV_MAP.get(nome.lower(), nome[:3])
-        livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "AT"})
+        livros_obj.append({"id": nome.lower(), "nome": nome, "abrev": abrev, "testamento": "AT"})
     for l in nt:
         nome = l.get("nome", "")
         abrev = _ABREV_MAP.get(nome.lower(), nome[:3])
-        livros_obj.append({"nome": nome, "abrev": abrev, "testamento": "NT"})
+        livros_obj.append({"id": nome.lower(), "nome": nome, "abrev": abrev, "testamento": "NT"})
     return {"_livros": livros, "_livros_obj": livros_obj, "_capitulos": capitulos, "_raw": raw}
 
 _BIBLIA_DATA = _carregar_biblia()
