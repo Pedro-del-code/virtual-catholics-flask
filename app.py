@@ -5,7 +5,7 @@ import re
 import io
 import json
 from datetime import datetime, date, timedelta, timezone
-from flask import Flask, session, redirect, url_for, request, jsonify, render_template
+from flask import Flask, session, redirect, url_for, request, jsonify, render_template, send_file
 from authlib.integrations.flask_client import OAuth
 import requests as http_req
 from groq import Groq
@@ -1737,3 +1737,7 @@ def api_playlists_buscar():
     query_seguro = f"{termo} católico"
     videos = _buscar_videos_yt(query_seguro, n=6)
     return jsonify({"videos": videos, "query": query_seguro})
+
+@app.route('/google0a2d94cc1267b1e9.html')
+def google_verify():
+    return send_file('google0a2d94cc1267b1e9.html')
