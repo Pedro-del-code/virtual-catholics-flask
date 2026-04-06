@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual Catholics — Nova Senha</title>
+{% extends "base.html" %}
+
+{% block title %}Virtual Catholics — Nova Senha{% endblock %}
+
+{% block fonts %}
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block head_extra %}
 <style>
 :root{--gold:#C9A84C;--gold-light:#E8C97A;--white:#FDFAF4;--glass-bg:rgba(255,252,245,.10);--glass-border:rgba(201,168,76,.30);}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -31,17 +33,16 @@ body{font-family:'Cormorant Garamond',serif;display:flex;align-items:center;just
 .ok-msg.show{display:block}
 .blessing{text-align:center;margin-top:22px;font-style:italic;font-size:12px;color:rgba(201,168,76,.35)}
 </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
 <div class="card">
   <div class="top">
     <span class="cross">✝</span>
     <div class="title">NOVA SENHA</div>
     <div class="subtitle">Digite e confirme sua nova senha</div>
   </div>
-
   <div id="msg" class="msg"></div>
-
   <div class="field">
     <input type="password" id="nova" placeholder="Nova senha">
     <span class="eye" onclick="toggle('nova',this)">👁</span>
@@ -50,59 +51,38 @@ body{font-family:'Cormorant Garamond',serif;display:flex;align-items:center;just
     <input type="password" id="confirma" placeholder="Confirmar senha">
     <span class="eye" onclick="toggle('confirma',this)">👁</span>
   </div>
-
   <button class="btn" id="btn" onclick="salvar()">✝ &nbsp; SALVAR NOVA SENHA</button>
   <div class="ok-msg" id="ok">Senha redefinida! <a href="/login" style="color:var(--gold)">Entrar agora →</a></div>
   <div class="blessing">Que Deus te abençoe &nbsp;✦&nbsp; Paz e Bem</div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script>
 const TOKEN = "{{ token }}";
-
-function toggle(id, el) {
-  const i = document.getElementById(id);
-  i.type = i.type === 'password' ? 'text' : 'password';
-  el.textContent = i.type === 'password' ? '👁' : '🙈';
+function toggle(id, el){
+  const i=document.getElementById(id);
+  i.type=i.type==='password'?'text':'password';
+  el.textContent=i.type==='password'?'👁':'🙈';
 }
-
-function erro(m) {
-  const e = document.getElementById('msg');
-  e.textContent = m; e.classList.add('show');
-}
-
-async function salvar() {
+function erro(m){const e=document.getElementById('msg');e.textContent=m;e.classList.add('show');}
+async function salvar(){
   document.getElementById('msg').classList.remove('show');
-  const nova     = document.getElementById('nova').value.trim();
-  const confirma = document.getElementById('confirma').value.trim();
-
-  if (!nova || !confirma) { erro('Preencha os dois campos.'); return; }
-  if (nova !== confirma)  { erro('As senhas não coincidem.'); return; }
-  if (nova.length < 6)    { erro('A senha deve ter pelo menos 6 caracteres.'); return; }
-
-  const btn = document.getElementById('btn');
-  btn.textContent = 'Salvando...'; btn.classList.add('loading');
-
-  try {
-    const r = await fetch('/api/redefinir-senha', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ token: TOKEN, nova_senha: nova })
-    });
-    const d = await r.json();
-    if (d.ok) {
-      btn.style.display = 'none';
-      document.getElementById('ok').classList.add('show');
-    } else {
-      erro(d.erro || 'Erro ao redefinir. Tente novamente.');
-    }
-  } catch(e) {
-    erro('Erro de conexão.');
-  }
-
-  btn.textContent = '✝  SALVAR NOVA SENHA'; btn.classList.remove('loading');
+  const nova=document.getElementById('nova').value.trim();
+  const confirma=document.getElementById('confirma').value.trim();
+  if(!nova||!confirma){erro('Preencha os dois campos.');return;}
+  if(nova!==confirma){erro('As senhas não coincidem.');return;}
+  if(nova.length<6){erro('A senha deve ter pelo menos 6 caracteres.');return;}
+  const btn=document.getElementById('btn');
+  btn.textContent='Salvando...';btn.classList.add('loading');
+  try{
+    const r=await fetch('/api/redefinir-senha',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:TOKEN,nova_senha:nova})});
+    const d=await r.json();
+    if(d.ok){btn.style.display='none';document.getElementById('ok').classList.add('show');}
+    else{erro(d.erro||'Erro ao redefinir. Tente novamente.');}
+  }catch(e){erro('Erro de conexão.');}
+  btn.textContent='✝  SALVAR NOVA SENHA';btn.classList.remove('loading');
 }
-
-document.addEventListener('keydown', e => { if (e.key === 'Enter') salvar(); });
+document.addEventListener('keydown',e=>{if(e.key==='Enter')salvar();});
 </script>
-</body>
-</html>
+{% endblock %}

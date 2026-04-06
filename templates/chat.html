@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Virtual Catholics</title>
+{% extends "base.html" %}
+
+{% block title %}Virtual Catholics{% endblock %}
+
+{% block fonts %}
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block head_extra %}
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
@@ -646,7 +648,13 @@ textarea#msgInput:focus{border-color:rgba(200,160,74,.5);box-shadow:0 0 0 2px rg
 }
 .pix-qr-wrap canvas{display:block;}
 </style>
-</head>
+{% endblock %}
+
+{% block body_attrs %}style="overflow:hidden"{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
 <body>
 
 <div class="overlay" id="overlay" onclick="fecharTudo()"></div>
@@ -1813,7 +1821,4 @@ if(window.visualViewport){
 
 // Init
 irHome();
-novoChat();
-</script>
-</body>
-</html>
+{% endblock %}

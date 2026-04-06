@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- SEO -->
+<meta name="description" content="Virtual Catholics - Site católico com orações, terço, Bíblia, vídeos, música e IA pastoral. Reze, aprenda e compartilhe a fé. Totalmente grátis.">
+<meta name="keywords" content="católico, orações, terço, Bíblia, IA católica, fé, liturgia, novenas">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Virtual Catholics">
+<meta property="og:description" content="Site católico com orações, terço, Bíblia, vídeos, música e IA pastoral.">
+<meta property="og:image" content="https://virtualcatholics.com.br/static/images/og-image.jpg">
+<meta property="og:url" content="https://virtualcatholics.com.br">
+<meta property="og:type" content="website">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+
+<title>{% block title %}Virtual Catholics{% endblock %}</title>
+
+{% block fonts %}
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block head_extra %}{% endblock %}
+</head>
+<body {% block body_attrs %}{% endblock %}>
+
+{% block header %}{% endblock %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+{% block footer %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
