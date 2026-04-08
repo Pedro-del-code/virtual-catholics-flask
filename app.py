@@ -25,6 +25,12 @@ except ImportError:
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
 
+@app.before_request
+def redirect_www():
+    if request.host.startswith('www.'):
+        new_url = request.url.replace('https://www.', 'https://', 1)
+        return redirect(new_url, 301)
+
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
