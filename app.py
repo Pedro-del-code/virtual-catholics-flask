@@ -6,6 +6,7 @@ import io
 import json
 from datetime import datetime, date, timedelta, timezone
 from flask import Flask, session, redirect, url_for, request, jsonify, render_template, send_file
+from werkzeug.middleware.proxy_fix import ProxyFix
 from authlib.integrations.flask_client import OAuth
 import requests as http_req
 from groq import Groq
@@ -24,6 +25,7 @@ except ImportError:
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 @app.before_request
 def redirect_www():
