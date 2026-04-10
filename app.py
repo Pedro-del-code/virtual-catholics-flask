@@ -1328,34 +1328,56 @@ def api_biblia_versiculo():
         return jsonify({"error": str(e), "verses": []}), 500
 
 # ── CATECISMO COMPLETO ────────────────────────────────────────────────────────
+# ── CATECISMO LOCAL ───────────────────────────────────────────────────────────
+_catecismo_cache = None
+
+def _carregar_catecismo():
+    global _catecismo_cache
+    if _catecismo_cache is None:
+        caminho = os.path.join(os.path.dirname(__file__), "data", "catecismo.json")
+        try:
+            with open(caminho, "r", encoding="utf-8") as f:
+                _catecismo_cache = {p["id"]: p for p in json.load(f)}
+        except Exception as e:
+            print(f"[CATECISMO] Erro ao carregar: {e}")
+            _catecismo_cache = {}
+    return _catecismo_cache
+
 @app.route("/api/catecismo/paragrafo/<int:num>")
 def api_catecismo_paragrafo(num):
-    import requests as req
-    try:
-        url = "https://raw.githubusercontent.com/aseemsavio/catholicism-in-json/master/catholicism-in-json/catechism.json"
-        r = req.get(url, timeout=10)
-        data = r.json()
-        if 1 <= num <= len(data):
-            p = data[num-1]
-            return jsonify({"id": p.get("id", num), "texto": p.get("text","")})
-        return jsonify({"error": "Parágrafo não encontrado"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    data = _carregar_catecismo()
+    p = data.get(num)
+    if p:
+        return jsonify({"id": p["id"], "texto": p["texto"]})
+    return jsonify({"error": "Parágrafo não encontrado"}), 404
 
 @app.route("/api/catecismo/busca")
 def api_catecismo_busca():
-    import requests as req
-    termo = request.args.get("q","").lower()
+    termo = request.args.get("q", "").lower().strip()
     if not termo or len(termo) < 3:
         return jsonify({"error": "Termo muito curto"}), 400
-    try:
-        url = "https://raw.githubusercontent.com/aseemsavio/catholicism-in-json/master/catholicism-in-json/catechism.json"
-        r = req.get(url, timeout=10)
-        data = r.json()
-        resultados = [{"id":p["id"],"texto":p["text"][:200]+"..."} for p in data if termo in p.get("text","").lower()][:20]
-        return jsonify(resultados)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    data = _carregar_catecismo()
+    resultados = [
+        {"id": p["id"], "texto": p["texto"][:220] + "..."}
+        for p in data.values()
+        if termo in p["texto"].lower()
+    ][:20]
+    return jsonify(resultados)
+
+@app.route("/api/catecismo/parte")
+def api_catecismo_parte():
+    """Retorna parágrafos de um range para leitura sequencial."""
+    inicio = max(1, request.args.get("inicio", 1, type=int))
+    fim = min(inicio + 19, 2865)
+    data = _carregar_catecismo()
+    paragrafos = [data[i] for i in range(inicio, fim + 1) if i in data]
+    return jsonify({
+        "paragrafos": paragrafos,
+        "inicio": inicio,
+        "fim": fim,
+        "tem_anterior": inicio > 1,
+        "tem_proximo": fim < 2865
+    })
 
 # ── CALENDÁRIO LITÚRGICO ──────────────────────────────────────────────────────
 @app.route("/api/calendario")
