@@ -1667,6 +1667,50 @@ _yt_cache = {}
 _yt_cache_ts = {}
 _YT_TTL = 6 * 3600
 
+_CANAIS_CATOLICOS = [
+    "canção nova", "cancao nova", "padre paulo ricardo", "padre fábio de melo",
+    "padre fabio de melo", "padre reginaldo manzotti", "vatican news",
+    "tv aparecida", "shalom", "com cristo", "arquidiocese", "diocese",
+    "paroquia", "paróquia", "iecrj", "a12", "sanctus", "evangelizar",
+    "fundação joão paulo", "fundacao joao paulo", "fraternidade são pedro",
+    "fraternidade sao pedro", "opus dei", "jesuits", "jesuítas",
+    "dominicanos", "franciscanos", "carmelitas", "redentoristas",
+]
+
+_PALAVRAS_CATOLICAS = [
+    "católico", "catolico", "catholic", "missa", "rosário", "rosario",
+    "novena", "terço", "terco", "oração", "oracao", "padre", "bispo",
+    "papa", "vaticano", "church", "gospel", "evangelho", "bíblia", "biblia",
+    "santo", "santa", "são", "sao", "nossa senhora", "jesus", "cristo",
+    "eucaristia", "sacramento", "batismo", "confissão", "confissao",
+    "liturgia", "advento", "quaresma", "pentecostes", "natal", "páscoa", "pascoa",
+]
+
+_PALAVRAS_BLOQUEADAS = [
+    "jazz", "rock", "funk", "rap", "hip hop", "sertanejo", "pagode",
+    "ghost", "horror", "terror", "violence", "game", "gameplay",
+    "minecraft", "fortnite", "gta", "anime", "manga", "porn", "sex",
+    "satan", "satã", "diabo", "macumba", "umbanda", "candomblé",
+    "política", "politica", "esporte", "futebol", "receita", "culinaria",
+    "culinária", "fitness", "academia", "moda", "fashion",
+]
+
+def _video_e_catolico(titulo, canal, descricao):
+    t = titulo.lower()
+    c = canal.lower()
+    d = descricao.lower()
+    texto = f"{t} {c} {d}"
+    # Bloqueia se tiver palavra proibida no título ou canal
+    if any(p in t or p in c for p in _PALAVRAS_BLOQUEADAS):
+        return False
+    # Aprova se canal for reconhecidamente católico
+    if any(canal_cat in c for canal_cat in _CANAIS_CATOLICOS):
+        return True
+    # Aprova se título ou descrição tiver palavra católica
+    if any(p in texto for p in _PALAVRAS_CATOLICAS):
+        return True
+    return False
+
 def _buscar_videos_yt(query, n=4):
     if not YOUTUBE_API_KEY:
         return []
@@ -1678,7 +1722,7 @@ def _buscar_videos_yt(query, n=4):
             "https://www.googleapis.com/youtube/v3/search",
             params={"part":"snippet","q":query,"type":"video",
                     "videoEmbeddable":"true","relevanceLanguage":"pt",
-                    "regionCode":"BR","maxResults": n*2,"key": YOUTUBE_API_KEY},
+                    "regionCode":"BR","maxResults": n*3,"key": YOUTUBE_API_KEY},
             timeout=8
         )
         if not r.ok:
@@ -1698,11 +1742,16 @@ def _buscar_videos_yt(query, n=4):
             if not v.get("status", {}).get("embeddable", False):
                 continue
             s = v["snippet"]
+            titulo = s.get("title", "")[:60]
+            canal = s.get("channelTitle", "")
+            descricao = (s.get("description", "") or "")[:80]
+            if not _video_e_catolico(titulo, canal, descricao):
+                continue
             videos.append({
-                "titulo": s.get("title","")[:60],
-                "canal": s.get("channelTitle",""),
+                "titulo": titulo,
+                "canal": canal,
                 "video_id": v["id"],
-                "descricao": (s.get("description","") or "")[:80]
+                "descricao": descricao
             })
             if len(videos) >= n:
                 break
