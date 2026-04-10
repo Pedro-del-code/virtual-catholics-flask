@@ -29,8 +29,11 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 @app.before_request
 def redirect_www():
-    if request.host.startswith('www.'):
-        new_url = request.url.replace('https://www.', 'https://', 1)
+    host = request.host.lower()
+    if host.startswith('www.'):
+        new_url = request.url \
+            .replace('https://www.', 'https://', 1) \
+            .replace('http://www.', 'https://', 1)
         return redirect(new_url, 301)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
@@ -1749,3 +1752,46 @@ def api_playlists_buscar():
 @app.route('/google0a2d94cc1267b1e9.html')
 def google_verify():
     return send_file('google0a2d94cc1267b1e9.html')
+
+# ── SEO ────────────────────────────────────────────────────────────────────────
+@app.route('/robots.txt')
+def robots_txt():
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /chat\n"
+        "Disallow: /api/\n"
+        "Disallow: /perfil\n"
+        "Disallow: /reset-senha\n"
+        "Disallow: /redefinir-senha\n"
+        "\n"
+        "Sitemap: https://virtualcatholics.com.br/sitemap.xml\n"
+    )
+    from flask import Response
+    return Response(content, mimetype='text/plain')
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    base = "https://virtualcatholics.com.br"
+    hoje = date.today().isoformat()
+    urls = [
+        {"loc": f"{base}/",         "priority": "1.0", "changefreq": "daily"},
+        {"loc": f"{base}/login",    "priority": "0.5", "changefreq": "monthly"},
+        {"loc": f"{base}/register", "priority": "0.5", "changefreq": "monthly"},
+        {"loc": f"{base}/intro",    "priority": "0.7", "changefreq": "monthly"},
+    ]
+    xml_items = "\n".join(
+        f"""  <url>
+    <loc>{u['loc']}</loc>
+    <lastmod>{hoje}</lastmod>
+    <changefreq>{u['changefreq']}</changefreq>
+    <priority>{u['priority']}</priority>
+  </url>"""
+        for u in urls
+    )
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{xml_items}
+</urlset>"""
+    from flask import Response
+    return Response(xml, mimetype='application/xml')
