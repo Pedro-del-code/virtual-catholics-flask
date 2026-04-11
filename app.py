@@ -627,7 +627,7 @@ TRADUCOES = {
 
 @app.route("/intro")
 def intro():
-    return render_template("intro.html")
+    return redirect("/", 301)
 
 @app.route("/")
 def index():
