@@ -632,7 +632,7 @@ def intro():
 @app.route("/")
 def index():
     if "username" not in session:
-        return redirect("/intro")
+        return render_template("intro.html")
     idioma = session.get("idioma", "pt")
     T = TRADUCOES[idioma]
     hoje = date.today()
