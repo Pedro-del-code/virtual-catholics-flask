@@ -1849,7 +1849,6 @@ def sitemap_xml():
         {"loc": f"{base}/",         "priority": "1.0", "changefreq": "daily"},
         {"loc": f"{base}/login",    "priority": "0.5", "changefreq": "monthly"},
         {"loc": f"{base}/register", "priority": "0.5", "changefreq": "monthly"},
-        {"loc": f"{base}/intro",    "priority": "0.7", "changefreq": "monthly"},
     ]
     xml_items = "\n".join(
         f"""  <url>
