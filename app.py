@@ -1019,7 +1019,7 @@ IMPORTANTE: Quando perguntado sobre um santo específico, discorra SOMENTE sobre
 
         texto = resposta.choices[0].message.content
         if "[LEMBRAR:" in texto:
-            matches = _re.findall(r'\[LEMBRAR:\s*(.+?)\]', texto)
+            matches = re.findall(r'\[LEMBRAR:\s*(.+?)\]', texto)
             if matches:
                 try:
                     mem = carregar_memoria(session["username"])
@@ -1030,7 +1030,7 @@ IMPORTANTE: Quando perguntado sobre um santo específico, discorra SOMENTE sobre
                     salvar_memoria(session["username"], fatos_atuais[-30:])
                 except:
                     pass
-            texto = _re.sub(r'\[LEMBRAR:\s*.+?\]', '', texto).strip()
+            texto = re.sub(r'\[LEMBRAR:\s*.+?\]', '', texto).strip()
 
         # Salva chat automaticamente
         if chat_id:
@@ -1125,7 +1125,7 @@ def api_liturgia_dia():
             for leitura in missa.get("lectures", []):
                 tipo = leitura.get("type", "")
                 ref  = leitura.get("ref", "")
-                texte = _re.sub(r"<[^>]+>", "", leitura.get("texte", "")).strip()
+                texte = re.sub(r"<[^>]+>", "", leitura.get("texte", "")).strip()
                 if not texte:
                     continue
                 cabecalho = TIPO_MAP.get(tipo, tipo)
@@ -1153,17 +1153,17 @@ def api_liturgia_dia():
         if r2.ok:
             html = r2.text
             # Pega título da liturgia
-            titulo_m = _re.search(r'<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>(.*?)</h1>', html, _re.S)
-            titulo = _re.sub(r"<[^>]+>", "", titulo_m.group(1)).strip() if titulo_m else ""
+            titulo_m = re.search(r'<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>(.*?)</h1>', html, re.S)
+            titulo = re.sub(r"<[^>]+>", "", titulo_m.group(1)).strip() if titulo_m else ""
             # Pega conteúdo principal
-            content_m = _re.search(r'<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>(.*?)</div>\s*<footer', html, _re.S)
+            content_m = re.search(r'<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>(.*?)</div>\s*<footer', html, re.S)
             if content_m:
                 raw = content_m.group(1)
                 # Remove scripts/styles
-                raw = _re.sub(r'<(script|style)[^>]*>.*?</\1>', '', raw, flags=_re.S)
+                raw = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', raw, flags=re.S)
                 # Remove tags, normaliza espaços
-                texto = _re.sub(r"<[^>]+>", "\n", raw)
-                texto = _re.sub(r"\n{3,}", "\n\n", texto).strip()
+                texto = re.sub(r"<[^>]+>", "\n", raw)
+                texto = re.sub(r"\n{3,}", "\n\n", texto).strip()
                 texto = texto[:2000]
                 if titulo:
                     texto = f"📅 {titulo}\n\n{texto}"
