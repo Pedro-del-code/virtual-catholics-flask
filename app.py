@@ -3,6 +3,7 @@ import hashlib
 import uuid
 import re
 import io
+import base64
 import json
 from datetime import datetime, date, timedelta, timezone
 from flask import Flask, session, redirect, url_for, request, jsonify, render_template, send_file
@@ -27,14 +28,6 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vc-secret-2026")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-@app.before_request
-def redirect_www():
-    host = request.host.lower()
-    if host.startswith('www.'):
-        new_url = request.url \
-            .replace('https://www.', 'https://', 1) \
-            .replace('http://www.', 'https://', 1)
-        return redirect(new_url, 301)
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://aqvqjdljhtzyxocwtrmg.supabase.co")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -651,8 +644,6 @@ def login_page():
     T = TRADUCOES[idioma]
     return render_template("login.html", T=T, idioma=idioma)
 
-# Adicione esta rota no app.py, logo após a rota /login:
-
 @app.route("/register")
 def register_page():
     if "username" in session:
@@ -815,12 +806,10 @@ def api_chat():
         return jsonify({"erro": "Nao autenticado"}), 401
 
     # Suporta multipart (com arquivo) e JSON (sem arquivo)
-    import json as _json, base64 as _b64, re as _re
-
     MSG_FORA = "O arquivo ou imagem não convém para o que eu fui criado. Por favor, caso queira enviar algo, envie algo que realmente seja católico. 🙏"
 
     if request.content_type and "multipart" in request.content_type:
-        mensagens = _json.loads(request.form.get("mensagens", "[]"))
+        mensagens = json.loads(request.form.get("mensagens", "[]"))
         chat_id = request.form.get("chat_id")
         arquivo = request.files.get("arquivo")
         tipo_arquivo = request.form.get("tipo_arquivo", "")
@@ -975,7 +964,7 @@ IMPORTANTE: Quando perguntado sobre um santo específico, discorra SOMENTE sobre
         if arquivo and tipo_arquivo == "imagem":
             img_bytes = arquivo.read()
             mime = arquivo.mimetype or "image/jpeg"
-            img_b64 = _b64.b64encode(img_bytes).decode()
+            img_b64 = base64.b64encode(img_bytes).decode()
             prompt_visao = (f"{system_prompt}\n\nO usuário enviou uma imagem e perguntou: "
                            f"{ultima or 'Analise esta imagem no contexto católico.'}\n\n"
                            f"Responda SOMENTE se a imagem tiver conteúdo católico (santos, bíblia, arte sacra, etc). "
@@ -1189,10 +1178,6 @@ def api_liturgia_dia():
         "url_cnbb": url_cnbb
     })
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-# ── BÍBLIA ────────────────────────────────────────────────────────────────────
 # ── BÍBLIA CATÓLICA — leitura do JSON local (73 livros, Ave Maria) ────────────
 import pathlib as _pathlib
 
@@ -1865,3 +1850,6 @@ def sitemap_xml():
 </urlset>"""
     from flask import Response
     return Response(xml, mimetype='application/xml')
+
+if __name__ == "__main__":
+    app.run(debug=True)
